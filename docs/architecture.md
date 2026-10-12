@@ -1,21 +1,21 @@
 # MacTidar Cloud — Architecture & Data Model
 
-Status: draft v2 · Owner: Ukeme · Infra as code: Terraform · Region: **af-south-1 (Cape Town)** · Domain: **cloud.zetca.com**
+Status: draft v3 · Owner: Ukeme · Infra as code: Terraform · Data: **af-south-1 (Cape Town)** · App: **eu-west-1 (Ireland)** · Domain: **cloud.zetca.com**
 
 ## 1. Goals & constraints
 - One team (3 people today), each with their own account. Invite-only, email + password sign-in.
 - 15 GB shared team quota, raisable by an admin without a deploy.
 - Share files/folders with teammates (Viewer / Editor) and with outsiders via public links (optional password, expiry, download toggle).
 - Cheap at low volume, secure by default, everything in Terraform.
-- Everything runs in **af-south-1 (Cape Town)**, in the default AWS account, as **one environment** (no dev/prod split).
+- All data and back-end services (S3, DynamoDB, Cognito, SES, Lambdas) run in **af-south-1 (Cape Town)**. The Next.js app runs on **Amplify Hosting in eu-west-1 (Ireland)**, because Amplify isn't available in Cape Town and the alternative (a container + load balancer) costs ~$30/month more.
+- Default AWS account, **one environment** (no dev/prod split).
 - af-south-1 is an opt-in region: it must be enabled once in the AWS account (Account → AWS Regions) before Terraform can use it.
 
 ## 2. High-level architecture
 
 ```mermaid
 flowchart LR
-  B[Browser<br/>Next.js UI] -->|HTTPS<br/>cloud.zetca.com| ALB[Load balancer<br/>ACM certificate]
-  ALB --> H[Next.js server<br/>ECS Fargate container<br/>pages + /api routes]
+  B[Browser<br/>Next.js UI] -->|HTTPS<br/>cloud.zetca.com| H[Next.js server<br/>Amplify Hosting · eu-west-1<br/>pages + /api routes]
   B -->|presigned PUT / GET<br/>file bytes only| S3[(S3 bucket<br/>mactidar-files)]
   H -->|auth calls| C[Cognito<br/>User Pool]
   H -->|metadata, permissions,<br/>quota| D[(DynamoDB<br/>single table)]
@@ -32,13 +32,15 @@ flowchart LR
   U --> D
 ```
 
+Everything except the Next.js server lives in af-south-1.
+
 **Key principle:** file bytes never pass through our server. The API checks permissions and quota, then hands the browser a short-lived presigned S3 URL. The server only handles small JSON requests, so hosting stays cheap and fast.
 
 | Layer | Choice | Why |
 |---|---|---|
 | Frontend + API | Next.js (App Router) with Route Handlers under `/api` | One codebase; the server side holds AWS credentials, the browser never does |
-| Hosting | **ECS Fargate** (1 small task) behind an Application Load Balancer, image in ECR | Amplify Hosting doesn't appear to be offered in af-south-1, and App Runner closed to new customers on 30 Apr 2026. Fargate keeps the app in Cape Town next to the data. Next.js runs as a standalone Docker container |
-| DNS & TLS | Route 53 hosted zone for `cloud.zetca.com` (delegated from Namecheap) + ACM certificate | zetca.com stays at Namecheap; only the subdomain is handed to AWS so Terraform can manage its records |
+| Hosting | **AWS Amplify Hosting** (SSR / `WEB_COMPUTE`) in **eu-west-1** | Managed Next.js hosting, builds from GitHub on push, Terraform support, ~$1–5/month. Amplify doesn't appear to be offered in af-south-1; App Runner closed to new customers on 30 Apr 2026. Server code calls the Cape Town services with AWS SDK clients set to `af-south-1`, using the app's IAM compute role |
+| DNS & TLS | Route 53 hosted zone for `cloud.zetca.com` (delegated from Namecheap); Amplify custom domain issues the certificate | zetca.com stays at Namecheap; only the subdomain is handed to AWS so Terraform can manage its records |
 | Auth | Amazon Cognito User Pool | Managed passwords, reset codes, MFA later. Admin-only user creation |
 | Database | DynamoDB, single table, on-demand | Pay-per-request, zero ops, fits key-based access patterns |
 | Files | S3, private bucket | Durable, cheap; direct browser upload via presigned URLs |
@@ -283,23 +285,22 @@ All routes require a signed-in user except **Auth** and **Public**. Inputs valid
 - `zetca.com` stays registered at Namecheap; its existing records are untouched.
 - Terraform creates a Route 53 hosted zone for **`cloud.zetca.com`**. Its 4 name servers are added **once, by hand, in Namecheap** as `NS` records for the host `cloud`. That delegates only the subdomain to AWS.
 - Inside that zone, Terraform manages:
-  - `cloud.zetca.com` → load balancer (alias record)
-  - ACM certificate validation records (HTTPS)
+  - `cloud.zetca.com` → Amplify app (records created by the Amplify custom-domain association, including certificate validation)
   - SES domain verification, DKIM, SPF and DMARC records, so invites come from `no-reply@cloud.zetca.com`
 - SES starts in sandbox mode (can only email verified addresses). That's enough for a 3-person team; request production access when invites go to new people regularly.
 
 ## 13. Terraform layout
-One environment, one state file, default AWS account, region `af-south-1`.
+One environment, one state file, default AWS account. The AWS provider defaults to `af-south-1`, with a second aliased provider for `eu-west-1` used only by the hosting module.
 ```
 infra/
   bootstrap/              # one-off: S3 bucket for Terraform state (versioned, encrypted)
   modules/
-    dns/                  # Route 53 zone for cloud.zetca.com, ACM certificate
+    dns/                  # Route 53 zone for cloud.zetca.com
     storage/              # S3 bucket, lifecycle, CORS, policy, EventBridge notifications
     database/             # DynamoDB table, GSIs, TTL, PITR
     auth/                 # Cognito user pool + app client
     email/                # SES domain identity, DKIM/SPF/DMARC records
-    hosting/              # ECR repo, ECS cluster/service/task, ALB, security groups, IAM task role
+    hosting/              # Amplify app + master branch (eu-west-1), custom domain, env vars, IAM compute role
     workers/              # Lambdas, IAM roles, EventBridge rules & schedules
     monitoring/           # CloudWatch alarms, AWS Budgets alert
   main.tf                 # wires the modules together
@@ -310,27 +311,27 @@ infra/
 - Resource names prefixed `mactidar-`.
 - **CI (GitHub Actions + AWS OIDC, no stored keys):**
   - Pull request → `terraform fmt`/`validate`/`plan`, plus app lint and tests.
-  - Merge to `master` → `terraform apply`, build the Docker image, push to ECR, roll the ECS service.
+  - Merge to `master` → `terraform apply`. Amplify builds and deploys the Next.js app itself on every push to `master` (connected to the GitHub repo).
 
-## 14. Rough monthly cost (3 users, ≤ 15 GB, af-south-1)
+## 14. Rough monthly cost (3 users, ≤ 15 GB)
 | Service | Estimate |
 |---|---|
-| ECS Fargate (0.25 vCPU, 0.5 GB, always on) | ~$10–12 |
-| Application Load Balancer | ~$20 |
-| S3 (15 GB + requests) | ~$0.50 |
+| Amplify Hosting, eu-west-1 (build minutes + SSR requests + hosting) | ~$1–5 |
+| S3, af-south-1 (15 GB + requests) | ~$0.50 |
 | DynamoDB on-demand + PITR | < $1 |
 | Route 53 hosted zone | $0.50 |
-| Cognito (well within free tier), ACM | $0 |
-| Lambda, EventBridge, SES, CloudWatch, ECR | ~$1–2 |
-| **Total** | **≈ $33–38 / month** |
+| Cognito (well within free tier) | $0 |
+| Lambda, EventBridge, SES, CloudWatch | < $1 |
+| Ireland ↔ Cape Town traffic (small JSON API calls only) | < $0.10 |
+| **Total** | **≈ $3–8 / month** |
 
-af-south-1 prices are roughly 10–20% higher than US/EU regions. Data transfer out (downloads) is the main variable: ~$0.15/GB after the first 100 GB/month free. The load balancer is the biggest fixed cost; §15 lists a cheaper option.
+The main variable is downloads: data leaving S3 costs ~$0.15/GB beyond the first 100 GB/month free (shared across all of AWS). A team of 3 is unlikely to reach that. An AWS Budgets alert at $15 is included.
 
 ## 15. Decisions
 | Topic | Decision |
 |---|---|
-| Region | af-south-1 (Cape Town) |
+| Data region | af-south-1 (Cape Town): S3, DynamoDB, Cognito, SES, Lambdas |
+| App hosting | Amplify Hosting in eu-west-1 (Ireland). Each page/API request adds ~150–200 ms; file uploads and downloads go straight to Cape Town and aren't affected |
 | Domain | `cloud.zetca.com`, subdomain delegated from Namecheap to Route 53 |
 | AWS account | Default account, single environment |
 | Public links | Owners only |
-| Hosting | ECS Fargate + ALB in af-south-1 *(pending confirmation)*. Cheaper alternative: Amplify Hosting in eu-west-1 (~$3–8/month total) with data staying in Cape Town; file bytes still go straight to Cape Town S3, but every page/API request makes a round trip to Ireland (~150–200 ms extra) |
