@@ -335,3 +335,43 @@ The main variable is downloads: data leaving S3 costs ~$0.15/GB beyond the first
 | Domain | `cloud.mactidar.com`, subdomain delegated from Namecheap to Route 53 |
 | AWS account | Default account, single environment |
 | Public links | Owners only |
+
+---
+
+## 16. Public platform — Phase 1: Workspaces (foundation)
+
+Goal: every piece of data belongs to a **workspace**, so later phases can add self sign-up, personal workspaces and company workspaces. Phase 1 has **no visible change** for the current team: the MacTidar team becomes the first company workspace (`ws-mactidar`).
+
+### 16.1 New and changed records
+| Entity | PK | SK | GSI keys | Notes |
+|---|---|---|---|---|
+| Workspace | `WS#<wsId>` | `META` | — | `name`, `type` (`PERSONAL`/`COMPANY`), `ownerId`, `status`, quota counters (`quotaBytes`, `usedBytes`, `freeBytes`, `maxFileBytes`, `alertPercent`, `alertSentAt`), `externalSharing` (false) — replaces `TEAM/SETTINGS` |
+| Membership | `WS#<wsId>` | `MEMBER#<userId>` | GSI1: `USERWS#<userId>` / `<wsId>` | `role` (`ADMIN`/`MEMBER`), `status` (`ACTIVE`/`DISABLED`), `rootFolderId`, `usedBytes`, `joinedAt` |
+| User | `USER#<userId>` | `PROFILE` | GSI1: `MEMBERS` / `<email>` (global email lookup) | Global identity only: `email`, `name`, `status`, `sessionVersion`, `notifyShares`. `role`/`rootFolderId`/`usedBytes` move to the membership |
+| Item | unchanged | | | + `workspaceId` |
+| Share | unchanged | | GSI1: `SHAREDWITH#<wsId>#<userId>` | + `workspaceId` |
+| Invite | unchanged | | GSI1: `INVITES#<wsId>` | + `workspaceId` |
+| Recent | unchanged | | GSI2: `RECENT#<wsId>#<userId>` | |
+| Trash root | unchanged | | GSI2: `TRASH#<wsId>#<userId>` | |
+
+Each member keeps their own root folder **per workspace** (`rootFolderId` on the membership). Existing roots keep their IDs.
+
+### 16.2 Request context
+- The signed-in user's **active workspace** is stored in an `HttpOnly` cookie `mt_ws`, validated on every request against an `ACTIVE` membership. If missing or invalid, the first company workspace (else the first workspace) is used.
+- Server code receives a *viewer*: the user profile plus the active membership (`workspaceId`, `role`, `rootFolderId`, `usedBytes`). Admin checks use the membership role.
+- **Isolation rule:** every item, share, invite, link, search result and stat must have `workspaceId === viewer.workspaceId`; anything else is treated as not found. (Phase 2 adds the controlled exception for guests and outside sharing.)
+
+### 16.3 Quotas
+Quota counters live on `WS#<id>/META`; per-member usage on the membership. Uploads reserve against the item's workspace. The cleanup Lambdas use `item.workspaceId`.
+
+### 16.4 Deactivation
+Deactivating a member now disables their **membership** in that workspace (they lose access to it) rather than the global Cognito login, because a person may belong to other workspaces.
+
+### 16.5 Migration (`npm run migrate:workspaces`, idempotent, additive)
+1. Create `WS#ws-mactidar/META` from `TEAM/SETTINGS` (name "MacTidar", `COMPANY`, owner = first admin).
+2. For each user: create the membership (role, usedBytes, rootFolderId from the profile) and its `USERWS#` index entry.
+3. Add `workspaceId` to every item, share, invite and link; rewrite the `SHAREDWITH#`, `INVITES#`, `RECENT#` and `TRASH#` index keys.
+4. Leave `TEAM/SETTINGS` and the old profile fields in place for rollback; remove them in a later cleanup.
+5. Recompute usage from the files themselves (`npm run recompute:usage`) to correct any drift during the switch-over.
+
+Order: run the migration → apply the Lambda update → deploy the app. The migration only adds data, so the old app keeps working until the new one is live.
