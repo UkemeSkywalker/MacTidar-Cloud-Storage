@@ -3,7 +3,9 @@ import { config } from "./config";
 import { getItems, pathIds, type Item } from "./db/items";
 import { createLink, deleteLink, getLinkForItem, updateLink, type PublicLink } from "./db/links";
 import { deleteShare, getShare, listSharesOn, putShare } from "./db/shares";
-import { getUser, listMembers, type User } from "./db/users";
+import { getUser, type User } from "./db/users";
+import { getMembership, listWorkspaceMembers } from "./db/workspaces";
+import type { Viewer } from "./session";
 import { sendEmail } from "./email";
 import { badRequest, forbidden, notFound } from "./errors";
 import { hashLinkPassword } from "./linkAccess";
@@ -18,9 +20,9 @@ export type AccessEntry = {
   inheritedFrom?: { id: string; name: string };
 };
 
-export async function accessList(user: User, itemId: string) {
+export async function accessList(user: Viewer, itemId: string) {
   const { item, role } = await requireAccess(user, itemId, "VIEWER");
-  const members = await listMembers();
+  const members = await listWorkspaceMembers(item.workspaceId);
   const byId = new Map(members.map((m) => [m.id, m]));
   const ancestors = pathIds(item.path).slice(0, -1);
   const folderNames = await getItems(ancestors);
@@ -48,7 +50,7 @@ export async function accessList(user: User, itemId: string) {
     item,
     myRole: role,
     entries: [...entries.values()],
-    members: members.filter((m) => m.status === "ACTIVE").map((m) => ({ id: m.id, name: m.name, email: m.email })),
+    members: members.filter((m) => m.status === "ACTIVE" && m.userStatus === "ACTIVE").map((m) => ({ id: m.id, name: m.name, email: m.email })),
     link: link ? publicLinkInfo(link) : null,
   };
 }
@@ -60,21 +62,22 @@ export const publicLinkInfo = (link: PublicLink) => ({
   expiresAt: link.expiresAt ? new Date(link.expiresAt * 1000).toISOString() : null,
 });
 
-export async function shareWith(user: User, itemId: string, targetId: string, role: "VIEWER" | "EDITOR") {
+export async function shareWith(user: Viewer, itemId: string, targetId: string, role: "VIEWER" | "EDITOR") {
   const { item } = await requireAccess(user, itemId, "EDITOR");
   if (!item.parentId) throw badRequest("Share folders inside My Files instead of My Files itself.");
   const target = await getUser(targetId);
-  if (!target || target.status !== "ACTIVE") throw notFound("That teammate doesn't exist.");
+  const membership = target ? await getMembership(item.workspaceId, target.id) : null;
+  if (!target || target.status !== "ACTIVE" || membership?.status !== "ACTIVE") throw notFound("That teammate isn't in this workspace.");
   if (target.id === item.ownerId) throw badRequest(`${target.name} owns this item already.`);
   if (target.id === user.id) throw badRequest("You can't change your own access.");
-  const created = await putShare(item.id, target.id, role, user.id);
+  const created = await putShare(item.workspaceId, item.id, target.id, role, user.id);
   if (created) {
-    recordRecent(target.id, item.id, "shared").catch(() => {});
+    recordRecent(target.id, item.workspaceId, item.id, "shared").catch(() => {});
     if (target.notifyShares !== false) notifyShare(user, target, item, role).catch(() => {});
   }
 }
 
-export async function unshare(user: User, itemId: string, targetId: string) {
+export async function unshare(user: Viewer, itemId: string, targetId: string) {
   const { item } = await requireAccess(user, itemId, "EDITOR");
   if (!(await getShare(item.id, targetId))) throw notFound("That person doesn't have direct access to this item.");
   await deleteShare(item.id, targetId);
@@ -98,7 +101,7 @@ async function notifyShare(from: User, to: User, item: Item, role: string) {
 
 export type LinkSettings = { allowDownload: boolean; password?: string | null; expiresInDays?: number | null };
 
-export async function saveLink(user: User, itemId: string, settings: LinkSettings) {
+export async function saveLink(user: Viewer, itemId: string, settings: LinkSettings) {
   const { item, role } = await requireAccess(user, itemId, "VIEWER");
   if (!atLeast(role, "OWNER")) throw forbidden("Only the owner can create or change public links.");
   if (!item.parentId) throw badRequest("Create links for files or folders inside My Files.");
@@ -115,6 +118,7 @@ export async function saveLink(user: User, itemId: string, settings: LinkSetting
     await updateLink(existing.token, { allowDownload: settings.allowDownload, passwordHash, expiresAt });
   } else {
     await createLink({
+      workspaceId: item.workspaceId,
       itemId: item.id,
       createdBy: user.id,
       allowDownload: settings.allowDownload,
@@ -126,7 +130,7 @@ export async function saveLink(user: User, itemId: string, settings: LinkSetting
   return link ? publicLinkInfo(link) : null;
 }
 
-export async function removeLink(user: User, itemId: string) {
+export async function removeLink(user: Viewer, itemId: string) {
   const { item, role } = await requireAccess(user, itemId, "VIEWER");
   if (!atLeast(role, "OWNER")) throw forbidden("Only the owner can disable public links.");
   const link = await getLinkForItem(item.id);

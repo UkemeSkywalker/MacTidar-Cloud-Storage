@@ -20,12 +20,14 @@ const ADMIN_NAV = [
 ];
 
 export function Sidebar({
+  workspace,
   isAdmin,
   usedBytes,
   quotaBytes,
   open,
   onClose,
 }: {
+  workspace: { id: string; name: string; type: "PERSONAL" | "COMPANY" };
   isAdmin: boolean;
   usedBytes: number;
   quotaBytes: number;
@@ -68,6 +70,15 @@ export function Sidebar({
               </div>
               <span className="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface">MacTidar</span>
             </Link>
+          </div>
+          <div className="mx-space-md mb-space-sm flex items-center gap-2.5 rounded-xl bg-surface-container-low px-3 py-2">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-fixed font-title-md text-title-md text-primary">
+              {workspace.name.slice(0, 1).toUpperCase()}
+            </div>
+            <div className="min-w-0">
+              <p className="truncate font-title-md text-title-md text-text-primary">{workspace.name}</p>
+              <p className="font-label-sm text-label-sm text-text-secondary">{workspace.type === "COMPANY" ? "Company workspace" : "Personal workspace"}</p>
+            </div>
           </div>
           <div className="px-space-md pb-space-md pt-space-xs">
             <NewMenu />

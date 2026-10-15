@@ -3,7 +3,7 @@ import { ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { fileKind } from "@/components/files/FileIcon";
 import { ddb, TABLE } from "./db/table";
 import { getTeamSettings, updateTeamFields } from "./db/team";
-import { listMembers } from "./db/users";
+import { listWorkspaceMembers } from "./db/workspaces";
 import { config } from "./config";
 import { sendEmail } from "./email";
 import { formatBytes } from "@/lib/format";
@@ -16,7 +16,7 @@ const GROUPS = {
 } as const;
 
 // Team-wide numbers for the admin Storage page (one scan; fine at this size).
-export async function storageStats() {
+export async function storageStats(workspaceId: string) {
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
   const weekAgo = new Date(Date.now() - 7 * 86400_000).toISOString();
@@ -28,9 +28,9 @@ export async function storageStats() {
     const res = await ddb().send(
       new ScanCommand({
         TableName: TABLE(),
-        FilterExpression: "(SK = :meta AND #t = :file) OR begins_with(PK, :link)",
+        FilterExpression: "workspaceId = :ws AND ((SK = :meta AND #t = :file) OR begins_with(PK, :link))",
         ExpressionAttributeNames: { "#t": "type", "#s": "status", "#n": "name" },
-        ExpressionAttributeValues: { ":meta": "META", ":file": "file", ":link": "LINK#" },
+        ExpressionAttributeValues: { ":meta": "META", ":file": "file", ":link": "LINK#", ":ws": workspaceId },
         ProjectionExpression: "PK, #t, #s, #n, mimeType, size, createdAt, expiresAt",
         ExclusiveStartKey: start,
       }),
@@ -65,13 +65,13 @@ export async function storageStats() {
 }
 
 // Emails admins once when team usage crosses the alert threshold.
-export async function checkUsageAlert() {
-  const team = await getTeamSettings();
+export async function checkUsageAlert(workspaceId: string) {
+  const team = await getTeamSettings(workspaceId);
   if (!team.alertPercent || team.alertSentAt) return;
   const pct = (team.usedBytes / team.quotaBytes) * 100;
   if (pct < team.alertPercent) return;
-  await updateTeamFields({ alertSentAt: new Date().toISOString() });
-  const admins = (await listMembers()).filter((m) => m.role === "ADMIN" && m.status === "ACTIVE");
+  await updateTeamFields(workspaceId, { alertSentAt: new Date().toISOString() });
+  const admins = (await listWorkspaceMembers(workspaceId)).filter((m) => m.role === "ADMIN" && m.status === "ACTIVE");
   for (const a of admins) {
     await sendEmail(
       a.email,

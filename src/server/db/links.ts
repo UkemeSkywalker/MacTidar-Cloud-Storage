@@ -5,6 +5,7 @@ import { ddb, epochSeconds, keys, now, TABLE } from "./table";
 
 export type PublicLink = {
   token: string;
+  workspaceId?: string;
   itemId: string;
   createdBy: string;
   allowDownload: boolean;

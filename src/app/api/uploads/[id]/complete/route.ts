@@ -13,7 +13,7 @@ export const POST = route<{ params: Promise<{ id: string }> }>(async (req, { par
   const user = await requireUser();
   const { parts } = body.parse(await req.json());
   const item = await completeUpload(user, (await params).id, parts);
-  recordRecent(user.id, item.id, "uploaded").catch(() => {});
-  await checkUsageAlert().catch((e) => console.error(e));
+  recordRecent(user.id, item.workspaceId, item.id, "uploaded").catch(() => {});
+  await checkUsageAlert(item.workspaceId).catch((e) => console.error(e));
   return Response.json({ id: item.id, name: item.name });
 });

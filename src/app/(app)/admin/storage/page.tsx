@@ -1,5 +1,5 @@
 import { getTeamSettings } from "@/server/db/team";
-import { listMembers } from "@/server/db/users";
+import { listWorkspaceMembers } from "@/server/db/workspaces";
 import { requirePageAdmin } from "@/server/session";
 import { storageStats } from "@/server/usage";
 import { StorageView } from "./StorageView";
@@ -7,8 +7,12 @@ import { StorageView } from "./StorageView";
 export const metadata = { title: "Storage · MacTidar Cloud" };
 
 export default async function StoragePage() {
-  await requirePageAdmin();
-  const [team, members, stats] = await Promise.all([getTeamSettings(), listMembers(), storageStats()]);
+  const admin = await requirePageAdmin();
+  const [team, members, stats] = await Promise.all([
+    getTeamSettings(admin.workspaceId),
+    listWorkspaceMembers(admin.workspaceId),
+    storageStats(admin.workspaceId),
+  ]);
   return (
     <StorageView
       team={team}

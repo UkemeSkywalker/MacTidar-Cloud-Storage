@@ -11,6 +11,6 @@ export const PATCH = route<{ params: Promise<{ id: string }> }>(async (req, { pa
   const { name } = body.parse(await req.json());
   const id = (await params).id;
   await renameItem(user, id, name);
-  recordRecent(user.id, id, "renamed").catch(() => {});
+  recordRecent(user.id, user.workspaceId, id, "renamed").catch(() => {});
   return Response.json({ ok: true });
 });

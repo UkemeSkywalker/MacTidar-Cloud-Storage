@@ -43,7 +43,7 @@ export async function handler() {
 
     const byUser = new Map();
     for (const d of subtree) if (d.type === "file" && d.size) byUser.set(d.createdBy, (byUser.get(d.createdBy) ?? 0) + d.size);
-    for (const [userId, bytes] of byUser) await subtractUsed(userId, bytes);
+    for (const [userId, bytes] of byUser) await subtractUsed(root.workspaceId, userId, bytes);
     purged += subtree.length;
   }
   console.log(JSON.stringify({ trashRoots: roots.length, itemsPurged: purged }));

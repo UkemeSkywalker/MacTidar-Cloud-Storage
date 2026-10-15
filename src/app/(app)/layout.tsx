@@ -6,10 +6,11 @@ export const dynamic = "force-dynamic";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await requirePageUser();
-  const team = await getTeamSettings();
+  const team = await getTeamSettings(user.workspaceId);
   return (
     <AppShell
       user={{ id: user.id, name: user.name, email: user.email, role: user.role }}
+      workspace={{ id: user.workspaceId, name: user.workspaceName, type: user.workspaceType }}
       usedBytes={team.usedBytes}
       quotaBytes={team.quotaBytes}
     >

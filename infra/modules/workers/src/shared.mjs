@@ -60,28 +60,29 @@ export async function abortUpload(key, uploadId) {
   await s3.send(new AbortMultipartUploadCommand({ Bucket: BUCKET, Key: key, UploadId: uploadId })).catch(() => {});
 }
 
-export async function releaseFree(bytes) {
+export async function releaseFree(workspaceId, bytes) {
   if (bytes > 0) {
     await ddb.send(new UpdateCommand({
       TableName: TABLE,
-      Key: { PK: "TEAM", SK: "SETTINGS" },
+      Key: { PK: `WS#${workspaceId}`, SK: "META" },
       UpdateExpression: "SET freeBytes = freeBytes + :b",
       ExpressionAttributeValues: { ":b": bytes },
     }));
   }
 }
 
-// Removes permanently deleted bytes from the team and uploader totals.
-export async function subtractUsed(userId, bytes) {
+// Removes permanently deleted bytes from the workspace and uploader totals.
+export async function subtractUsed(workspaceId, userId, bytes) {
   if (!bytes) return;
+  const ws = { PK: `WS#${workspaceId}`, SK: "META" };
   await ddb.send(new TransactWriteCommand({
     TransactItems: [
-      { Update: { TableName: TABLE, Key: { PK: "TEAM", SK: "SETTINGS" }, UpdateExpression: "SET usedBytes = usedBytes - :b, freeBytes = freeBytes + :b", ExpressionAttributeValues: { ":b": bytes } } },
-      { Update: { TableName: TABLE, Key: { PK: `USER#${userId}`, SK: "PROFILE" }, UpdateExpression: "SET usedBytes = if_not_exists(usedBytes, :zero) - :b", ConditionExpression: "attribute_exists(PK)", ExpressionAttributeValues: { ":b": bytes, ":zero": 0 } } },
+      { Update: { TableName: TABLE, Key: ws, UpdateExpression: "SET usedBytes = usedBytes - :b, freeBytes = freeBytes + :b", ExpressionAttributeValues: { ":b": bytes } } },
+      { Update: { TableName: TABLE, Key: { PK: `WS#${workspaceId}`, SK: `MEMBER#${userId}` }, UpdateExpression: "SET usedBytes = if_not_exists(usedBytes, :zero) - :b", ConditionExpression: "attribute_exists(PK)", ExpressionAttributeValues: { ":b": bytes, ":zero": 0 } } },
     ],
   })).catch(async () => {
-    // Uploader no longer exists: still fix the team totals.
-    await ddb.send(new UpdateCommand({ TableName: TABLE, Key: { PK: "TEAM", SK: "SETTINGS" }, UpdateExpression: "SET usedBytes = usedBytes - :b, freeBytes = freeBytes + :b", ExpressionAttributeValues: { ":b": bytes } }));
+    // Uploader left the workspace: still fix the workspace totals.
+    await ddb.send(new UpdateCommand({ TableName: TABLE, Key: ws, UpdateExpression: "SET usedBytes = usedBytes - :b, freeBytes = freeBytes + :b", ExpressionAttributeValues: { ":b": bytes } }));
   });
 }
 

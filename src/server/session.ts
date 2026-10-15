@@ -4,10 +4,12 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import { getUser, updateUser, type User } from "./db/users";
+import { listUserWorkspaces, type Role, type WorkspaceType } from "./db/workspaces";
 import { forbidden, unauthorized } from "./errors";
 import { secrets } from "./secrets";
 
 export const SESSION_COOKIE = "mt_session";
+export const WORKSPACE_COOKIE = "mt_ws";
 const REMEMBER_DAYS = 30;
 const SHORT_HOURS = 12;
 
@@ -51,38 +53,74 @@ export async function endSession() {
   (await cookies()).delete(SESSION_COOKIE);
 }
 
-// The signed-in, active user for this request, or null. Cached per request.
-export const currentUser = cache(async (): Promise<User | null> => {
-  const token = (await cookies()).get(SESSION_COOKIE)?.value;
+// The signed-in user plus their membership in the active workspace.
+export type Viewer = User & {
+  workspaceId: string;
+  workspaceName: string;
+  workspaceType: WorkspaceType;
+  role: Role;
+  rootFolderId: string;
+  usedBytes: number;
+  workspaces: { id: string; name: string; type: WorkspaceType; role: Role }[];
+};
+
+// The signed-in, active viewer for this request, or null. Cached per request.
+export const currentUser = cache(async (): Promise<Viewer | null> => {
+  const jar = await cookies();
+  const token = jar.get(SESSION_COOKIE)?.value;
   if (!token) return null;
   const payload = await decode(token);
   if (!payload) return null;
   const user = await getUser(payload.uid);
   if (!user || user.status !== "ACTIVE" || user.sessionVersion !== payload.ver) return null;
-  return user;
+
+  const all = (await listUserWorkspaces(user.id)).filter((w) => w.membership.status === "ACTIVE" && w.workspace.status === "ACTIVE");
+  if (!all.length) return null;
+  const wanted = jar.get(WORKSPACE_COOKIE)?.value;
+  const active = all.find((w) => w.workspace.id === wanted) ?? all[0];
+  return {
+    ...user,
+    workspaceId: active.workspace.id,
+    workspaceName: active.workspace.name,
+    workspaceType: active.workspace.type,
+    role: active.membership.role,
+    rootFolderId: active.membership.rootFolderId,
+    usedBytes: active.membership.usedBytes ?? 0,
+    workspaces: all.map((w) => ({ id: w.workspace.id, name: w.workspace.name, type: w.workspace.type, role: w.membership.role })),
+  };
 });
 
+export async function setActiveWorkspace(workspaceId: string) {
+  (await cookies()).set(WORKSPACE_COOKIE, workspaceId, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 365 * 86400,
+  });
+}
+
 // For pages: redirect to sign-in when signed out.
-export async function requirePageUser(): Promise<User> {
+export async function requirePageUser(): Promise<Viewer> {
   const user = await currentUser();
   if (!user) redirect("/sign-in");
   return user;
 }
 
-export async function requirePageAdmin(): Promise<User> {
+export async function requirePageAdmin(): Promise<Viewer> {
   const user = await requirePageUser();
   if (user.role !== "ADMIN") redirect("/files");
   return user;
 }
 
 // For API routes: throw 401/403 instead of redirecting.
-export async function requireUser(): Promise<User> {
+export async function requireUser(): Promise<Viewer> {
   const user = await currentUser();
   if (!user) throw unauthorized();
   return user;
 }
 
-export async function requireAdmin(): Promise<User> {
+export async function requireAdmin(): Promise<Viewer> {
   const user = await requireUser();
   if (user.role !== "ADMIN") throw forbidden("Only admins can do this.");
   return user;

@@ -15,6 +15,7 @@ export type ItemStatus = "UPLOADING" | "ACTIVE" | "TRASHED";
 
 export type Item = {
   id: string;
+  workspaceId: string;
   type: ItemType;
   name: string;
   nameLower: string;

@@ -2,12 +2,12 @@ import "server-only";
 import { ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { getItems, pathIds, type Item } from "./db/items";
 import { ddb, strip, TABLE } from "./db/table";
-import type { User } from "./db/users";
+import type { Viewer } from "./session";
 import { effectiveRole, sharesOnPath, type AccessRole } from "./permissions";
 
 // Keeps the active items the user can see, with their role and a readable location.
-export async function visibleItems(user: User, items: Item[]) {
-  const live = items.filter((i) => i.status === "ACTIVE" && i.parentId);
+export async function visibleItems(user: Viewer, items: Item[]) {
+  const live = items.filter((i) => i.status === "ACTIVE" && i.parentId && i.workspaceId === user.workspaceId);
   const roles = new Map<string, AccessRole>();
   const startIndex = new Map<string, number>();
   await Promise.all(
@@ -33,7 +33,7 @@ export async function visibleItems(user: User, items: Item[]) {
 }
 
 // Name search. A full scan is fine at this team's size (see docs/architecture.md §5.2).
-export async function searchItems(query: string): Promise<Item[]> {
+export async function searchItems(workspaceId: string, query: string): Promise<Item[]> {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const out: Item[] = [];
@@ -42,9 +42,9 @@ export async function searchItems(query: string): Promise<Item[]> {
     const res = await ddb().send(
       new ScanCommand({
         TableName: TABLE(),
-        FilterExpression: "SK = :meta AND begins_with(PK, :item) AND #s = :active AND contains(nameLower, :q)",
+        FilterExpression: "SK = :meta AND begins_with(PK, :item) AND #s = :active AND workspaceId = :ws AND contains(nameLower, :q)",
         ExpressionAttributeNames: { "#s": "status" },
-        ExpressionAttributeValues: { ":meta": "META", ":item": "ITEM#", ":active": "ACTIVE", ":q": q },
+        ExpressionAttributeValues: { ":meta": "META", ":item": "ITEM#", ":active": "ACTIVE", ":ws": workspaceId, ":q": q },
         ExclusiveStartKey: start,
       }),
     );

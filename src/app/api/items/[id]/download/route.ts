@@ -10,6 +10,6 @@ export const GET = route<{ params: Promise<{ id: string }> }>(async (req, { para
   const { item } = await requireAccess(user, (await params).id, "VIEWER");
   if (item.type !== "file" || !item.s3Key) throw badRequest("Folders can't be downloaded directly.");
   const inline = new URL(req.url).searchParams.get("inline") === "1";
-  recordRecent(user.id, item.id, inline ? "opened" : "downloaded").catch(() => {});
+  recordRecent(user.id, item.workspaceId, item.id, inline ? "opened" : "downloaded").catch(() => {});
   return Response.redirect(await presignGet(item.s3Key, item.name, item.mimeType, inline), 302);
 });

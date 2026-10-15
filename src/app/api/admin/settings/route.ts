@@ -12,16 +12,16 @@ const body = z.object({
 });
 
 export const PATCH = route(async (req) => {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const { quotaGb, maxFileGb, alerts } = body.parse(await req.json());
-  const team = await getTeamSettings();
+  const team = await getTeamSettings(admin.workspaceId);
   if (quotaGb !== undefined) {
     const next = Math.round(quotaGb * GB);
-    if (next !== team.quotaBytes && !(await setQuota(team.quotaBytes, next))) {
+    if (next !== team.quotaBytes && !(await setQuota(admin.workspaceId, team.quotaBytes, next))) {
       throw badRequest(`The limit can't go below what's already used (${formatBytes(team.quotaBytes - team.freeBytes)}).`);
     }
   }
-  await updateTeamFields({
+  await updateTeamFields(admin.workspaceId, {
     maxFileBytes: maxFileGb !== undefined ? Math.round(maxFileGb * GB) : undefined,
     alertPercent: alerts === undefined ? undefined : alerts ? 80 : 0,
   });

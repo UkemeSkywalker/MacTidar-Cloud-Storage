@@ -2,17 +2,18 @@ import "server-only";
 import type { BrowserRow } from "@/components/files/FileBrowser";
 import type { Item } from "./db/items";
 import { listStarIds } from "./db/stars";
-import { listMembers, type User } from "./db/users";
+import { listWorkspaceMembers } from "./db/workspaces";
+import type { Viewer } from "./session";
 import type { AccessRole } from "./permissions";
 
 // Shapes items for the client file browser, resolving owner names and stars.
 export async function toRows(
-  user: User,
+  user: Viewer,
   items: Item[],
   roleOf: (item: Item) => AccessRole,
   locationOf?: (item: Item) => string | undefined,
 ): Promise<BrowserRow[]> {
-  const [members, stars] = await Promise.all([listMembers(), listStarIds(user.id)]);
+  const [members, stars] = await Promise.all([listWorkspaceMembers(user.workspaceId), listStarIds(user.id)]);
   const names = new Map(members.map((m) => [m.id, m.name]));
   const starred = new Set(stars);
   return items.map((i) => ({

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { verifyPassword } from "@/server/cognito";
 import { getUser } from "@/server/db/users";
+import { listUserWorkspaces } from "@/server/db/workspaces";
 import { HttpError, route } from "@/server/errors";
 import { startSession } from "@/server/session";
 
@@ -16,6 +17,10 @@ export const POST = route(async (req) => {
   const user = await getUser(id);
   if (!user || user.status !== "ACTIVE") {
     throw new HttpError(403, "This account is deactivated. Contact your admin.", "disabled");
+  }
+  const workspaces = (await listUserWorkspaces(user.id)).filter((w) => w.membership.status === "ACTIVE" && w.workspace.status === "ACTIVE");
+  if (!workspaces.length) {
+    throw new HttpError(403, "Your account isn't part of an active workspace. Contact your admin.", "no_workspace");
   }
   await startSession(user, remember);
   return Response.json({ ok: true });
