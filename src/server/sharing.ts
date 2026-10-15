@@ -70,7 +70,7 @@ export async function shareWith(user: User, itemId: string, targetId: string, ro
   const created = await putShare(item.id, target.id, role, user.id);
   if (created) {
     recordRecent(target.id, item.id, "shared").catch(() => {});
-    notifyShare(user, target, item, role).catch(() => {});
+    if (target.notifyShares !== false) notifyShare(user, target, item, role).catch(() => {});
   }
 }
 
