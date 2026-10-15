@@ -1,0 +1,378 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_blank" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-lowest": "#ffffff", "warning": "#D97706", "tertiary-fixed-dim": "#62df7d", "file-archive": "#6B7280", "tertiary-fixed": "#7ffc97", "file-video": "#EC4899", "surface-container": "#edeef0", "on-secondary-fixed-variant": "#40484f", "secondary-fixed": "#dce3ec", "canvas": "#F7F8FA", "file-folder": "#2563EB", "text-primary": "#111827", "tertiary": "#006329", "on-tertiary-container": "#c7ffca", "primary-fixed-dim": "#b4c5ff", "text-secondary": "#6B7280", "file-sheet": "#16A34A", "on-tertiary-fixed": "#002109", "surface-container-low": "#f2f4f6", "inverse-primary": "#b4c5ff", "file-pdf": "#DC2626", "on-background": "#191c1e", "surface": "#FFFFFF", "primary-container": "#2563eb", "outline": "#737686", "error": "#ba1a1a", "on-secondary": "#ffffff", "surface-dim": "#d9dadc", "file-image": "#9333EA", "on-primary-fixed-variant": "#003ea8", "secondary-fixed-dim": "#c0c7d0", "on-surface-variant": "#434655", "surface-tint": "#0053db", "inverse-on-surface": "#f0f1f3", "outline-variant": "#c3c6d7", "on-primary": "#ffffff", "background": "#f8f9fb", "on-error": "#ffffff", "primary-fixed": "#dbe1ff", "file-doc": "#4F46E5", "on-error-container": "#93000a", "border": "#E5E7EB", "on-secondary-fixed": "#151c23", "error-container": "#ffdad6", "surface-container-highest": "#e1e2e4", "on-tertiary": "#ffffff", "surface-container-high": "#e7e8ea", "on-primary-container": "#eeefff", "inverse-surface": "#2e3132", "overlay-dark": "rgba(17, 24, 39, 0.95)", "secondary": "#585f67", "on-surface": "#191c1e", "surface-bright": "#f8f9fb", "secondary-container": "#dce3ec", "on-tertiary-fixed-variant": "#005320", "on-primary-fixed": "#00174b", "on-secondary-container": "#5e656d", "danger": "#DC2626", "primary": "#004ac6", "surface-variant": "#e1e2e4", "tertiary-container": "#007f36" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xl": "2rem", "space-lg": "1.5rem", "margin-desktop": "2rem", "gutter": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "margin": "1rem", "gutter-desktop": "1.5rem", "space-sm": "0.5rem" }, "fontFamily": { "headline-lg": ["Inter"], "label-md": ["Inter"], "label-sm": ["Inter"], "body-sm": ["Inter"], "headline-sm": ["Inter"], "title-md": ["Inter"], "body-md": ["Inter"] }, "fontSize": { "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "title-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }] } } } };</script></head><body class="min-h-full bg-canvas text-on-surface font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container"><main class="min-h-screen w-full flex flex-col justify-center items-center p-margin md:p-margin-desktop"><div class="flex flex-col w-full">
+<div class="w-full max-w-6xl mx-auto flex flex-col gap-8 pb-12">
+<!-- Header / Brand & Step Counter -->
+<header class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-headline-sm">cloud_queue</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm tracking-tight text-text-primary block">MacTidar Cloud</span>
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider block">Enterprise Hub</span>
+</div>
+</div>
+<!-- Stepper Indicator -->
+<div class="flex flex-col sm:items-end gap-1.5 w-full sm:w-auto">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-text-primary">Step 2 of 2</span>
+<span class="font-label-sm text-label-sm text-text-secondary">· Team Architecture</span>
+</div>
+<div class="flex items-center gap-1.5 w-48">
+<div class="h-1.5 flex-1 rounded-full bg-primary transition-all duration-300"></div>
+<div class="h-1.5 flex-1 rounded-full bg-primary transition-all duration-300"></div>
+</div>
+</div>
+</header>
+<!-- Split Screen Work Area -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left / Main Setup Form (approx 60%) -->
+<section class="lg:col-span-7 bg-surface rounded-xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+<div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-text-secondary font-label-sm text-label-sm mb-3">
+<span class="material-symbols-outlined text-label-md">corporate_fare</span>
+<span>Organization Setup</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-text-primary tracking-tight">Create your company workspace</h1>
+<p class="font-body-md text-body-md text-text-secondary mt-1">Set up your team's shared file vault and collaboration policies.</p>
+</div>
+<form class="flex flex-col gap-5" id="workspace-form" onsubmit="event.preventDefault();">
+<!-- Logo Upload Avatar Area -->
+<div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-low">
+<label class="group relative w-16 h-16 rounded-full bg-surface flex flex-col items-center justify-center cursor-pointer shadow-sm overflow-hidden flex-shrink-0 transition-transform duration-200 hover:scale-105" for="logo-upload">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" id="logo-icon-placeholder">add_a_photo</span>
+<img class="hidden absolute inset-0 w-full h-full object-cover" data-alt="Minimal modern geometric logo badge for MacTidar tech enterprise, sleek vector icon on pure white backdrop, royal blue and steel grey tones." id="logo-preview-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsz7ofZ_OdycOLcQA-IKQvVVZ1k75zrRdbAIVMvOp4Ka50bSR2_lKK5hRGlP1lVG7XIyf2wuR2B-kJG2kM94DcjRgz9mayc3l91DpmluxPmjuTJNASbWfT9SuMzmSxEM73qwTxgPkeaY8jw87h-_ESQQ5rJKYrw4KiMd2tpfjrz17hgopEj_uQNu8A1EZkxKB3KrsVK1EhJFdsA7RFvYYrNQRZx8KzK9kc-Ih7EV97rWDgbprSkQc3kQ">
+<input accept="image/png, image/jpeg" class="sr-only" id="logo-upload" onchange="previewLogo(this)" type="file">
+</label>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<label class="font-title-md text-title-md text-primary cursor-pointer hover:underline" for="logo-upload">Upload workspace logo</label>
+<span class="font-label-sm text-label-sm text-text-secondary">Optional</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-0.5">Recommended square PNG or JPG, max 2MB</p>
+</div>
+</div>
+<!-- Company Name Input -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center">
+<label class="font-title-md text-title-md text-text-primary" for="company-name">Company name</label>
+<span class="font-label-sm text-label-sm text-text-secondary">Official legal or brand name</span>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">business</span>
+<input class="w-full h-10 pl-10 pr-3 rounded-lg bg-surface text-text-primary font-body-md text-body-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-primary/20" id="company-name" oninput="updateWorkspaceName(this.value)" placeholder="Enter organization name" type="text" value="MacTidar">
+</div>
+</div>
+<!-- Workspace URL Preview -->
+<div class="flex flex-col gap-1.5">
+<label class="font-title-md text-title-md text-text-primary">Workspace address</label>
+<div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 px-3 py-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-1.5 min-w-0 font-body-sm text-body-sm text-text-secondary truncate">
+<span class="material-symbols-outlined text-outline">link</span>
+<span class="text-text-secondary select-none">cloud.mactidar.com/w/</span>
+<span class="text-text-primary font-title-md truncate" id="url-slug-preview">mactidar</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary text-label-sm font-label-sm flex-shrink-0">
+<span class="material-symbols-outlined text-label-md" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>Available</span>
+</div>
+</div>
+</div>
+<!-- Company Size Segmented Control -->
+<div class="flex flex-col gap-2">
+<label class="font-title-md text-title-md text-text-primary">Company size</label>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-surface-container-low p-1.5 rounded-lg" id="team-size-selector">
+<button class="team-size-btn flex items-center justify-center py-2 px-3 rounded-md font-label-md text-label-md transition-all bg-surface text-primary shadow-sm" data-size="1–10" onclick="selectSize(this)" type="button">
+                1–10
+              </button>
+<button class="team-size-btn flex items-center justify-center py-2 px-3 rounded-md font-label-md text-label-md transition-all text-text-secondary hover:text-text-primary" data-size="11–50" onclick="selectSize(this)" type="button">
+                11–50
+              </button>
+<button class="team-size-btn flex items-center justify-center py-2 px-3 rounded-md font-label-md text-label-md transition-all text-text-secondary hover:text-text-primary" data-size="51–200" onclick="selectSize(this)" type="button">
+                51–200
+              </button>
+<button class="team-size-btn flex items-center justify-center py-2 px-3 rounded-md font-label-md text-label-md transition-all text-text-secondary hover:text-text-primary" data-size="200+" onclick="selectSize(this)" type="button">
+                200+
+              </button>
+</div>
+</div>
+<!-- Invite Teammates Input -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center">
+<label class="font-title-md text-title-md text-text-primary" for="invite-input">Invite teammates <span class="text-text-secondary font-body-sm">(optional)</span></label>
+<span class="font-label-sm text-label-sm text-text-secondary" id="invite-counter">2 invites queued</span>
+</div>
+<div class="min-h-12 p-2 rounded-lg bg-surface shadow-sm flex flex-wrap items-center gap-1.5 focus-within:ring-2 focus-within:ring-primary/20">
+<div class="flex flex-wrap items-center gap-1.5" id="chips-container">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-fixed/50 text-text-primary font-body-sm text-body-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-file-folder"></span>
+                  ada@mactidar.com
+                  <button class="hover:text-danger ml-0.5 flex items-center" onclick="removeChip(this)" type="button">
+<span class="material-symbols-outlined text-label-md">close</span>
+</button>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-fixed/50 text-text-primary font-body-sm text-body-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-file-folder"></span>
+                  tunde@mactidar.com
+                  <button class="hover:text-danger ml-0.5 flex items-center" onclick="removeChip(this)" type="button">
+<span class="material-symbols-outlined text-label-md">close</span>
+</button>
+</span>
+</div>
+<input class="flex-1 min-w-[140px] h-8 bg-transparent text-text-primary font-body-sm text-body-sm outline-none px-1" id="invite-input" onkeydown="handleKeyChip(event)" placeholder="colleague@mactidar.com" type="email">
+</div>
+<p class="font-label-sm text-label-sm text-text-secondary">Press comma or Enter to add multiple team addresses.</p>
+</div>
+<!-- Security / Information Callout Note -->
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-primary-fixed/40 text-on-primary-fixed">
+<span class="material-symbols-outlined text-primary text-headline-sm flex-shrink-0 mt-0.5">verified_user</span>
+<div class="flex flex-col gap-0.5">
+<span class="font-title-md text-title-md text-primary">Vault privacy policy enabled</span>
+<p class="font-body-sm text-body-sm text-text-secondary">Sharing outside your company is turned off by default. You can fine-tune external domains and guest links anytime in Workspace settings.</p>
+</div>
+</div>
+<!-- Action Buttons Row -->
+<div class="flex items-center justify-between pt-4 gap-4">
+<button class="px-5 py-2.5 rounded-full bg-surface-container-low hover:bg-surface-container text-text-primary font-title-md text-title-md shadow-sm transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-headline-sm">arrow_back</span>
+<span>Back</span>
+</button>
+<button class="px-6 py-2.5 rounded-full bg-primary-container hover:bg-primary text-on-primary font-title-md text-title-md shadow-sm transition-all flex items-center gap-2" onclick="handleCreateWorkspace()" type="button">
+<span>Create workspace</span>
+<span class="material-symbols-outlined text-headline-sm">arrow_forward</span>
+</button>
+</div>
+</form>
+</section>
+<!-- Right Side Live Preview Container (approx 40%) -->
+<aside class="lg:col-span-5 flex flex-col gap-3 sticky top-6">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-file-sheet opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-file-sheet"></span>
+</span>
+<span class="font-label-md text-label-md text-text-secondary uppercase tracking-wider">Live preview</span>
+</div>
+<span class="font-label-sm text-label-sm text-text-secondary">Interactive simulation</span>
+</div>
+<!-- Realistic Mini Mockup Frame -->
+<div class="w-full bg-surface rounded-2xl shadow-md p-3 flex flex-col gap-4">
+<!-- Top Window chrome dot mockups -->
+<div class="flex items-center justify-between px-2 pt-1 pb-2 bg-surface-container-low rounded-xl">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-file-pdf/70 inline-block"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-warning/70 inline-block"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary/70 inline-block"></span>
+</div>
+<div class="px-2 py-0.5 rounded bg-surface text-text-secondary font-label-sm text-label-sm flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-label-sm text-text-secondary">lock</span>
+<span>mactidar.internal/cloud</span>
+</div>
+<div class="w-10"></div>
+</div>
+<!-- Realistic Mini Sidebar Mockup -->
+<div class="bg-surface-container-lowest rounded-xl p-3 shadow-sm flex flex-col gap-4">
+<!-- Workspace Switcher Component -->
+<div class="p-2.5 rounded-xl bg-surface-container-low shadow-sm flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary font-headline-sm text-headline-sm flex items-center justify-center shadow-sm flex-shrink-0" id="preview-avatar">
+                    M
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate" id="preview-org-name">MacTidar Workspace</span>
+<span class="font-label-sm text-label-sm text-primary flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+                      Enterprise Vault
+                    </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-headline-sm">unfold_more</span>
+</div>
+<!-- Context Switcher Alternative Dropdown Ghost -->
+<div class="pt-2 flex items-center justify-between text-text-secondary font-label-sm text-label-sm">
+<div class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-label-md">account_circle</span>
+<span class="truncate">Switch to Personal Workspace</span>
+</div>
+<span class="bg-surface-container px-1.5 py-0.5 rounded text-label-sm">3 GB</span>
+</div>
+</div>
+<!-- Mini Navigation Structure -->
+<nav class="flex flex-col gap-0.5">
+<div class="px-2 py-1 font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Vault Workspace</div>
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg bg-primary-fixed/30 text-primary font-title-md text-title-md">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span>My Files</span>
+</div>
+<span class="font-label-sm text-label-sm bg-surface px-1.5 py-0.5 rounded-full shadow-sm text-primary">1.4k</span>
+</div>
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg text-text-secondary hover:bg-surface-container-low font-body-md text-body-md transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-headline-sm">folder_shared</span>
+<span>Shared with me</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+</div>
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg text-text-secondary hover:bg-surface-container-low font-body-md text-body-md transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-headline-sm">schedule</span>
+<span>Recent</span>
+</div>
+</div>
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg text-text-secondary hover:bg-surface-container-low font-body-md text-body-md transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-headline-sm">star</span>
+<span>Starred</span>
+</div>
+</div>
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg text-text-secondary hover:bg-surface-container-low font-body-md text-body-md transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-headline-sm">delete</span>
+<span>Trash</span>
+</div>
+</div>
+<!-- Admin Navigation Items -->
+<div class="pt-2 mt-1 px-2 py-1 font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Administration</div>
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg text-text-secondary hover:bg-surface-container-low font-body-md text-body-md transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-headline-sm">group</span>
+<span>Admin Members</span>
+</div>
+<span class="font-label-sm text-label-sm bg-secondary-fixed text-text-primary px-1.5 py-0.5 rounded" id="preview-member-badge">3 users</span>
+</div>
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg text-text-secondary hover:bg-surface-container-low font-body-md text-body-md transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-headline-sm">database</span>
+<span>Admin Storage</span>
+</div>
+<span class="material-symbols-outlined text-label-md text-outline">tune</span>
+</div>
+</nav>
+<!-- Storage Progress Meter Component -->
+<div class="p-3 rounded-xl bg-surface-container-low flex flex-col gap-2 mt-1">
+<div class="flex items-center justify-between font-label-md text-label-md">
+<span class="text-text-primary font-title-md">Team Storage</span>
+<span class="text-text-secondary">41% used</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-file-folder rounded-full transition-all duration-500" style="width: 41%;"></div>
+</div>
+<div class="flex items-center justify-between font-label-sm text-label-sm text-text-secondary">
+<span>6.2 GB allocated</span>
+<span class="font-title-md text-primary">15 GB Plan</span>
+</div>
+</div>
+<!-- Live Status footer banner in preview -->
+<div class="p-2.5 rounded-lg bg-surface flex items-center gap-2 text-text-secondary font-label-sm text-label-sm shadow-sm">
+<span class="material-symbols-outlined text-file-folder text-headline-sm">shield</span>
+<span class="truncate">Zero-knowledge end-to-end policy</span>
+</div>
+</div>
+</div>
+<!-- Quick Help Micro Note -->
+<div class="px-2 py-1 flex items-center justify-between text-text-secondary font-label-sm text-label-sm">
+<span>Need custom tenant SSO / Okta?</span>
+<button class="text-primary hover:underline font-label-md" type="button">Contact sales</button>
+</div>
+</aside>
+</div>
+</div>
+</div>
+<script>
+  function updateWorkspaceName(val) {
+    const cleanName = val.trim() || 'My Workspace';
+    const previewNameElem = document.getElementById('preview-org-name');
+    const previewAvatarElem = document.getElementById('preview-avatar');
+    const slugPreview = document.getElementById('url-slug-preview');
+    
+    if (previewNameElem) {
+      previewNameElem.textContent = cleanName + ' Workspace';
+    }
+    
+    if (previewAvatarElem) {
+      previewAvatarElem.textContent = cleanName.charAt(0).toUpperCase();
+    }
+    
+    if (slugPreview) {
+      const slug = cleanName.toLowerCase().replace(/[^a-z0-9]/g, '');
+      slugPreview.textContent = slug || 'workspace';
+    }
+  }
+
+  function selectSize(btn) {
+    document.querySelectorAll('.team-size-btn').forEach(el => {
+      el.classList.remove('bg-surface', 'text-primary', 'shadow-sm');
+      el.classList.add('text-text-secondary');
+    });
+    btn.classList.add('bg-surface', 'text-primary', 'shadow-sm');
+    btn.classList.remove('text-text-secondary');
+  }
+
+  function removeChip(btn) {
+    const chip = btn.closest('span');
+    if (chip) {
+      chip.remove();
+      refreshChipCount();
+    }
+  }
+
+  function handleKeyChip(e) {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const input = e.target;
+      const email = input.value.trim().replace(',', '');
+      if (email && email.includes('@')) {
+        const container = document.getElementById('chips-container');
+        const chip = document.createElement('span');
+        chip.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-fixed/50 text-text-primary font-body-sm text-body-sm';
+        chip.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-file-folder"></span>' +
+          email +
+          '<button type="button" onclick="removeChip(this)" class="hover:text-danger ml-0.5 flex items-center"><span class="material-symbols-outlined text-label-md">close</span></button>';
+        container.appendChild(chip);
+        input.value = '';
+        refreshChipCount();
+      }
+    }
+  }
+
+  function refreshChipCount() {
+    const chips = document.querySelectorAll('#chips-container > span');
+    const count = chips.length;
+    const counterElem = document.getElementById('invite-counter');
+    const memberBadge = document.getElementById('preview-member-badge');
+    
+    if (counterElem) {
+      counterElem.textContent = count === 1 ? '1 invite queued' : count + ' invites queued';
+    }
+    
+    if (memberBadge) {
+      // 1 owner + invited teammates
+      memberBadge.textContent = (count + 1) + ' users';
+    }
+  }
+
+  function previewLogo(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById('logo-preview-img');
+        const icon = document.getElementById('logo-icon-placeholder');
+        if (img && icon) {
+          img.src = e.target.result;
+          img.classList.remove('hidden');
+          icon.classList.add('hidden');
+        }
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function handleCreateWorkspace() {
+    const name = document.getElementById('company-name').value || 'MacTidar';
+    alert('Workspace "' + name + '" successfully created! Redirecting to dashboard...');
+  }
+</script></main></body></html>
