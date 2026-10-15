@@ -37,6 +37,7 @@ module "hosting" {
   app_region          = var.app_region
   data_region         = var.data_region
   domain_name         = var.domain_name
+  zone_id             = module.dns.zone_id
   repository          = var.github_repository
   access_token        = var.github_access_token
   production_branch   = var.production_branch

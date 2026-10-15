@@ -1,6 +1,6 @@
 # MacTidar Cloud — Architecture & Data Model
 
-Status: draft v3 · Owner: Ukeme · Infra as code: Terraform · Data: **af-south-1 (Cape Town)** · App: **eu-west-1 (Ireland)** · Domain: **cloud.zetca.com**
+Status: draft v3 · Owner: Ukeme · Infra as code: Terraform · Data: **af-south-1 (Cape Town)** · App: **eu-west-1 (Ireland)** · Domain: **cloud.mactidar.com**
 
 ## 1. Goals & constraints
 - One team (3 people today), each with their own account. Invite-only, email + password sign-in.
@@ -15,7 +15,7 @@ Status: draft v3 · Owner: Ukeme · Infra as code: Terraform · Data: **af-south
 
 ```mermaid
 flowchart LR
-  B[Browser<br/>Next.js UI] -->|HTTPS<br/>cloud.zetca.com| H[Next.js server<br/>Amplify Hosting · eu-west-1<br/>pages + /api routes]
+  B[Browser<br/>Next.js UI] -->|HTTPS<br/>cloud.mactidar.com| H[Next.js server<br/>Amplify Hosting · eu-west-1<br/>pages + /api routes]
   B -->|presigned PUT / GET<br/>file bytes only| S3[(S3 bucket<br/>mactidar-files)]
   H -->|auth calls| C[Cognito<br/>User Pool]
   H -->|metadata, permissions,<br/>quota| D[(DynamoDB<br/>single table)]
@@ -40,7 +40,7 @@ Everything except the Next.js server lives in af-south-1.
 |---|---|---|
 | Frontend + API | Next.js (App Router) with Route Handlers under `/api` | One codebase; the server side holds AWS credentials, the browser never does |
 | Hosting | **AWS Amplify Hosting** (SSR / `WEB_COMPUTE`) in **eu-west-1** | Managed Next.js hosting, builds from GitHub on push, Terraform support, ~$1–5/month. Amplify doesn't appear to be offered in af-south-1; App Runner closed to new customers on 30 Apr 2026. Server code calls the Cape Town services with AWS SDK clients set to `af-south-1`, using the app's IAM compute role |
-| DNS & TLS | Route 53 hosted zone for `cloud.zetca.com` (delegated from Namecheap); Amplify custom domain issues the certificate | zetca.com stays at Namecheap; only the subdomain is handed to AWS so Terraform can manage its records |
+| DNS & TLS | Route 53 hosted zone for `cloud.mactidar.com` (delegated from Namecheap); Amplify custom domain issues the certificate | mactidar.com stays at Namecheap; only the subdomain is handed to AWS so Terraform can manage its records |
 | Auth | Amazon Cognito User Pool | Managed passwords, reset codes, MFA later. Admin-only user creation |
 | Database | DynamoDB, single table, on-demand | Pay-per-request, zero ops, fits key-based access patterns |
 | Files | S3, private bucket | Durable, cheap; direct browser upload via presigned URLs |
@@ -204,7 +204,7 @@ API checks Viewer access, then returns a presigned `GET` (5 minutes) with `respo
 
 ### 7.4 Public links
 - **Only the item's Owner** can create, change or disable its link.
-- Token: 22-character random string (128 bits), URL `https://cloud.zetca.com/s/<token>`. One active link per item.
+- Token: 22-character random string (128 bits), URL `https://cloud.mactidar.com/s/<token>`. One active link per item.
 - Optional password stored as an **argon2id** hash. After a correct password the server sets a signed, `HttpOnly` cookie for that token (12 h).
 - **Brute-force protection:** 10 wrong passwords → link locked for 15 minutes (`failedAttempts`, `lockedUntil`).
 - `expiresAt` checked on every request (and used as the TTL, so expired links are deleted automatically).
@@ -228,7 +228,7 @@ tmp/zips/<jobId>.zip      folder downloads (expire after 1 day)
 - Encryption: SSE-S3 (free). Can switch to SSE-KMS later if required.
 - **Versioning on**, with non-current versions expiring after 30 days — a safety net against accidental overwrites and deletes.
 - Lifecycle: abort incomplete multipart uploads after 2 days; expire `tmp/` after 1 day.
-- CORS: allow `PUT`, `GET`, `HEAD` from `https://cloud.zetca.com` (and `http://localhost:3000` for local development) only; expose `ETag` (needed to complete multipart uploads).
+- CORS: allow `PUT`, `GET`, `HEAD` from `https://cloud.mactidar.com` (and `http://localhost:3000` for local development) only; expose `ETag` (needed to complete multipart uploads).
 - EventBridge notifications on, for the thumbnail Lambda.
 
 ## 9. API endpoints (Next.js Route Handlers)
@@ -282,11 +282,11 @@ All routes require a signed-in user except **Auth** and **Public**. Inputs valid
 - Later: GuardDuty Malware Protection for S3, MFA.
 
 ## 12. Domain & DNS
-- `zetca.com` stays registered at Namecheap; its existing records are untouched.
-- Terraform creates a Route 53 hosted zone for **`cloud.zetca.com`**. Its 4 name servers are added **once, by hand, in Namecheap** as `NS` records for the host `cloud`. That delegates only the subdomain to AWS.
+- `mactidar.com` stays registered at Namecheap; its existing records are untouched.
+- Terraform creates a Route 53 hosted zone for **`cloud.mactidar.com`**. Its 4 name servers are added **once, by hand, in Namecheap** as `NS` records for the host `cloud`. That delegates only the subdomain to AWS.
 - Inside that zone, Terraform manages:
-  - `cloud.zetca.com` → Amplify app (records created by the Amplify custom-domain association, including certificate validation)
-  - SES domain verification, DKIM, SPF and DMARC records, so invites come from `no-reply@cloud.zetca.com`
+  - `cloud.mactidar.com` → Amplify app (records created by the Amplify custom-domain association, including certificate validation)
+  - SES domain verification, DKIM, SPF and DMARC records, so invites come from `no-reply@cloud.mactidar.com`
 - SES starts in sandbox mode (can only email verified addresses). That's enough for a 3-person team; request production access when invites go to new people regularly.
 
 ## 13. Terraform layout
@@ -295,7 +295,7 @@ One environment, one state file, default AWS account. The AWS provider defaults 
 infra/
   bootstrap/              # one-off: S3 bucket for Terraform state (versioned, encrypted)
   modules/
-    dns/                  # Route 53 zone for cloud.zetca.com
+    dns/                  # Route 53 zone for cloud.mactidar.com
     storage/              # S3 bucket, lifecycle, CORS, policy, EventBridge notifications
     database/             # DynamoDB table, GSIs, TTL, PITR
     auth/                 # Cognito user pool + app client
@@ -332,6 +332,6 @@ The main variable is downloads: data leaving S3 costs ~$0.15/GB beyond the first
 |---|---|
 | Data region | af-south-1 (Cape Town): S3, DynamoDB, Cognito, SES, Lambdas |
 | App hosting | Amplify Hosting in eu-west-1 (Ireland). Each page/API request adds ~150–200 ms; file uploads and downloads go straight to Cape Town and aren't affected |
-| Domain | `cloud.zetca.com`, subdomain delegated from Namecheap to Route 53 |
+| Domain | `cloud.mactidar.com`, subdomain delegated from Namecheap to Route 53 |
 | AWS account | Default account, single environment |
 | Public links | Owners only |

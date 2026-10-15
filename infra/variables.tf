@@ -13,7 +13,7 @@ variable "app_region" {
 variable "domain_name" {
   description = "Domain the app is served from. Delegated from Namecheap to Route 53."
   type        = string
-  default     = "cloud.zetca.com"
+  default     = "cloud.mactidar.com"
 }
 
 variable "github_repository" {
