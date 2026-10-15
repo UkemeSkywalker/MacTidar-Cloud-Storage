@@ -33,6 +33,7 @@ export function FileBrowser({
   emptyState,
   meId,
   showToolbar = false,
+  highlight,
 }: {
   rows: BrowserRow[];
   header?: React.ReactNode;
@@ -43,6 +44,7 @@ export function FileBrowser({
   emptyState?: React.ReactNode;
   meId: string;
   showToolbar?: boolean;
+  highlight?: string;
 }) {
   const router = useRouter();
   const params = useSearchParams();
@@ -390,7 +392,7 @@ export function FileBrowser({
                         <FileIcon type={r.type} name={r.name} mime={r.mimeType} />
                         <span className="min-w-0">
                           <span className={`flex items-center gap-1.5 font-title-md text-title-md ${isSel ? "text-primary" : "text-text-primary"}`}>
-                            <span className="truncate">{r.name}</span>
+                            <span className="truncate">{highlight ? <Highlight text={r.name} q={highlight} /> : r.name}</span>
                             {r.starred && <Icon name="star" fill className="text-[16px] text-[#f59e0b]" />}
                           </span>
                           <span className="block truncate font-body-sm text-body-sm text-text-secondary">{kindLabel(r.type, r.name, r.mimeType)}</span>
@@ -645,5 +647,17 @@ export function Breadcrumbs({ crumbs, rootLabel, rootHref }: { crumbs: { id: str
         );
       })}
     </nav>
+  );
+}
+
+function Highlight({ text, q }: { text: string; q: string }) {
+  const i = text.toLowerCase().indexOf(q.toLowerCase());
+  if (i < 0 || !q) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, i)}
+      <mark className="rounded bg-primary-fixed px-0.5 text-primary">{text.slice(i, i + q.length)}</mark>
+      {text.slice(i + q.length)}
+    </>
   );
 }

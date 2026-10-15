@@ -36,3 +36,17 @@ export async function listRecent(userId: string, limit = 100) {
   );
   return (res.Items ?? []).map((r) => ({ itemId: r.itemId as string, action: r.action as RecentAction, at: r.at as string }));
 }
+
+export async function clearRecent(userId: string) {
+  const { BatchWriteCommand } = await import("@aws-sdk/lib-dynamodb");
+  const items = await listRecent(userId, 1000);
+  for (let i = 0; i < items.length; i += 25) {
+    await ddb().send(
+      new BatchWriteCommand({
+        RequestItems: {
+          [TABLE()]: items.slice(i, i + 25).map((r) => ({ DeleteRequest: { Key: keys.recent(userId, r.itemId) } })),
+        },
+      }),
+    );
+  }
+}
