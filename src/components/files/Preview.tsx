@@ -18,6 +18,7 @@ export function Preview({
   onShare,
   onStar,
   canShare,
+  canDownload = true,
 }: {
   rows: Row[];
   index: number;
@@ -28,6 +29,7 @@ export function Preview({
   onShare?: (row: Row) => void;
   onStar?: (row: Row) => void;
   canShare?: boolean;
+  canDownload?: boolean;
 }) {
   const row = rows[index];
   const [zoom, setZoom] = useState(100);
@@ -82,9 +84,11 @@ export function Preview({
               <Icon name="share" className="text-[18px]" /> Share
             </button>
           )}
-          <a aria-label="Download" href={downloadUrl(row)} className={roundBtn}>
-            <Icon name="download" className="text-[20px]" />
-          </a>
+          {canDownload && (
+            <a aria-label="Download" href={downloadUrl(row)} className={roundBtn}>
+              <Icon name="download" className="text-[20px]" />
+            </a>
+          )}
           {onStar && (
             <button aria-label={row.starred ? "Unstar" : "Star"} onClick={() => onStar(row)} className={roundBtn}>
               <Icon name="star" fill={row.starred} className={`text-[20px] ${row.starred ? "text-[#facc15]" : ""}`} />
@@ -132,9 +136,9 @@ export function Preview({
               <FileIcon type="file" name={row.name} mime={row.mimeType} size="xl" />
               <p className="font-headline-sm text-headline-sm">No preview available</p>
               <p className="font-body-md text-body-md text-white/60">Download the file to open it on your device.</p>
-              <a href={downloadUrl(row)} className="mt-2 flex h-10 items-center gap-2 rounded-full bg-primary-container px-5 font-title-md text-title-md hover:bg-primary">
+              {canDownload && <a href={downloadUrl(row)} className="mt-2 flex h-10 items-center gap-2 rounded-full bg-primary-container px-5 font-title-md text-title-md hover:bg-primary">
                 <Icon name="download" className="text-[18px]" /> Download ({formatBytes(row.size)})
-              </a>
+              </a>}
             </div>
           )}
           <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full bg-white/10 px-5 py-2.5 backdrop-blur">

@@ -9,16 +9,19 @@ export function FolderView({
   crumbs,
   viaShare,
   rows,
+  meId,
 }: {
   folder: { id: string; name: string; role: AccessRole; path: string };
   crumbs: Crumb[];
   viaShare: boolean;
   rows: BrowserRow[];
+  meId: string;
 }) {
   const isRoot = folder.id.startsWith("root-") && !viaShare;
   return (
     <FileBrowser
       rows={rows}
+      meId={meId}
       folder={folder}
       locationLabel={crumbs.map((c) => c.name).join(" / ")}
       header={
