@@ -11,6 +11,7 @@ import { toast } from "../toast";
 import { MoveDialog, NameDialog, TrashDialog } from "./dialogs";
 import { FileIcon, kindLabel } from "./FileIcon";
 import { Preview } from "./Preview";
+import { ShareDialog } from "./ShareDialog";
 import type { AccessRole, Row } from "./types";
 import { UploadPanel } from "./UploadPanel";
 import { useUploads } from "./useUploads";
@@ -30,7 +31,8 @@ export function FileBrowser({
   locationLabel,
   showLocation = false,
   emptyState,
-  onShare,
+  meId,
+  showToolbar = false,
 }: {
   rows: BrowserRow[];
   header?: React.ReactNode;
@@ -39,7 +41,8 @@ export function FileBrowser({
   locationLabel?: string;
   showLocation?: boolean;
   emptyState?: React.ReactNode;
-  onShare?: (row: BrowserRow) => void;
+  meId: string;
+  showToolbar?: boolean;
 }) {
   const router = useRouter();
   const params = useSearchParams();
@@ -52,6 +55,8 @@ export function FileBrowser({
   const [preview, setPreview] = useState<number | null>(null);
   const [dragging, setDragging] = useState(false);
   const [starOverrides, setStarOverrides] = useState<Record<string, boolean>>({});
+  const [shareRow, setShareRow] = useState<BrowserRow | null>(null);
+  const onShare = (row: BrowserRow) => setShareRow(row);
   const fileInput = useRef<HTMLInputElement>(null);
   const dragDepth = useRef(0);
 
@@ -212,7 +217,7 @@ export function FileBrowser({
 
   const quickActions = (r: BrowserRow, alwaysVisible = false) => (
     <div className={`flex items-center justify-end gap-1 ${alwaysVisible ? "" : "opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"}`}>
-      {onShare && can(r.role, "EDITOR") && (
+      {can(r.role, "EDITOR") && (
         <IconBtn label="Share" icon="share" onClick={() => onShare(r)} />
       )}
       {r.type === "file" && <IconBtn label="Download" icon="download" onClick={() => downloadMany([r])} />}
@@ -223,7 +228,7 @@ export function FileBrowser({
           ...(can(r.role, "EDITOR")
             ? [
                 { label: "Rename", icon: "edit", onClick: () => setNameDialog({ mode: "rename", row: r }) },
-                { label: "Move", icon: "drive_file_move", onClick: () => setMoveRows([r]) },
+                ...(folder ? [{ label: "Move", icon: "drive_file_move", onClick: () => setMoveRows([r]) }] : []),
                 { label: "Move to trash", icon: "delete", danger: true, onClick: () => setTrashRows([r]) },
               ]
             : []),
@@ -238,7 +243,7 @@ export function FileBrowser({
     <div className="mx-auto max-w-[1400px]">
       {header}
 
-      {(folder || showLocation) && (
+      {(folder || showLocation || showToolbar) && (
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             {canUpload && (
@@ -317,9 +322,9 @@ export function FileBrowser({
           <span className="mr-2 flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 font-title-md text-title-md">
             <Icon name="check_circle" className="text-[18px]" /> {selectedRows.length} item{selectedRows.length > 1 ? "s" : ""} selected
           </span>
-          {onShare && one && can(one.role, "EDITOR") && <BarBtn icon="person_add" label="Share" onClick={() => onShare(one)} />}
+          {one && can(one.role, "EDITOR") && <BarBtn icon="person_add" label="Share" onClick={() => onShare(one)} />}
           <BarBtn icon="download" label="Download" onClick={() => downloadMany(selectedRows)} />
-          {allEditable && <BarBtn icon="drive_file_move" label="Move" onClick={() => setMoveRows(selectedRows)} />}
+          {allEditable && folder && <BarBtn icon="drive_file_move" label="Move" onClick={() => setMoveRows(selectedRows)} />}
           {one && can(one.role, "EDITOR") && <BarBtn icon="edit" label="Rename" onClick={() => setNameDialog({ mode: "rename", row: one })} />}
           {allEditable && <BarBtn icon="delete" label="Delete" onClick={() => setTrashRows(selectedRows)} />}
           <span className="ml-auto hidden font-body-sm text-body-sm text-white/70 md:inline">
@@ -452,13 +457,13 @@ export function FileBrowser({
                   <RowMenu
                     items={[
                       { label: "Open", icon: "open_in_new", onClick: () => open(r) },
-                      ...(onShare && can(r.role, "EDITOR") ? [{ label: "Share", icon: "share", onClick: () => onShare(r) }] : []),
+                      ...(can(r.role, "EDITOR") ? [{ label: "Share", icon: "share", onClick: () => onShare(r) }] : []),
                       ...(r.type === "file" ? [{ label: "Download", icon: "download", onClick: () => downloadMany([r]) }] : []),
                       { label: r.starred ? "Unstar" : "Star", icon: "star", onClick: () => toggleStar(r) },
                       ...(can(r.role, "EDITOR")
                         ? [
                             { label: "Rename", icon: "edit", onClick: () => setNameDialog({ mode: "rename", row: r }) },
-                            { label: "Move", icon: "drive_file_move", onClick: () => setMoveRows([r]) },
+                            ...(folder ? [{ label: "Move", icon: "drive_file_move", onClick: () => setMoveRows([r]) }] : []),
                             { label: "Move to trash", icon: "delete", danger: true, onClick: () => setTrashRows([r]) },
                           ]
                         : []),
@@ -541,6 +546,8 @@ export function FileBrowser({
         }}
       />
 
+      {shareRow && <ShareDialog itemId={shareRow.id} meId={meId} onClose={() => setShareRow(null)} onChanged={refresh} />}
+
       {preview !== null && files[preview] && (
         <Preview
           rows={files}
@@ -550,8 +557,8 @@ export function FileBrowser({
           onClose={() => setPreview(null)}
           downloadUrl={downloadUrl}
           onStar={(r) => toggleStar(r as BrowserRow)}
-          onShare={onShare ? (r) => onShare(r as BrowserRow) : undefined}
-          canShare={!!onShare && can(files[preview].role, "EDITOR")}
+          onShare={(r) => onShare(r as BrowserRow)}
+          canShare={can(files[preview].role, "EDITOR")}
         />
       )}
     </div>

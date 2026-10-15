@@ -18,6 +18,7 @@ export async function FolderPage({ folderId }: { folderId: string }) {
       crumbs={crumbs}
       viaShare={viaShare}
       rows={rows}
+      meId={user.id}
     />
   );
 }
