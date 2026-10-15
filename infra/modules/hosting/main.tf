@@ -5,6 +5,7 @@ variable "name" { type = string }
 variable "app_region" { type = string }
 variable "data_region" { type = string }
 variable "domain_name" { type = string }
+variable "zone_id" { type = string }
 variable "repository" { type = string }
 variable "production_branch" { type = string }
 variable "table_arn" { type = string }
@@ -164,8 +165,6 @@ resource "aws_amplify_branch" "main" {
   }
 }
 
-# Amplify creates the DNS + certificate validation records itself, because
-# the cloud.zetca.com zone is in Route 53 in this account.
 resource "aws_amplify_domain_association" "this" {
   region                = var.app_region
   app_id                = aws_amplify_app.this.id
@@ -175,6 +174,36 @@ resource "aws_amplify_domain_association" "this" {
   sub_domain {
     branch_name = aws_amplify_branch.main.branch_name
     prefix      = ""
+  }
+}
+
+# DNS records for the custom domain. Amplify only creates these itself if the
+# zone already exists when the domain is added, so Terraform manages them.
+locals {
+  # "<name> CNAME <value>"
+  cert_record = split(" ", trimspace(aws_amplify_domain_association.this.certificate_verification_dns_record))
+  # " CNAME <distribution>.cloudfront.net"
+  cdn_domain = element(split(" ", trimspace(one(aws_amplify_domain_association.this.sub_domain[*].dns_record))), 1)
+}
+
+resource "aws_route53_record" "certificate" {
+  zone_id = var.zone_id
+  name    = local.cert_record[0]
+  type    = "CNAME"
+  ttl     = 300
+  records = [local.cert_record[2]]
+}
+
+# The app lives at the zone apex, which can't be a CNAME, so use an alias.
+resource "aws_route53_record" "app" {
+  zone_id = var.zone_id
+  name    = var.domain_name
+  type    = "A"
+
+  alias {
+    name                   = local.cdn_domain
+    zone_id                = "Z2FDTNDATAQYW2" # fixed hosted zone ID for all CloudFront distributions
+    evaluate_target_health = false
   }
 }
 

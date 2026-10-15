@@ -41,7 +41,7 @@ Locally, the app uses your own AWS CLI credentials to reach the Cape Town (af-so
    terraform -chdir=infra init
    terraform -chdir=infra apply
    ```
-5. **Delegate `cloud.zetca.com` from Namecheap:** in Namecheap → zetca.com → Advanced DNS, add 4 `NS` records with host `cloud`, one for each value in `terraform -chdir=infra output name_servers`. The certificate and email records then verify on their own (can take up to an hour).
+5. **Delegate `cloud.mactidar.com` from Namecheap:** in Namecheap → mactidar.com → Advanced DNS, add 4 `NS` records with host `cloud`, one for each value in `terraform -chdir=infra output name_servers`. The certificate and email records then verify on their own (can take up to an hour).
 6. **Cost alerts:** in Billing → Cost allocation tags, activate the `Project` tag so the `mactidar-monthly` budget can track this project's spend.
 
 After that, every push to `master` is built and deployed by Amplify.

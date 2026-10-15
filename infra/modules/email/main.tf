@@ -1,4 +1,4 @@
-# SES domain identity for cloud.zetca.com with DKIM, SPF and DMARC.
+# SES domain identity for cloud.mactidar.com with DKIM, SPF and DMARC.
 
 variable "domain_name" {
   type = string

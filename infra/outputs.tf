@@ -1,5 +1,5 @@
 output "name_servers" {
-  description = "Add these as NS records for host \"cloud\" in Namecheap (zetca.com → Advanced DNS)."
+  description = "Add these as NS records for host \"cloud\" in Namecheap (mactidar.com → Advanced DNS)."
   value       = module.dns.name_servers
 }
 

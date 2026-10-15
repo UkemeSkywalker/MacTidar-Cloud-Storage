@@ -4,7 +4,11 @@ variable "domain_name" {
 
 resource "aws_route53_zone" "this" {
   name    = var.domain_name
-  comment = "Delegated from Namecheap (zetca.com)"
+  comment = "Delegated from Namecheap (mactidar.com)"
+
+  # Amplify adds its own records (app alias, certificate validation) that
+  # Terraform doesn't track; allow the zone to be removed anyway.
+  force_destroy = true
 }
 
 output "zone_id" {
