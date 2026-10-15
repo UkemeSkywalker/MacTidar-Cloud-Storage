@@ -28,7 +28,10 @@ Locally, the app uses your own AWS CLI credentials to reach the Cape Town (af-so
    terraform -chdir=infra/bootstrap init
    terraform -chdir=infra/bootstrap apply
    ```
-3. **GitHub token for Amplify:** create a classic personal access token with the `repo` and `admin:repo_hook` scopes, then:
+3. **Connect GitHub to Amplify:**
+   - Install the AWS Amplify GitHub App for eu-west-1 on this repository: https://github.com/apps/aws-amplify-eu-west-1/installations/new
+   - Create a classic personal access token with only the `admin:repo_hook` scope. Amplify uses it once to create the app and doesn't store it, so you can delete it after the first apply.
+   - Then:
    ```bash
    export TF_VAR_github_access_token=ghp_...
    cp infra/terraform.tfvars.example infra/terraform.tfvars   # set alert_email
