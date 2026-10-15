@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {"darkMode":"class","theme":{"extend":{"colors":{"on-primary-fixed-variant":"#003ea8","inverse-primary":"#b4c5ff","tertiary-container":"#007f36","secondary-fixed-dim":"#c0c7d0","file-folder":"#2563EB","surface-bright":"#f8f9fb","surface-container-low":"#f2f4f6","on-secondary-fixed-variant":"#40484f","tertiary-fixed-dim":"#62df7d","background":"#f8f9fb","warning":"#D97706","text-secondary":"#6B7280","on-secondary-fixed":"#151c23","surface-variant":"#e1e2e4","on-primary-container":"#eeefff","file-sheet":"#16A34A","secondary":"#585f67","on-background":"#191c1e","file-pdf":"#DC2626","on-error-container":"#93000a","primary":"#004ac6","on-primary":"#ffffff","surface-dim":"#d9dadc","primary-container":"#2563eb","outline":"#737686","on-primary-fixed":"#00174b","on-surface-variant":"#434655","surface-container-highest":"#e1e2e4","file-image":"#9333EA","surface-tint":"#0053db","on-error":"#ffffff","on-tertiary":"#ffffff","primary-fixed-dim":"#b4c5ff","error":"#ba1a1a","inverse-on-surface":"#f0f1f3","on-secondary":"#ffffff","surface":"#FFFFFF","danger":"#DC2626","file-doc":"#4F46E5","text-primary":"#111827","surface-container-lowest":"#ffffff","tertiary-fixed":"#7ffc97","secondary-container":"#dce3ec","on-tertiary-fixed":"#002109","canvas":"#F7F8FA","border":"#E5E7EB","error-container":"#ffdad6","surface-container-high":"#e7e8ea","surface-container":"#edeef0","file-archive":"#6B7280","on-tertiary-container":"#c7ffca","on-surface":"#191c1e","primary-fixed":"#dbe1ff","secondary-fixed":"#dce3ec","outline-variant":"#c3c6d7","inverse-surface":"#2e3132","file-video":"#EC4899","on-secondary-container":"#5e656d","overlay-dark":"rgba(17, 24, 39, 0.95)","on-tertiary-fixed-variant":"#005320","tertiary":"#006329"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter":"1rem","margin-desktop":"2rem","margin":"1rem","space-xl":"2rem","space-xs":"0.25rem","space-lg":"1.5rem","gutter-desktop":"1.5rem","space-md":"1rem","space-sm":"0.5rem"},"fontFamily":{"label-sm":["Inter"],"body-md":["Inter"],"headline-sm":["Inter"],"body-sm":["Inter"],"label-md":["Inter"],"headline-lg":["Inter"],"title-md":["Inter"]},"fontSize":{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"18px","fontWeight":"400"}],"label-md":["12px",{"lineHeight":"16px","fontWeight":"500"}],"headline-lg":["24px",{"lineHeight":"32px","fontWeight":"600"}],"title-md":["14px",{"lineHeight":"20px","fontWeight":"600"}]}}}};</script></head><body class="bg-canvas font-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-[260px] bg-surface z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center justify-between"><div class="flex items-center gap-space-xs"><div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary"><span class="material-symbols-outlined text-[20px]">cloud</span></div><span class="font-headline-sm text-headline-sm text-text-primary">MacTidar</span></div><span class="px-space-xs py-0.5 rounded-full bg-file-image/10 text-file-image font-label-sm text-label-sm">Platform admin</span></div><div class="px-space-md pt-space-md"><div class="px-space-xs mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Platform</div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm rounded-lg"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="overview" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">Overview</span></div></a><a aria-current="page" class="flex items-center justify-between px-space-sm py-2 transition-colors bg-primary-container text-on-primary-container font-headline-sm rounded-lg" data-path="workspaces" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">domain</span><span class="font-body-md text-body-md">Workspaces</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="users" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">group</span><span class="font-body-md text-body-md">Users</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="abuse-reports" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">gpp_maybe</span><span class="font-body-md text-body-md">Abuse reports</span></div><span class="w-5 h-5 flex items-center justify-center rounded-full bg-danger text-on-error font-label-sm text-label-sm">3</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="system" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">dns</span><span class="font-body-md text-body-md">System</span></div></a></nav></div></div><div class="flex flex-col"><div class="px-space-md mb-space-md"><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm rounded-lg"><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-body-md text-body-md">Settings</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="client-portal" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">open_in_new</span><span class="font-body-md text-body-md">Back to user app</span></div></a></nav></div><div class="p-space-md mx-space-sm mb-space-sm rounded-xl bg-surface-container-low"><div class="flex items-center gap-2 mb-1"><span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span><span class="font-label-sm text-label-sm text-text-primary font-medium">Operational</span></div><div class="font-label-sm text-label-sm text-text-secondary truncate">System Status: S3 Cape Town</div></div></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center flex-1 max-w-[540px]"><div class="w-full h-10 px-space-md rounded-lg bg-surface-container-low flex items-center gap-space-sm text-text-secondary focus-within:bg-surface focus-within:ring-2 focus-within:ring-primary-container transition-all"><span class="material-symbols-outlined text-[20px]">search</span><input class="w-full bg-transparent border-0 outline-none font-body-sm text-body-sm text-text-primary placeholder:text-text-secondary" placeholder="Search workspaces, users, files, IPs... (⌘K)" type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-2 px-space-sm py-1 rounded-full bg-surface-container-low"><span class="w-2 h-2 rounded-full bg-tertiary-container"></span><span class="font-label-sm text-label-sm text-on-surface-variant">Production · af-south-1</span></div><button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-danger"></span></button><div class="h-6 w-[1px] bg-surface-variant"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden xl:flex flex-col text-left"><span class="font-title-md text-title-md text-text-primary leading-none">Ukeme</span><span class="font-label-sm text-label-sm text-text-secondary mt-0.5 leading-none">Superadmin</span></div></div></div></header><main class="relative pt-16 bg-canvas min-h-screen"><div class="flex flex-col w-full">
+<div class="px-space-lg py-space-lg flex flex-col gap-space-lg">
+<!-- Breadcrumb & Header Summary -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-space-xs font-label-md text-label-md text-text-secondary mb-1">
+<span>Platform</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-text-primary">Workspaces</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm ml-1">af-south-1</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<h1 class="font-headline-lg text-headline-lg text-text-primary tracking-tight">Workspaces</h1>
+<span class="font-body-md text-body-md text-text-secondary">1,402 tenants registered</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">
+          Manage, inspect, and audit all tenant workspaces across personal sandboxes and company production tiers.
+        </p>
+</div>
+<!-- Quick Metrics Strip -->
+<div class="flex items-center gap-3">
+<div class="bg-surface px-space-md py-2 rounded-xl shadow-sm flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-tertiary-fixed/40 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-text-primary leading-tight">1,394</div>
+<div class="font-label-sm text-label-sm text-text-secondary">Healthy (99.4%)</div>
+</div>
+</div>
+<div class="bg-surface px-space-md py-2 rounded-xl shadow-sm flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-error-container/60 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[18px]">gpp_maybe</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-error leading-tight">8</div>
+<div class="font-label-sm text-label-sm text-text-secondary">Suspended</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Filter Control Bar -->
+<div class="bg-surface rounded-xl shadow-sm p-space-md flex flex-col gap-space-md">
+<!-- Search & Main Actions -->
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md">
+<div class="relative flex-1 max-w-xl">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">search</span>
+<input class="w-full h-10 pl-10 pr-12 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-text-primary placeholder:text-text-secondary focus:bg-surface focus:outline-none focus:ring-2 focus:ring-primary-container transition-all" placeholder="Search by workspace name, URL slug, or owner email... (⌘K)" type="text"/>
+<kbd class="hidden sm:inline-flex items-center gap-0.5 absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-surface-container-highest text-[10px] font-label-sm text-on-surface-variant uppercase tracking-wider">⌘K</kbd>
+</div>
+<div class="flex items-center gap-space-sm flex-wrap">
+<button class="h-10 px-space-md rounded-full bg-surface-container-low hover:bg-surface-container-high text-text-primary font-label-md text-label-md flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">download</span>
+<span>Export CSV</span>
+</button>
+<button class="h-10 px-space-md rounded-full bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md flex items-center gap-space-xs shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>Platform Quota Rules</span>
+</button>
+</div>
+</div>
+<!-- Segmented Controls / Quick Filters -->
+<div class="flex flex-wrap items-center gap-y-3 gap-x-space-lg pt-space-xs">
+<!-- Type Filter -->
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Type:</span>
+<div class="inline-flex p-0.5 rounded-lg bg-surface-container-low">
+<button class="px-2.5 py-1 rounded-[6px] bg-surface font-label-md text-label-md text-text-primary shadow-xs">All (1,402)</button>
+<button class="px-2.5 py-1 rounded-[6px] text-text-secondary hover:text-text-primary font-label-md text-label-md transition-colors">Personal (1,180)</button>
+<button class="px-2.5 py-1 rounded-[6px] text-text-secondary hover:text-text-primary font-label-md text-label-md transition-colors">Company (222)</button>
+</div>
+</div>
+<div class="h-4 w-[1px] bg-surface-variant hidden md:block"></div>
+<!-- Status Filter -->
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Status:</span>
+<div class="inline-flex p-0.5 rounded-lg bg-surface-container-low">
+<button class="px-2.5 py-1 rounded-[6px] bg-surface font-label-md text-label-md text-text-primary shadow-xs">All</button>
+<button class="px-2.5 py-1 rounded-[6px] text-text-secondary hover:text-text-primary font-label-md text-label-md transition-colors flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+<span>Active (1,394)</span>
+</button>
+<button class="px-2.5 py-1 rounded-[6px] text-text-secondary hover:text-text-primary font-label-md text-label-md transition-colors flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-danger"></span>
+<span>Suspended (8)</span>
+</button>
+</div>
+</div>
+<div class="h-4 w-[1px] bg-surface-variant hidden md:block"></div>
+<!-- Plan Filter -->
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Plan:</span>
+<div class="inline-flex p-0.5 rounded-lg bg-surface-container-low">
+<button class="px-2.5 py-1 rounded-[6px] bg-surface font-label-md text-label-md text-text-primary shadow-xs">All</button>
+<button class="px-2.5 py-1 rounded-[6px] text-text-secondary hover:text-text-primary font-label-md text-label-md transition-colors">Free (1,402)</button>
+<button class="px-2.5 py-1 rounded-[6px] text-text-secondary/50 font-label-md text-label-md cursor-not-allowed">Team Early Access (0)</button>
+</div>
+</div>
+<div class="ml-auto flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-text-secondary">Sorted by:</span>
+<button class="flex items-center gap-1 font-label-md text-label-md text-text-primary hover:text-primary transition-colors">
+<span>Storage Usage (High to Low)</span>
+<span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="bg-surface rounded-xl shadow-sm overflow-hidden">
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[1240px]">
+<thead>
+<tr class="h-11 bg-surface-container-low/70 text-text-secondary font-label-sm text-label-sm uppercase tracking-wider select-none">
+<th class="w-12 px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-outline/30 text-primary-container focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</th>
+<th class="px-4 py-2 font-medium">Workspace</th>
+<th class="px-4 py-2 font-medium">Type</th>
+<th class="px-4 py-2 font-medium">Owner</th>
+<th class="px-4 py-2 font-medium">Members</th>
+<th class="px-4 py-2 font-medium">Storage Quota</th>
+<th class="px-4 py-2 font-medium">Traffic (30d)</th>
+<th class="px-4 py-2 font-medium">Outside Sharing</th>
+<th class="px-4 py-2 font-medium">Created</th>
+<th class="px-4 py-2 font-medium">Status</th>
+<th class="w-16 px-4 py-2 text-right font-medium">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low font-body-sm text-body-sm">
+<!-- ROW 1: Designcorp -->
+<tr class="h-14 hover:bg-surface-bright transition-colors group">
+<td class="px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-outline/30 text-primary-container focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-file-folder/10 text-file-folder flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-medium">
+                    D
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate font-semibold hover:text-primary transition-colors cursor-pointer">Designcorp</span>
+<span class="font-label-sm text-label-sm text-text-secondary font-mono truncate">cloud.mactidar.com/w/designcorp</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-medium">
+                  Company
+                </span>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-label-sm text-on-surface-variant font-medium">
+                    SJ
+                  </div>
+<div class="flex flex-col">
+<span class="text-text-primary leading-tight font-medium">Sarah Jenkins</span>
+<span class="text-text-secondary text-[11px] leading-tight">sarah@designcorp.com</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-1.5 text-text-primary">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">groups</span>
+<span>12 members</span>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex flex-col gap-1 w-32">
+<div class="flex justify-between font-label-sm text-label-sm text-text-secondary">
+<span class="text-text-primary font-medium">2.4 GB</span>
+<span>3 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-primary-container" style="width: 80%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="font-medium text-text-primary">480 GB</span>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed/50 text-on-tertiary-fixed-variant font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  On (2 domains)
+                </span>
+</td>
+<td class="px-4 py-2 text-text-secondary">Feb 3, 2024</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                  Active
+                </span>
+</td>
+<td class="px-4 py-2 text-right">
+<button class="p-1 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- ROW 2: MacTidar Inc -->
+<tr class="h-14 hover:bg-surface-bright transition-colors group">
+<td class="px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-outline/30 text-primary-container focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-primary text-on-primary flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-medium">
+                    M
+                  </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-text-primary truncate font-semibold hover:text-primary transition-colors cursor-pointer">MacTidar Inc</span>
+<span class="material-symbols-outlined text-[14px] text-primary" title="Internal System Workspace">star</span>
+</div>
+<span class="font-label-sm text-label-sm text-text-secondary font-mono truncate">cloud.mactidar.com/w/mactidar</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-medium">
+                  Company
+                </span>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm flex items-center justify-center font-medium">
+                    UE
+                  </div>
+<div class="flex flex-col">
+<span class="text-text-primary leading-tight font-medium">Ukeme Emmanuel</span>
+<span class="text-text-secondary text-[11px] leading-tight">ukeme@mactidar.com</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-1.5 text-text-primary">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">groups</span>
+<span>48 members</span>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex flex-col gap-1 w-32">
+<div class="flex justify-between font-label-sm text-label-sm text-warning font-medium">
+<span>2.9 GB</span>
+<span class="text-text-secondary">3 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-warning" style="width: 96%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="font-medium text-text-primary">310 GB</span>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed/50 text-on-tertiary-fixed-variant font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  On (All)
+                </span>
+</td>
+<td class="px-4 py-2 text-text-secondary">Jan 10, 2024</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                  Active
+                </span>
+</td>
+<td class="px-4 py-2 text-right">
+<button class="p-1 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- ROW 3: Apex Studio -->
+<tr class="h-14 hover:bg-surface-bright transition-colors group">
+<td class="px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-outline/30 text-primary-container focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-file-image/10 text-file-image flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-medium">
+                    A
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate font-semibold hover:text-primary transition-colors cursor-pointer">Apex Studio</span>
+<span class="font-label-sm text-label-sm text-text-secondary font-mono truncate">cloud.mactidar.com/w/apexstudio</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-medium">
+                  Company
+                </span>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-label-sm text-on-surface-variant font-medium">
+                    AO
+                  </div>
+<div class="flex flex-col">
+<span class="text-text-primary leading-tight font-medium">Ada Okon</span>
+<span class="text-text-secondary text-[11px] leading-tight">ada@apexstudio.io</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-1.5 text-text-primary">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">groups</span>
+<span>8 members</span>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex flex-col gap-1 w-32">
+<div class="flex justify-between font-label-sm text-label-sm text-text-secondary">
+<span class="text-text-primary font-medium">1.8 GB</span>
+<span>3 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-primary-container" style="width: 60%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="font-medium text-text-primary">195 GB</span>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed/50 text-on-tertiary-fixed-variant font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  On (1 domain)
+                </span>
+</td>
+<td class="px-4 py-2 text-text-secondary">Mar 12, 2024</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                  Active
+                </span>
+</td>
+<td class="px-4 py-2 text-right">
+<button class="p-1 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- ROW 4: Ukeme's Personal -->
+<tr class="h-14 hover:bg-surface-bright transition-colors group">
+<td class="px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-outline/30 text-primary-container focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high text-on-surface flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-medium">
+                    U
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate font-semibold hover:text-primary transition-colors cursor-pointer">Ukeme's Personal</span>
+<span class="font-label-sm text-label-sm text-text-secondary font-mono truncate">cloud.mactidar.com/w/ukeme</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+                  Personal
+                </span>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm flex items-center justify-center font-medium">
+                    UE
+                  </div>
+<div class="flex flex-col">
+<span class="text-text-primary leading-tight font-medium">Ukeme Emmanuel</span>
+<span class="text-text-secondary text-[11px] leading-tight">ukeme@example.com</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-1.5 text-text-secondary">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span>1 member</span>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex flex-col gap-1 w-32">
+<div class="flex justify-between font-label-sm text-label-sm text-text-secondary">
+<span class="text-text-primary font-medium">1.2 GB</span>
+<span>3 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-primary-container" style="width: 40%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="font-medium text-text-primary">14.2 GB</span>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-text-secondary font-label-sm text-label-sm">
+                  Off
+                </span>
+</td>
+<td class="px-4 py-2 text-text-secondary">Jan 10, 2024</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                  Active
+                </span>
+</td>
+<td class="px-4 py-2 text-right">
+<button class="p-1 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- ROW 5: WarezVault [SUSPENDED] -->
+<tr class="h-14 bg-error-container/20 hover:bg-error-container/30 transition-colors group">
+<td class="px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-error/40 text-danger focus:ring-danger focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-danger/15 text-danger flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-medium">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-text-primary truncate font-semibold">WarezVault</span>
+<span class="material-symbols-outlined text-[15px] text-danger" title="Flagged: DMCA copyright abuse">warning</span>
+</div>
+<span class="font-label-sm text-label-sm text-text-secondary font-mono truncate">cloud.mactidar.com/w/warezvault</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+                  Personal
+                </span>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-label-sm text-error font-medium">
+                    AK
+                  </div>
+<div class="flex flex-col">
+<span class="text-text-primary leading-tight font-medium">Alex K.</span>
+<span class="text-error text-[11px] leading-tight font-mono">alex99@tempmail.io</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-1.5 text-text-secondary">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span>1 member</span>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex flex-col gap-1 w-32">
+<div class="flex justify-between font-label-sm text-label-sm text-danger font-medium">
+<span>3.0 GB</span>
+<span>3 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-danger" style="width: 100%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="font-medium text-danger">540 GB</span>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-danger"></span>
+                  On (Public)
+                </span>
+</td>
+<td class="px-4 py-2 text-text-secondary">Sep 18, 2024</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-danger/10 text-danger font-label-sm text-label-sm font-medium" title="Flagged: DMCA copyright abuse">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+                  Suspended
+                </span>
+</td>
+<td class="px-4 py-2 text-right">
+<button class="p-1 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- ROW 6: Nairobi Creatives -->
+<tr class="h-14 hover:bg-surface-bright transition-colors group">
+<td class="px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-outline/30 text-primary-container focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-file-video/10 text-file-video flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-medium">
+                    N
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate font-semibold hover:text-primary transition-colors cursor-pointer">Nairobi Creatives</span>
+<span class="font-label-sm text-label-sm text-text-secondary font-mono truncate">cloud.mactidar.com/w/nairobicreatives</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-medium">
+                  Company
+                </span>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-label-sm text-on-surface-variant font-medium">
+                    BM
+                  </div>
+<div class="flex flex-col">
+<span class="text-text-primary leading-tight font-medium">Brian Mwangi</span>
+<span class="text-text-secondary text-[11px] leading-tight">brian@nairobidigital.ke</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-1.5 text-text-primary">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">groups</span>
+<span>6 members</span>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex flex-col gap-1 w-32">
+<div class="flex justify-between font-label-sm text-label-sm text-text-secondary">
+<span class="text-text-primary font-medium">950 MB</span>
+<span>3 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-primary-container" style="width: 31%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="font-medium text-text-primary">42 GB</span>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed/50 text-on-tertiary-fixed-variant font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  On (3 domains)
+                </span>
+</td>
+<td class="px-4 py-2 text-text-secondary">Apr 22, 2024</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                  Active
+                </span>
+</td>
+<td class="px-4 py-2 text-right">
+<button class="p-1 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- ROW 7: Amara Photography -->
+<tr class="h-14 hover:bg-surface-bright transition-colors group">
+<td class="px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-outline/30 text-primary-container focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-file-image/10 text-file-image flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-medium">
+                    AP
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate font-semibold hover:text-primary transition-colors cursor-pointer">Amara Photography</span>
+<span class="font-label-sm text-label-sm text-text-secondary font-mono truncate">cloud.mactidar.com/w/amaraphoto</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+                  Personal
+                </span>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-label-sm text-on-surface-variant font-medium">
+                    AD
+                  </div>
+<div class="flex flex-col">
+<span class="text-text-primary leading-tight font-medium">Amara Diallo</span>
+<span class="text-text-secondary text-[11px] leading-tight">amara@diallo.art</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-1.5 text-text-secondary">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span>1 member</span>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex flex-col gap-1 w-32">
+<div class="flex justify-between font-label-sm text-label-sm text-warning font-medium">
+<span>2.7 GB</span>
+<span class="text-text-secondary">3 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-warning" style="width: 90%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="font-medium text-text-primary">88 GB</span>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed/50 text-on-tertiary-fixed-variant font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  On (Public)
+                </span>
+</td>
+<td class="px-4 py-2 text-text-secondary">Jun 5, 2024</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                  Active
+                </span>
+</td>
+<td class="px-4 py-2 text-right">
+<button class="p-1 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- ROW 8: Cape Town Tech -->
+<tr class="h-14 hover:bg-surface-bright transition-colors group">
+<td class="px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-outline/30 text-primary-container focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-tertiary-fixed/40 text-tertiary flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-medium">
+                    CT
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate font-semibold hover:text-primary transition-colors cursor-pointer">Cape Town Tech</span>
+<span class="font-label-sm text-label-sm text-text-secondary font-mono truncate">cloud.mactidar.com/w/capetech</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-medium">
+                  Company
+                </span>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-label-sm text-on-surface-variant font-medium">
+                    LV
+                  </div>
+<div class="flex flex-col">
+<span class="text-text-primary leading-tight font-medium">Liam Van Der Merwe</span>
+<span class="text-text-secondary text-[11px] leading-tight">liam@capetech.co.za</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-1.5 text-text-primary">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">groups</span>
+<span>15 members</span>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex flex-col gap-1 w-32">
+<div class="flex justify-between font-label-sm text-label-sm text-text-secondary">
+<span class="text-text-primary font-medium">1.4 GB</span>
+<span>3 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-primary-container" style="width: 47%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="font-medium text-text-primary">64 GB</span>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-text-secondary font-label-sm text-label-sm">
+                  Off
+                </span>
+</td>
+<td class="px-4 py-2 text-text-secondary">Jul 19, 2024</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                  Active
+                </span>
+</td>
+<td class="px-4 py-2 text-right">
+<button class="p-1 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- ROW 9: Folake Law & Tax -->
+<tr class="h-14 hover:bg-surface-bright transition-colors group">
+<td class="px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-outline/30 text-primary-container focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-file-doc/10 text-file-doc flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-medium">
+                    FL
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate font-semibold hover:text-primary transition-colors cursor-pointer">Folake Law & Tax</span>
+<span class="font-label-sm text-label-sm text-text-secondary font-mono truncate">cloud.mactidar.com/w/folakelaw</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-medium">
+                  Company
+                </span>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-label-sm text-on-surface-variant font-medium">
+                    FA
+                  </div>
+<div class="flex flex-col">
+<span class="text-text-primary leading-tight font-medium">Folake Adebayo</span>
+<span class="text-text-secondary text-[11px] leading-tight">folake@adebayolaw.ng</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-1.5 text-text-primary">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">groups</span>
+<span>4 members</span>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex flex-col gap-1 w-32">
+<div class="flex justify-between font-label-sm text-label-sm text-text-secondary">
+<span class="text-text-primary font-medium">620 MB</span>
+<span>3 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-primary-container" style="width: 20%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="font-medium text-text-primary">6.2 GB</span>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-text-secondary font-label-sm text-label-sm">
+                  Off
+                </span>
+</td>
+<td class="px-4 py-2 text-text-secondary">Aug 11, 2024</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                  Active
+                </span>
+</td>
+<td class="px-4 py-2 text-right">
+<button class="p-1 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- ROW 10: Kofi Mensah -->
+<tr class="h-14 hover:bg-surface-bright transition-colors group">
+<td class="px-4 text-center">
+<input class="w-4 h-4 rounded bg-surface border-0 ring-1 ring-outline/30 text-primary-container focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high text-on-surface flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-medium">
+                    KM
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate font-semibold hover:text-primary transition-colors cursor-pointer">Kofi Mensah</span>
+<span class="font-label-sm text-label-sm text-text-secondary font-mono truncate">cloud.mactidar.com/w/kofimensah</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+                  Personal
+                </span>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm flex items-center justify-center font-medium">
+                    KM
+                  </div>
+<div class="flex flex-col">
+<span class="text-text-primary leading-tight font-medium">Kofi Mensah</span>
+<span class="text-text-secondary text-[11px] leading-tight">kofi@mensah.gh</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-1.5 text-text-secondary">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span>1 member</span>
+</div>
+</td>
+<td class="px-4 py-2">
+<div class="flex flex-col gap-1 w-32">
+<div class="flex justify-between font-label-sm text-label-sm text-text-secondary">
+<span class="text-text-primary font-medium">410 MB</span>
+<span>3 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-primary-container" style="width: 14%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2">
+<span class="font-medium text-text-primary">1.8 GB</span>
+</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-text-secondary font-label-sm text-label-sm">
+                  Off
+                </span>
+</td>
+<td class="px-4 py-2 text-text-secondary">Nov 1, 2024</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                  Active
+                </span>
+</td>
+<td class="px-4 py-2 text-right">
+<button class="p-1 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="px-space-md py-3 bg-surface flex flex-col sm:flex-row items-center justify-between gap-3 text-text-secondary font-body-sm text-body-sm">
+<div class="flex items-center gap-2">
+<span>Showing <strong class="text-text-primary font-medium">1–10</strong> of <strong class="text-text-primary font-medium">1,402</strong> workspaces</span>
+<span class="text-surface-variant">|</span>
+<div class="flex items-center gap-1">
+<span class="font-label-sm text-label-sm">Rows per page:</span>
+<select class="bg-surface-container-low text-text-primary font-label-sm text-label-sm rounded px-1.5 py-0.5 outline-none cursor-pointer">
+<option selected="">10</option>
+<option>25</option>
+<option>50</option>
+<option>100</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low text-text-secondary/40 font-label-md text-label-md flex items-center gap-1 cursor-not-allowed" disabled="" type="button">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+<span>Previous</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md font-medium">1</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container text-text-primary font-label-md text-label-md transition-colors">2</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container text-text-primary font-label-md text-label-md transition-colors">3</button>
+<span class="px-1 text-text-secondary">…</span>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container text-text-primary font-label-md text-label-md transition-colors">141</button>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-text-primary font-label-md text-label-md flex items-center gap-1 transition-colors" type="button">
+<span>Next</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Context Popover Template (Mock interactive preview for row action menu) -->
+<div class="hidden fixed z-50 w-52 bg-surface rounded-xl shadow-xl py-1.5 text-text-primary font-body-sm text-body-sm" id="row-context-menu">
+<a class="flex items-center gap-2.5 px-3.5 py-2 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">visibility</span>
+<span>View Details</span>
+</a>
+<a class="flex items-center gap-2.5 px-3.5 py-2 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">switch_account</span>
+<span>Impersonate Owner</span>
+</a>
+<a class="flex items-center gap-2.5 px-3.5 py-2 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">cloud_download</span>
+<span>Download Audit Log</span>
+</a>
+<div class="my-1 h-[1px] bg-surface-container-low"></div>
+<a class="flex items-center gap-2.5 px-3.5 py-2 text-warning hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">block</span>
+<span>Suspend Workspace</span>
+</a>
+<a class="flex items-center gap-2.5 px-3.5 py-2 text-danger hover:bg-error-container/30 transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span>Purge Tenant Data</span>
+</a>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive mock for row ⋯ menus
+  document.addEventListener('DOMContentLoaded', () => {
+    const menu = document.getElementById('row-context-menu');
+    const actionBtns = document.querySelectorAll('button:has(.material-symbols-outlined:contains("more_horiz")), button:has(span:contains("more_horiz"))');
+
+    document.querySelectorAll('td.text-right button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const rect = btn.getBoundingClientRect();
+        menu.style.top = `${rect.bottom + 6}px`;
+        menu.style.left = `${Math.min(rect.right - 208, window.innerWidth - 220)}px`;
+        menu.classList.toggle('hidden');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      if (menu && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+      }
+    });
+  });
+</script></main></div></body></html>

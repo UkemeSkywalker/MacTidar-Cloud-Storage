@@ -1,0 +1,229 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_blank" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-lowest": "#ffffff", "warning": "#D97706", "tertiary-fixed-dim": "#62df7d", "file-archive": "#6B7280", "tertiary-fixed": "#7ffc97", "file-video": "#EC4899", "surface-container": "#edeef0", "on-secondary-fixed-variant": "#40484f", "secondary-fixed": "#dce3ec", "canvas": "#F7F8FA", "file-folder": "#2563EB", "text-primary": "#111827", "tertiary": "#006329", "on-tertiary-container": "#c7ffca", "primary-fixed-dim": "#b4c5ff", "text-secondary": "#6B7280", "file-sheet": "#16A34A", "on-tertiary-fixed": "#002109", "surface-container-low": "#f2f4f6", "inverse-primary": "#b4c5ff", "file-pdf": "#DC2626", "on-background": "#191c1e", "surface": "#FFFFFF", "primary-container": "#2563eb", "outline": "#737686", "error": "#ba1a1a", "on-secondary": "#ffffff", "surface-dim": "#d9dadc", "file-image": "#9333EA", "on-primary-fixed-variant": "#003ea8", "secondary-fixed-dim": "#c0c7d0", "on-surface-variant": "#434655", "surface-tint": "#0053db", "inverse-on-surface": "#f0f1f3", "outline-variant": "#c3c6d7", "on-primary": "#ffffff", "background": "#f8f9fb", "on-error": "#ffffff", "primary-fixed": "#dbe1ff", "file-doc": "#4F46E5", "on-error-container": "#93000a", "border": "#E5E7EB", "on-secondary-fixed": "#151c23", "error-container": "#ffdad6", "surface-container-highest": "#e1e2e4", "on-tertiary": "#ffffff", "surface-container-high": "#e7e8ea", "on-primary-container": "#eeefff", "inverse-surface": "#2e3132", "overlay-dark": "rgba(17, 24, 39, 0.95)", "secondary": "#585f67", "on-surface": "#191c1e", "surface-bright": "#f8f9fb", "secondary-container": "#dce3ec", "on-tertiary-fixed-variant": "#005320", "on-primary-fixed": "#00174b", "on-secondary-container": "#5e656d", "danger": "#DC2626", "primary": "#004ac6", "surface-variant": "#e1e2e4", "tertiary-container": "#007f36" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xl": "2rem", "space-lg": "1.5rem", "margin-desktop": "2rem", "gutter": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "margin": "1rem", "gutter-desktop": "1.5rem", "space-sm": "0.5rem" }, "fontFamily": { "headline-lg": ["Inter"], "label-md": ["Inter"], "label-sm": ["Inter"], "body-sm": ["Inter"], "headline-sm": ["Inter"], "title-md": ["Inter"], "body-md": ["Inter"] }, "fontSize": { "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "title-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }] } } } };</script></head><body class="min-h-full bg-canvas text-on-surface font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container"><main class="min-h-screen w-full flex flex-col justify-center items-center p-margin md:p-margin-desktop"><div class="flex flex-col w-full">
+<div class="relative w-full max-w-2xl mx-auto flex flex-col items-center">
+<!-- Ambient Backdrop Aura -->
+<div class="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<!-- Brand Header -->
+<div class="flex items-center gap-2.5 mb-8">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-md shadow-primary/20">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">cloud_sync</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-sm text-headline-sm text-text-primary tracking-tight">MacTidar</span>
+<span class="font-title-md text-title-md text-primary font-semibold">Cloud</span>
+</div>
+</div>
+<!-- Stepper & Progress -->
+<div class="flex flex-col items-center gap-2.5 mb-8 w-full max-w-xs">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface shadow-sm">
+<span class="font-label-sm text-label-sm text-primary font-semibold uppercase tracking-wider">Step 1 of 2</span>
+<span class="w-1 h-1 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm text-text-secondary">Workspace Setup</span>
+</div>
+<!-- 2-Segment Progress Track -->
+<div class="flex items-center gap-2 w-full">
+<div class="h-1.5 flex-1 rounded-full bg-primary-container transition-all duration-300"></div>
+<div class="h-1.5 flex-1 rounded-full bg-surface-container-highest transition-all duration-300"></div>
+</div>
+</div>
+<!-- Header Typography -->
+<div class="text-center mb-8 px-4">
+<h1 class="font-headline-lg text-headline-lg text-text-primary mb-2 sm:text-[28px] sm:leading-[36px]">
+        How will you use MacTidar Cloud?
+      </h1>
+<p class="font-body-md text-body-md text-text-secondary max-w-md mx-auto">
+        Choose the workspace setup that fits your workflow. You can always change this later.
+      </p>
+</div>
+<!-- Core Interactive Options Grid -->
+<div aria-label="Workspace intent choices" class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full mb-4" role="radiogroup">
+<!-- Option 1: For myself -->
+<div aria-checked="false" class="group relative flex flex-col justify-between p-6 rounded-xl bg-surface shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer min-h-[200px] outline-none" id="card-myself" onclick="selectPlan('myself')" onkeydown="if(event.key==='Enter'||event.key===' ') selectPlan('myself')" role="radio" tabindex="0">
+<div>
+<div class="flex items-start justify-between mb-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-secondary transition-colors duration-200" id="icon-bg-myself">
+<span class="material-symbols-outlined text-headline-lg">person</span>
+</div>
+<!-- Custom Radio Circle -->
+<div class="w-5 h-5 rounded-full bg-surface-container flex items-center justify-center transition-all duration-200" id="radio-myself">
+<div class="w-2 h-2 rounded-full bg-surface opacity-0 scale-50 transition-all duration-200"></div>
+</div>
+</div>
+<h2 class="font-title-md text-title-md text-text-primary mb-1">For myself</h2>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+            A personal workspace with 3 GB free. Perfect for your own files.
+          </p>
+</div>
+<div class="mt-4 pt-3 flex items-center gap-1.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container-low font-label-sm text-label-sm text-text-secondary">Personal</span>
+<span class="font-label-sm text-label-sm text-text-secondary">3 GB quota</span>
+</div>
+</div>
+<!-- Option 2: With my company (Default Selected) -->
+<div aria-checked="true" class="group relative flex flex-col justify-between p-6 rounded-xl bg-primary-fixed/30 shadow-md transition-all duration-200 cursor-pointer min-h-[200px] outline-none" id="card-company" onclick="selectPlan('company')" onkeydown="if(event.key==='Enter'||event.key===' ') selectPlan('company')" role="radio" tabindex="0">
+<!-- Active Selection Ring Accent -->
+<div class="absolute inset-0 rounded-xl pointer-events-none shadow-[0_0_0_2px_#2563EB]" id="selection-ring"></div>
+<div>
+<div class="flex items-start justify-between mb-4">
+<div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary flex items-center justify-center transition-colors duration-200 shadow-sm shadow-primary/25" id="icon-bg-company">
+<span class="material-symbols-outlined text-headline-lg">corporate_fare</span>
+</div>
+<!-- Custom Radio Circle (Active) -->
+<div class="w-5 h-5 rounded-full bg-primary-container flex items-center justify-center transition-all duration-200 text-on-primary" id="radio-company">
+<span class="material-symbols-outlined text-label-sm" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<h2 class="font-title-md text-title-md text-text-primary mb-1">With my company</h2>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+            Create a company workspace and invite your team. You'll also keep a personal workspace.
+          </p>
+</div>
+<div class="mt-4 pt-3 flex items-center gap-1.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface font-label-sm text-label-sm text-primary font-medium shadow-sm">Recommended</span>
+<span class="font-label-sm text-label-sm text-text-secondary">Unlimited members</span>
+</div>
+</div>
+</div>
+<!-- Option 3: Full-Width Alternative for Invited Members -->
+<div class="w-full p-4 sm:p-5 rounded-xl bg-surface shadow-sm hover:shadow-md transition-all duration-200 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex items-start sm:items-center gap-3.5">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-text-secondary shrink-0 mt-0.5 sm:mt-0">
+<span class="material-symbols-outlined text-headline-sm">mail</span>
+</div>
+<div>
+<div class="font-title-md text-title-md text-text-primary mb-0.5">I was invited to a company workspace</div>
+<div class="font-body-sm text-body-sm text-text-secondary">Check your email for the invite, or paste the invite link</div>
+</div>
+</div>
+<button class="inline-flex items-center gap-1 text-primary hover:text-primary-container font-title-md text-title-md shrink-0 transition-colors self-start sm:self-center focus:outline-none" onclick="handleInvitePrompt()" type="button">
+<span>Enter invite link</span>
+<span class="material-symbols-outlined text-headline-sm transition-transform duration-200 hover:translate-x-0.5">arrow_forward</span>
+</button>
+</div>
+<!-- CTA & Progression Actions -->
+<div class="w-full flex flex-col items-center gap-4">
+<button class="w-full sm:w-80 h-11 px-6 rounded-full bg-primary-container hover:bg-primary text-on-primary font-title-md text-title-md shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.99] focus:outline-none" id="continue-button" onclick="handleContinue()" type="button">
+<span>Continue</span>
+<span class="material-symbols-outlined text-headline-sm">arrow_forward</span>
+</button>
+<!-- Current Identity & Footer Hint -->
+<div class="flex items-center gap-1.5 py-1 text-text-secondary">
+<span class="material-symbols-outlined text-label-md text-secondary">account_circle</span>
+<span class="font-body-sm text-body-sm">
+          Signed in as <span class="text-text-primary font-medium">ukeme@mactidar.com</span>
+</span>
+<span class="text-outline-variant mx-1">•</span>
+<a class="font-body-sm text-body-sm text-primary hover:underline" href="#switch">Switch account</a>
+</div>
+</div>
+<!-- Floating Feedback Toast Container (Interactive helper) -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-lg bg-overlay-dark text-on-primary font-body-sm text-body-sm shadow-xl flex items-center gap-2.5 pointer-events-none opacity-0 translate-y-3 transition-all duration-300 z-50" id="toast">
+<span class="material-symbols-outlined text-headline-sm text-tertiary-fixed">info</span>
+<span id="toast-message">Workspace configured</span>
+</div>
+</div>
+</div>
+<script>
+  let currentSelection = 'company';
+
+  function selectPlan(choice) {
+    currentSelection = choice;
+    const cardMyself = document.getElementById('card-myself');
+    const cardCompany = document.getElementById('card-company');
+    const iconMyself = document.getElementById('icon-bg-myself');
+    const iconCompany = document.getElementById('icon-bg-company');
+    const radioMyself = document.getElementById('radio-myself');
+    const radioCompany = document.getElementById('radio-company');
+
+    if (choice === 'myself') {
+      // Update Myself card to Active
+      cardMyself.setAttribute('aria-checked', 'true');
+      cardMyself.classList.remove('bg-surface', 'shadow-sm');
+      cardMyself.classList.add('bg-primary-fixed/30', 'shadow-md');
+      
+      iconMyself.classList.remove('bg-surface-container', 'text-secondary');
+      iconMyself.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm', 'shadow-primary/25');
+      
+      radioMyself.className = "w-5 h-5 rounded-full bg-primary-container flex items-center justify-center transition-all duration-200 text-on-primary";
+      radioMyself.innerHTML = '<span class="material-symbols-outlined text-label-sm" style="font-variation-settings: \'wght\' 700;">check</span>';
+
+      // Update Company card to Inactive
+      cardCompany.setAttribute('aria-checked', 'false');
+      cardCompany.classList.remove('bg-primary-fixed/30', 'shadow-md');
+      cardCompany.classList.add('bg-surface', 'shadow-sm');
+
+      iconCompany.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm', 'shadow-primary/25');
+      iconCompany.classList.add('bg-surface-container', 'text-secondary');
+
+      radioCompany.className = "w-5 h-5 rounded-full bg-surface-container flex items-center justify-center transition-all duration-200";
+      radioCompany.innerHTML = '<div class="w-2 h-2 rounded-full bg-surface opacity-0 scale-50 transition-all duration-200"></div>';
+
+      // Reposition visual highlight outline
+      const ring = document.getElementById('selection-ring');
+      if (ring) {
+        ring.remove();
+        const newRing = document.createElement('div');
+        newRing.id = 'selection-ring';
+        newRing.className = 'absolute inset-0 rounded-xl pointer-events-none shadow-[0_0_0_2px_#2563EB]';
+        cardMyself.appendChild(newRing);
+      }
+    } else {
+      // Update Company card to Active
+      cardCompany.setAttribute('aria-checked', 'true');
+      cardCompany.classList.remove('bg-surface', 'shadow-sm');
+      cardCompany.classList.add('bg-primary-fixed/30', 'shadow-md');
+
+      iconCompany.classList.remove('bg-surface-container', 'text-secondary');
+      iconCompany.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm', 'shadow-primary/25');
+
+      radioCompany.className = "w-5 h-5 rounded-full bg-primary-container flex items-center justify-center transition-all duration-200 text-on-primary";
+      radioCompany.innerHTML = '<span class="material-symbols-outlined text-label-sm" style="font-variation-settings: \'wght\' 700;">check</span>';
+
+      // Update Myself card to Inactive
+      cardMyself.setAttribute('aria-checked', 'false');
+      cardMyself.classList.remove('bg-primary-fixed/30', 'shadow-md');
+      cardMyself.classList.add('bg-surface', 'shadow-sm');
+
+      iconMyself.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm', 'shadow-primary/25');
+      iconMyself.classList.add('bg-surface-container', 'text-secondary');
+
+      radioMyself.className = "w-5 h-5 rounded-full bg-surface-container flex items-center justify-center transition-all duration-200";
+      radioMyself.innerHTML = '<div class="w-2 h-2 rounded-full bg-surface opacity-0 scale-50 transition-all duration-200"></div>';
+
+      // Reposition visual highlight outline
+      const ring = document.getElementById('selection-ring');
+      if (ring) {
+        ring.remove();
+        const newRing = document.createElement('div');
+        newRing.id = 'selection-ring';
+        newRing.className = 'absolute inset-0 rounded-xl pointer-events-none shadow-[0_0_0_2px_#2563EB]';
+        cardCompany.appendChild(newRing);
+      }
+    }
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-message');
+    toastMsg.textContent = msg;
+    toast.classList.remove('opacity-0', 'translate-y-3');
+    toast.classList.add('opacity-100', 'translate-y-0');
+    setTimeout(() => {
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', 'translate-y-3');
+    }, 2800);
+  }
+
+  function handleContinue() {
+    const target = currentSelection === 'company' ? 'Company Organization details' : 'Personal Storage space';
+    showToast(`Setting up ${target}... (Step 2 next)`);
+  }
+
+  function handleInvitePrompt() {
+    const link = prompt('Please paste your team workspace invitation link or code:');
+    if (link && link.trim().length > 0) {
+      showToast('Validating invite code...');
+    }
+  }
+</script></main></body></html>

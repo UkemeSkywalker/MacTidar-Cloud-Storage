@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "overlay-dark": "rgba(17, 24, 39, 0.95)",
+        "surface-bright": "#f8f9fb",
+        "surface-container-lowest": "#ffffff",
+        "text-secondary": "#6B7280",
+        "tertiary-fixed-dim": "#62df7d",
+        "warning": "#D97706",
+        "danger": "#DC2626",
+        "surface-variant": "#e1e2e4",
+        "surface-container": "#edeef0",
+        "on-background": "#191c1e",
+        "canvas": "#F7F8FA",
+        "surface-container-low": "#f2f4f6",
+        "error-container": "#ffdad6",
+        "outline-variant": "#c3c6d7",
+        "file-folder": "#2563EB",
+        "on-surface-variant": "#434655",
+        "text-primary": "#111827",
+        "outline": "#737686",
+        "tertiary-container": "#007f36",
+        "surface": "#FFFFFF",
+        "on-secondary-fixed-variant": "#40484f",
+        "on-primary": "#ffffff",
+        "on-secondary-fixed": "#151c23",
+        "on-tertiary": "#ffffff",
+        "primary-fixed": "#dbe1ff",
+        "on-error-container": "#93000a",
+        "secondary-fixed": "#dce3ec",
+        "secondary-fixed-dim": "#c0c7d0",
+        "secondary-container": "#dce3ec",
+        "file-image": "#9333EA",
+        "tertiary-fixed": "#7ffc97",
+        "border": "#E5E7EB",
+        "primary-container": "#2563eb",
+        "file-sheet": "#16A34A",
+        "surface-container-high": "#e7e8ea",
+        "on-primary-fixed-variant": "#003ea8",
+        "on-tertiary-fixed": "#002109",
+        "on-error": "#ffffff",
+        "file-video": "#EC4899",
+        "on-tertiary-fixed-variant": "#005320",
+        "inverse-surface": "#2e3132",
+        "primary": "#004ac6",
+        "surface-dim": "#d9dadc",
+        "secondary": "#585f67",
+        "tertiary": "#006329",
+        "on-surface": "#191c1e",
+        "inverse-primary": "#b4c5ff",
+        "file-archive": "#6B7280",
+        "on-secondary-container": "#5e656d",
+        "file-pdf": "#DC2626",
+        "background": "#f8f9fb",
+        "on-tertiary-container": "#c7ffca",
+        "primary-fixed-dim": "#b4c5ff",
+        "on-primary-fixed": "#00174b",
+        "on-secondary": "#ffffff",
+        "surface-tint": "#0053db",
+        "inverse-on-surface": "#f0f1f3",
+        "error": "ba1a1a",
+        "on-primary-container": "#eeefff",
+        "file-doc": "#4F46E5",
+        "surface-container-highest": "#e1e2e4"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.25rem",
+        "lg": "0.5rem",
+        "xl": "0.75rem",
+        "full": "9999px"
+      },
+      "spacing": {
+        "space-lg": "1.5rem",
+        "space-xl": "2rem",
+        "gutter-desktop": "1.5rem",
+        "margin-desktop": "2rem",
+        "space-md": "1rem",
+        "space-sm": "0.5rem",
+        "gutter": "1rem",
+        "margin": "1rem",
+        "space-xs": "0.25rem"
+      },
+      "fontFamily": {
+        "label-md": ["Inter"],
+        "body-md": ["Inter"],
+        "body-sm": ["Inter"],
+        "headline-lg": ["Inter"],
+        "label-sm": ["Inter"],
+        "headline-sm": ["Inter"],
+        "title-md": ["Inter"]
+      },
+      "fontSize": {
+        "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+        "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+        "title-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+      }
+    }
+  }
+}</script></head><body class="bg-canvas text-on-surface font-body-md text-body-md antialiased"><header class="fixed top-0 left-0 right-0 h-16 bg-surface/80 backdrop-blur-xl z-50 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 max-w-7xl mx-auto px-space-md lg:px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]">cloud</span></div><span class="font-title-md text-title-md tracking-tight text-text-primary">MacTidar Cloud</span><span class="ml-space-xs px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Guest View</span></div><div class="flex items-center gap-space-sm"><a class="h-9 px-space-md rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center justify-center hover:bg-surface-variant hover:text-on-surface transition-colors" data-path="login" href="#">Sign In</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 min-h-screen"><div class="flex flex-col w-full">
+<div class="relative w-full overflow-hidden bg-gradient-to-b from-surface-container-low via-canvas to-surface-bright pb-space-xl">
+<div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-primary/5 blur-3xl pointer-events-none"></div>
+<div class="absolute top-20 right-0 w-[30rem] h-[30rem] rounded-full bg-secondary-fixed/30 blur-3xl pointer-events-none"></div>
+<div class="max-w-7xl mx-auto px-space-md lg:px-space-lg pt-space-lg">
+<div class="flex flex-col gap-space-xs mb-space-xl">
+<div class="flex items-center gap-space-xs text-text-secondary font-label-sm text-label-sm uppercase tracking-wider">
+<span class="inline-block w-2 h-2 rounded-full bg-primary"></span>
+<span>Security & Governance Specs</span>
+<span class="text-outline-variant">•</span>
+<span>Design System Reference</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-text-primary tracking-tight">Share Dialog Blocked & Restriction States</h1>
+<p class="font-body-md text-body-md text-text-secondary mt-1">Comparative breakdown across organization policy locks, user preference gates, and workspace sandbox scopes.</p>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container p-1 rounded-full shadow-sm">
+<span class="px-space-sm py-1 rounded-full bg-surface text-primary font-label-md text-label-md shadow-xs">Desktop Panels</span>
+<span class="px-space-sm py-1 rounded-full text-text-secondary font-label-md text-label-md">Audit Mode</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg items-start">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center justify-center font-semibold">A</span>
+<span class="font-headline-sm text-headline-sm text-text-primary">Admin Enforced Block</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm">Org Policy</span>
+</div>
+<p class="text-text-secondary font-body-sm text-body-sm px-space-xs">Workspace tenant administrator completely disallows cross-domain document provisioning.</p>
+<div class="w-full bg-surface rounded-xl shadow-lg shadow-black/[0.04] p-space-lg flex flex-col gap-space-md">
+<div class="flex items-start justify-between pb-space-sm bg-surface">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-lg bg-file-folder/10 text-file-folder flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">folder</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-text-primary truncate">Share "Q4 Campaign"</span>
+<span class="material-symbols-outlined text-text-secondary text-[16px]">lock</span>
+</div>
+<span class="font-label-sm text-label-sm text-text-secondary">Enterprise Workspace · Acorn Corp</span>
+</div>
+</div>
+<button class="w-7 h-7 rounded-full flex items-center justify-center text-text-secondary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low p-1 rounded-lg">
+<button class="flex-1 py-1.5 rounded-md bg-surface text-text-primary font-label-md text-label-md shadow-xs flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">group</span>
+<span>People</span>
+</button>
+<button class="flex-1 py-1.5 rounded-md text-text-secondary hover:text-text-primary font-label-md text-label-md flex items-center justify-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">link</span>
+<span>General Access</span>
+</button>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-text-secondary">Add people, groups or email</label>
+<div class="relative flex items-center">
+<div class="w-full h-10 px-3 rounded-lg bg-surface-container-lowest shadow-[0_0_0_1.5px_#DC2626] flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-text-primary font-body-sm text-body-sm flex items-center gap-1">
+                    sarah@designcorp.com
+                    <span class="material-symbols-outlined text-text-secondary text-[14px] cursor-pointer">close</span>
+</span>
+<span class="w-0.5 h-4 bg-text-primary animate-pulse"></span>
+</div>
+<button class="absolute right-2 px-2.5 py-1 rounded-full bg-surface-container text-text-secondary font-label-sm text-label-sm cursor-not-allowed">
+                  Add
+                </button>
+</div>
+</div>
+<div class="rounded-xl bg-error-container/30 p-space-md flex flex-col gap-space-xs shadow-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-danger text-[20px]">block</span>
+<span class="font-headline-sm text-headline-sm text-on-error-container">Outside sharing restricted</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-primary leading-relaxed">
+                Sharing outside MacTidar is turned off by your workspace admin. <strong class="text-text-primary font-semibold">designcorp.com</strong> is not in your organization's verified domain list.
+              </p>
+<div class="pt-2 flex items-center justify-between">
+<a class="font-label-md text-label-md text-primary flex items-center gap-1 hover:underline" href="#">
+<span>Request admin access</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+<span class="font-label-sm text-label-sm text-text-secondary">Policy #SEC-981</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 pt-1">
+<span class="font-label-sm text-label-sm text-text-secondary">Workspace collaborators (2)</span>
+<div class="flex items-center justify-between py-1.5">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-on-primary font-label-sm text-label-sm font-semibold">JD</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-text-primary font-medium leading-none">James Diaz (You)</span>
+<span class="font-label-sm text-label-sm text-text-secondary">Owner</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-text-secondary font-label-sm text-label-sm">Owner</span>
+</div>
+<div class="flex items-center justify-between py-1.5">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-sm text-label-sm font-semibold">EM</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-text-primary font-medium leading-none">Elena Morales</span>
+<span class="font-label-sm text-label-sm text-text-secondary">elena@acorn.co</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm">Editor</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs bg-surface-container-low -mx-space-lg -mb-space-lg p-space-md rounded-b-xl">
+<button class="flex items-center gap-1 text-text-secondary font-label-md text-label-md hover:text-text-primary">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span>Learn about sharing limits</span>
+</button>
+<button class="h-9 px-space-md rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors">
+                Cancel
+              </button>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center justify-center font-semibold">B</span>
+<span class="font-headline-sm text-headline-sm text-text-primary">Member Toggle Pending</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Self Activation</span>
+</div>
+<p class="text-text-secondary font-body-sm text-body-sm px-space-xs">Tenant allows external collaboration, but the individual member preference is switched off.</p>
+<div class="w-full bg-surface rounded-xl shadow-lg shadow-black/[0.04] p-space-lg flex flex-col gap-space-md">
+<div class="flex items-start justify-between pb-space-sm bg-surface">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-lg bg-file-folder/10 text-file-folder flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">folder</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-text-primary truncate">Share "Q4 Campaign"</span>
+<span class="material-symbols-outlined text-warning text-[16px]">tune</span>
+</div>
+<span class="font-label-sm text-label-sm text-text-secondary">Acorn Corp · Growth Marketing</span>
+</div>
+</div>
+<button class="w-7 h-7 rounded-full flex items-center justify-center text-text-secondary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low p-1 rounded-lg">
+<button class="flex-1 py-1.5 rounded-md bg-surface text-text-primary font-label-md text-label-md shadow-xs flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">group</span>
+<span>People</span>
+</button>
+<button class="flex-1 py-1.5 rounded-md text-text-secondary hover:text-text-primary font-label-md text-label-md flex items-center justify-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">link</span>
+<span>General Access</span>
+</button>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-text-secondary">Recipient to invite</label>
+<div class="w-full h-10 px-3 rounded-lg bg-surface-container-lowest shadow-[0_0_0_1px_#E5E7EB] flex items-center justify-between">
+<div class="flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-text-secondary text-[18px]">mail</span>
+<span class="font-body-sm text-body-sm text-text-primary truncate">sarah@designcorp.com</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm shrink-0">External</span>
+</div>
+</div>
+<div class="rounded-xl bg-amber-500/10 p-space-md flex flex-col gap-space-sm shadow-xs">
+<div class="flex items-start gap-2.5">
+<div class="w-6 h-6 rounded-full bg-warning/20 text-warning flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">info</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-text-primary">Sharing outside MacTidar is off for you</span>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1 leading-relaxed">
+                    Your workspace allows outside sharing, but you need to enable it for your account first.
+                  </p>
+</div>
+</div>
+<div class="bg-surface rounded-lg p-space-sm flex items-center justify-between gap-space-sm shadow-xs">
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate">Allow outside invites</span>
+<span class="font-label-sm text-label-sm text-text-secondary">Permit sharing to emails outside Acorn</span>
+</div>
+<button class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full bg-surface-container-high p-0.5 transition-colors duration-200 ease-in-out focus:outline-none" id="toggle-opt-in" onclick="this.classList.toggle('bg-primary'); this.classList.toggle('bg-surface-container-high'); const dot = this.querySelector('span'); dot.classList.toggle('translate-x-5'); dot.classList.toggle('bg-on-primary'); dot.classList.toggle('bg-surface');">
+<span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-surface shadow-sm ring-0 transition duration-200 ease-in-out"></span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-1">
+<a class="font-label-md text-label-md text-primary hover:underline flex items-center gap-1" href="#">
+<span>Learn more</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+<span class="font-label-sm text-label-sm text-text-secondary">Account Preferences</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs bg-surface-container-low -mx-space-lg -mb-space-lg p-space-md rounded-b-xl">
+<button class="h-9 px-space-md rounded-full bg-surface text-text-primary font-label-md text-label-md hover:bg-surface-container-lowest transition-colors shadow-xs">
+                Save Draft
+              </button>
+<button class="h-9 px-space-md rounded-full bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-colors flex items-center gap-1">
+<span>Send invitation</span>
+<span class="material-symbols-outlined text-[16px]">send</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center justify-center font-semibold">C</span>
+<span class="font-headline-sm text-headline-sm text-text-primary">Personal Scope Sandbox</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">Private Vault</span>
+</div>
+<p class="text-text-secondary font-body-sm text-body-sm px-space-xs">Personal partition where sharing engine is dormant by default to ensure complete privacy.</p>
+<div class="w-full bg-surface rounded-xl shadow-lg shadow-black/[0.04] p-space-lg flex flex-col gap-space-md">
+<div class="flex items-start justify-between pb-space-sm bg-surface">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-lg bg-file-image/10 text-file-image flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-text-primary truncate">Share "Personal Portfolio"</span>
+</div>
+<span class="font-label-sm text-label-sm text-text-secondary">Personal Workspace · 1.4 GB</span>
+</div>
+</div>
+<button class="w-7 h-7 rounded-full flex items-center justify-center text-text-secondary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low p-1 rounded-lg">
+<button class="flex-1 py-1.5 rounded-md bg-surface text-text-primary font-label-md text-label-md shadow-xs flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span>People</span>
+</button>
+<button class="flex-1 py-1.5 rounded-md text-text-secondary hover:text-text-primary font-label-md text-label-md flex items-center justify-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">link_off</span>
+<span>Public Link</span>
+</button>
+</div>
+<div class="py-space-md px-space-sm bg-surface-container-lowest rounded-xl flex flex-col items-center text-center">
+<div class="relative w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-primary mb-space-sm">
+<div class="absolute inset-0 rounded-full bg-primary/10 animate-ping opacity-25"></div>
+<span class="material-symbols-outlined text-[32px] text-primary" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-surface flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[14px] text-danger">lock</span>
+</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-text-primary px-space-xs">Sharing is turned off for your personal workspace</h2>
+<p class="font-body-sm text-body-sm text-text-secondary mt-space-xs max-w-[280px] leading-relaxed">
+                Files in your personal workspace are private by default. Turn on sharing to invite people or create public links.
+              </p>
+<div class="mt-space-md w-full flex flex-col items-center gap-space-xs">
+<button class="h-10 px-space-lg rounded-full bg-primary-container text-on-primary font-title-md text-title-md hover:bg-primary transition-all shadow-md shadow-primary/20 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">lock_open</span>
+<span>Turn on sharing</span>
+</button>
+<span class="font-label-sm text-label-sm text-text-secondary">You can reverse this at any time</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-center justify-between text-text-secondary font-body-sm text-body-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary">verified_user</span>
+<span>Zero outbound data traffic</span>
+</div>
+<span class="font-label-sm text-label-sm bg-surface px-2 py-0.5 rounded-full text-text-primary">Encrypted</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs bg-surface-container-low -mx-space-lg -mb-space-lg p-space-md rounded-b-xl">
+<button class="text-text-secondary font-label-md text-label-md hover:text-text-primary">
+                Privacy policy
+              </button>
+<button class="h-9 px-space-md rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors">
+                Done
+              </button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-xl p-space-lg bg-surface rounded-xl shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">policy</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm text-text-primary">Unified Restriction Matrix</span>
+<p class="font-body-sm text-body-sm text-text-secondary">MacTidar Cloud evaluates policy hierarchies in sequence: Tenant Protocol → Account Permissions → Workspace Isolation.</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high font-label-sm text-label-sm text-text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+            Zero Leaks Guarantee
+          </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high font-label-sm text-label-sm text-text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+            Role Hierarchies
+          </span>
+</div>
+</div>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface py-space-lg shadow-[0_-1px_8px_rgba(0,0,0,0.02)]"><div class="max-w-7xl mx-auto px-space-md lg:px-space-lg flex flex-col md:flex-row items-center justify-between gap-space-sm font-label-sm text-label-sm text-text-secondary"><div>Secured by MacTidar Cloud Storage © 2025. All rights reserved.</div><div class="flex items-center gap-space-md"><a class="hover:text-on-surface transition-colors" data-path="guest-preview" href="#">Preview Terms</a><a class="hover:text-on-surface transition-colors" data-path="file-info" href="#">Security & Trust</a></div></div></footer></body></html>
