@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "surface-container-high": "#e7e8ea",
+        "on-primary": "#ffffff",
+        "on-primary-container": "#eeefff",
+        "overlay-dark": "rgba(17, 24, 39, 0.95)",
+        "error-container": "#ffdad6",
+        "file-pdf": "#DC2626",
+        "surface-tint": "#0053db",
+        "primary-container": "#2563eb",
+        "tertiary-container": "#007f36",
+        "primary-fixed": "#dbe1ff",
+        "background": "#f8f9fb",
+        "on-tertiary-fixed-variant": "#005320",
+        "surface-container-highest": "#e1e2e4",
+        "secondary-fixed-dim": "#c0c7d0",
+        "canvas": "#F7F8FA",
+        "on-error-container": "#93000a",
+        "tertiary-fixed": "#7ffc97",
+        "file-video": "#EC4899",
+        "border": "#E5E7EB",
+        "outline-variant": "#c3c6d7",
+        "text-primary": "#111827",
+        "secondary": "#585f67",
+        "secondary-fixed": "#dce3ec",
+        "tertiary-fixed-dim": "#62df7d",
+        "on-background": "#191c1e",
+        "surface-variant": "#e1e2e4",
+        "inverse-on-surface": "#f0f1f3",
+        "primary-fixed-dim": "#b4c5ff",
+        "inverse-surface": "#2e3132",
+        "surface-bright": "#f8f9fb",
+        "danger": "#DC2626",
+        "surface-container-low": "#f2f4f6",
+        "text-secondary": "#6B7280",
+        "surface-container": "#edeef0",
+        "on-tertiary-fixed": "#002109",
+        "on-secondary": "#ffffff",
+        "on-tertiary-container": "#c7ffca",
+        "on-secondary-fixed-variant": "#40484f",
+        "on-secondary-fixed": "#151c23",
+        "inverse-primary": "#b4c5ff",
+        "on-tertiary": "#ffffff",
+        "surface-container-lowest": "#ffffff",
+        "file-sheet": "#16A34A",
+        "on-surface-variant": "#434655",
+        "on-primary-fixed-variant": "#003ea8",
+        "file-folder": "#2563EB",
+        "on-primary-fixed": "#00174b",
+        "on-secondary-container": "#5e656d",
+        "surface": "#FFFFFF",
+        "on-surface": "#191c1e",
+        "primary": "#004ac6",
+        "on-error": "#ffffff",
+        "file-image": "#9333EA",
+        "secondary-container": "#dce3ec",
+        "error": "#ba1a1a",
+        "file-doc": "#4F46E5",
+        "surface-dim": "#d9dadc",
+        "warning": "#D97706",
+        "tertiary": "#006329",
+        "file-archive": "#6B7280",
+        "outline": "#737686"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.25rem",
+        "lg": "0.5rem",
+        "xl": "0.75rem",
+        "full": "9999px"
+      },
+      "spacing": {
+        "space-md": "1rem",
+        "margin": "1rem",
+        "space-xl": "2rem",
+        "margin-desktop": "2rem",
+        "gutter": "1rem",
+        "space-xs": "0.25rem",
+        "space-lg": "1.5rem",
+        "gutter-desktop": "1.5rem",
+        "space-sm": "0.5rem"
+      },
+      "fontFamily": {
+        "body-md": [
+          "Inter"
+        ],
+        "headline-sm": [
+          "Inter"
+        ],
+        "headline-lg": [
+          "Inter"
+        ],
+        "body-sm": [
+          "Inter"
+        ],
+        "title-md": [
+          "Inter"
+        ],
+        "label-sm": [
+          "Inter"
+        ],
+        "label-md": [
+          "Inter"
+        ]
+      },
+      "fontSize": {
+        "body-md": [
+          "14px",
+          {
+            "lineHeight": "20px",
+            "fontWeight": "400"
+          }
+        ],
+        "headline-sm": [
+          "16px",
+          {
+            "lineHeight": "24px",
+            "fontWeight": "600"
+          }
+        ],
+        "headline-lg": [
+          "24px",
+          {
+            "lineHeight": "32px",
+            "fontWeight": "600"
+          }
+        ],
+        "body-sm": [
+          "13px",
+          {
+            "lineHeight": "18px",
+            "fontWeight": "400"
+          }
+        ],
+        "title-md": [
+          "14px",
+          {
+            "lineHeight": "20px",
+            "fontWeight": "600"
+          }
+        ],
+        "label-sm": [
+          "11px",
+          {
+            "lineHeight": "14px",
+            "letterSpacing": "0.02em",
+            "fontWeight": "500"
+          }
+        ],
+        "label-md": [
+          "12px",
+          {
+            "lineHeight": "16px",
+            "fontWeight": "500"
+          }
+        ]
+      }
+    },
+  },
+}</script></head><body class="bg-canvas text-on-surface font-body-md text-body-md antialiased min-h-screen"><aside class="fixed top-0 left-0 bottom-0 w-[260px] bg-surface z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col flex-1 overflow-y-auto px-space-md pt-space-lg"><div class="flex items-center gap-space-sm px-space-xs mb-space-lg"><div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[22px]">cloud</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface">MacTidar</span><span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary -mt-1">Cloud Storage</span></div></div><div class="mb-space-lg"><button class="w-full h-10 px-space-lg rounded-full bg-primary-container text-on-primary font-title-md text-title-md flex items-center justify-center gap-space-sm shadow-[0_2px_8px_rgba(37,99,235,0.25)] hover:bg-primary transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">add</span><span>New</span></button></div><div class="mb-space-sm"><span class="px-space-xs font-label-sm text-label-sm uppercase tracking-wider text-secondary">Workspace</span></div><nav class="flex flex-col gap-1 mb-space-lg" data-active-classes="bg-secondary-container text-primary font-title-md rounded-xl"><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="my-files" href="#"><span class="material-symbols-outlined text-[20px]">folder</span><span>My Files</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="shared-with-me" href="#"><span class="material-symbols-outlined text-[20px]">group</span><span>Shared with me</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="recent" href="#"><span class="material-symbols-outlined text-[20px]">schedule</span><span>Recent</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="starred" href="#"><span class="material-symbols-outlined text-[20px]">star</span><span>Starred</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="trash" href="#"><span class="material-symbols-outlined text-[20px]">delete</span><span>Trash</span></a></nav><div class="mb-space-sm"><span class="px-space-xs font-label-sm text-label-sm uppercase tracking-wider text-secondary">Admin</span></div><nav class="flex flex-col gap-1 mb-space-lg" data-active-classes="bg-secondary-container text-primary font-title-md rounded-xl"><a aria-current="page" class="flex items-center gap-space-sm px-space-sm py-2 transition-colors bg-secondary-container text-primary font-title-md rounded-xl" data-path="admin-members" href="#"><span class="material-symbols-outlined text-[20px]">manage_accounts</span><span>Members</span></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="admin-storage" href="#"><span class="material-symbols-outlined text-[20px]">pie_chart</span><span>Storage</span></a></nav></div><div class="p-space-md border-t border-border bg-surface-container-low/50"><div class="flex items-center justify-between mb-space-xs"><div class="flex items-center gap-space-xs text-on-surface"><span class="material-symbols-outlined text-[16px] text-secondary">cloud_done</span><span class="font-title-md text-title-md">Storage</span></div><span class="font-label-sm text-label-sm text-secondary">41%</span></div><div class="w-full h-1.5 rounded-full bg-border overflow-hidden mb-space-xs"><div class="h-full bg-primary-container rounded-full w-[41%]"></div></div><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-text-secondary">6.2 GB of 15 GB used</span><a class="font-label-sm text-label-sm text-primary font-medium hover:underline" data-path="admin-storage" href="#">Manage</a></div></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-gutter-desktop"><div class="flex-1 max-w-[540px]"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-secondary text-[20px] pointer-events-none">search</span><input class="w-full h-10 pl-10 pr-20 rounded-lg bg-surface border border-border text-on-surface font-body-md text-body-md placeholder:text-secondary focus:outline-none focus:border-primary-container transition-all shadow-[0_1px_2px_rgba(0,0,0,0.02)]" placeholder="Search in MacTidar Cloud..." type="text"/><div class="absolute right-2.5 flex items-center gap-0.5 pointer-events-none"><kbd class="px-1.5 py-0.5 rounded bg-surface-container-low border border-border font-label-sm text-label-sm text-secondary">⌘</kbd><kbd class="px-1.5 py-0.5 rounded bg-surface-container-low border border-border font-label-sm text-label-sm text-secondary">K</kbd></div></div></div><div class="flex items-center gap-space-sm"><button class="w-9 h-9 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors" title="Help &amp; Documentation" type="button"><span class="material-symbols-outlined text-[20px]">help_outline</span></button><button class="w-9 h-9 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors relative" title="Notifications" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary-container ring-2 ring-surface"></span></button><div class="h-5 w-px bg-border mx-space-xs"></div><a class="flex items-center gap-space-sm pl-space-xs pr-space-sm py-1 rounded-full hover:bg-surface-container-low transition-colors" data-path="account-settings" href="#"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-title-md text-title-md text-on-surface leading-tight">Ukeme</span><span class="font-label-sm text-label-sm text-secondary leading-tight">Admin</span></div></a></div></header><main class="w-full pt-16 bg-canvas min-h-screen px-gutter-desktop py-space-lg"><div class="flex flex-col w-full">
+<!-- Subtle Header Backing Ambient Accent -->
+<div class="relative w-full mb-space-lg">
+<div class="absolute -top-10 -right-10 w-96 h-96 bg-primary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<div class="absolute top-1/2 left-1/3 w-80 h-80 bg-secondary-fixed/40 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<!-- Page Title & Top Action Tier -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md mb-space-lg">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-sm flex-wrap">
+<h1 class="font-headline-lg text-headline-lg text-text-primary tracking-tight">Team members (3)</h1>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-fixed-variant font-label-md text-label-md shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+            1 seat remaining in Plan
+          </span>
+</div>
+<p class="font-body-md text-body-md text-text-secondary">
+          Manage workspace collaborators, access permissions, and account roles.
+        </p>
+</div>
+<!-- Action Button -->
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<button class="h-10 px-5 rounded-full bg-primary-container text-on-primary font-title-md text-title-md flex items-center gap-space-xs shadow-md hover:bg-primary transition-all duration-200 hover:shadow-lg active:scale-95" id="inviteBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+<span>Invite member</span>
+</button>
+</div>
+</div>
+<!-- Quick Insights Bento Bar -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-lg">
+<div class="bg-surface rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Total Allocated</span>
+<span class="font-headline-lg text-headline-lg text-text-primary mt-0.5">4 <span class="font-body-md text-body-md text-text-secondary font-normal">/ 5 seats</span></span>
+</div>
+<div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">group</span>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Active Status</span>
+<span class="font-headline-lg text-headline-lg text-text-primary mt-0.5">3 <span class="font-body-md text-body-md text-tertiary font-normal">Members</span></span>
+</div>
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed-dim/30 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[22px]">verified_user</span>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Pending Inbound</span>
+<span class="font-headline-lg text-headline-lg text-text-primary mt-0.5">1 <span class="font-body-md text-body-md text-warning font-normal">Pending</span></span>
+</div>
+<div class="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center text-warning">
+<span class="material-symbols-outlined text-[22px]">mail</span>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Used Storage</span>
+<span class="font-headline-lg text-headline-lg text-text-primary mt-0.5">6.2 <span class="font-body-md text-body-md text-text-secondary font-normal">GB pooled</span></span>
+</div>
+<div class="w-10 h-10 rounded-xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[22px]">cloud_sync</span>
+</div>
+</div>
+</div>
+<!-- Search & Filter Control Bar -->
+<div class="bg-surface rounded-xl p-space-sm shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-sm mb-space-md">
+<!-- Search Input -->
+<div class="relative w-full md:w-96 flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-secondary text-[20px] pointer-events-none">search</span>
+<input class="w-full h-10 pl-10 pr-4 rounded-lg bg-surface-container-low text-text-primary font-body-md text-body-md placeholder:text-text-secondary focus:outline-none focus:bg-surface focus:shadow-sm transition-all" id="memberSearchInput" placeholder="Search members by name or email..." type="text"/>
+</div>
+<!-- Filters & Bulk Controls -->
+<div class="flex items-center gap-space-sm w-full md:w-auto justify-end overflow-x-auto pb-1 md:pb-0">
+<!-- Role Filter Dropdown -->
+<div class="relative">
+<select class="appearance-none h-10 pl-3.5 pr-8 rounded-lg bg-surface-container-low text-text-primary font-label-md text-label-md cursor-pointer hover:bg-surface-container transition-colors focus:outline-none focus:bg-surface focus:shadow-sm">
+<option value="all">Role: All roles</option>
+<option value="admin">Admin</option>
+<option value="member">Member</option>
+<option value="viewer">Viewer</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-secondary text-[18px] pointer-events-none">expand_more</span>
+</div>
+<!-- Status Filter Dropdown -->
+<div class="relative">
+<select class="appearance-none h-10 pl-3.5 pr-8 rounded-lg bg-surface-container-low text-text-primary font-label-md text-label-md cursor-pointer hover:bg-surface-container transition-colors focus:outline-none focus:bg-surface focus:shadow-sm">
+<option value="all">Status: All statuses</option>
+<option value="active">Active</option>
+<option value="invited">Invited</option>
+<option value="suspended">Deactivated</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-secondary text-[18px] pointer-events-none">expand_more</span>
+</div>
+<!-- Refresh Button -->
+<button class="w-10 h-10 flex-shrink-0 rounded-lg bg-surface-container-low text-secondary hover:text-on-surface hover:bg-surface-container flex items-center justify-center transition-colors" title="Refresh members list" type="button">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+</button>
+</div>
+</div>
+<!-- Table Surface Card -->
+<div class="bg-surface rounded-2xl shadow-sm overflow-visible relative">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/60 text-text-secondary font-label-md text-label-md">
+<th class="py-3.5 px-space-md font-medium tracking-wider uppercase" scope="col">Member</th>
+<th class="py-3.5 px-space-md font-medium tracking-wider uppercase" scope="col">Role</th>
+<th class="py-3.5 px-space-md font-medium tracking-wider uppercase" scope="col">Status</th>
+<th class="py-3.5 px-space-md font-medium tracking-wider uppercase min-w-[190px]" scope="col">Storage used</th>
+<th class="py-3.5 px-space-md font-medium tracking-wider uppercase" scope="col">Last active</th>
+<th class="py-3.5 px-space-md font-medium tracking-wider uppercase text-right" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-text-primary">
+<!-- Row 1: Ukeme (Admin / You) -->
+<tr class="h-16 hover:bg-surface-container-low/50 transition-colors group">
+<!-- Member Info -->
+<td class="px-space-md py-2">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-title-md text-title-md font-bold shadow-sm flex-shrink-0">
+                    U
+                  </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-text-primary truncate">Ukeme Sunday</span>
+<span class="px-1.5 py-0.2 rounded bg-primary-fixed text-primary font-label-sm text-label-sm font-semibold">You</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-secondary truncate">ukeme@mactidar.com</span>
+</div>
+</div>
+</td>
+<!-- Role Pill Dropdown -->
+<td class="px-space-md py-2">
+<div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary-fixed/80 text-primary font-label-md text-label-md font-semibold cursor-pointer hover:bg-primary-fixed transition-colors">
+<span>Admin</span>
+<span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+</div>
+</td>
+<!-- Status -->
+<td class="px-space-md py-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-container/15 text-tertiary font-label-md text-label-md font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  Active
+                </span>
+</td>
+<!-- Storage Used -->
+<td class="px-space-md py-2">
+<div class="flex flex-col gap-1 w-full max-w-[200px]">
+<div class="flex items-center justify-between text-text-secondary font-label-sm text-label-sm">
+<span class="font-medium text-text-primary">2.6 GB</span>
+<span>of 5 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 52%;"></div>
+</div>
+</div>
+</td>
+<!-- Last Active -->
+<td class="px-space-md py-2">
+<div class="flex items-center gap-1.5 font-body-sm text-body-sm text-text-primary">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span>Now (Active currently)</span>
+</div>
+</td>
+<!-- Actions Menu -->
+<td class="px-space-md py-2 text-right relative">
+<button class="w-8 h-8 rounded-lg text-secondary hover:text-text-primary hover:bg-surface-container flex items-center justify-center transition-colors ml-auto" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Ada Okon (Active Member - Popup menu simulated) -->
+<tr class="h-16 hover:bg-surface-container-low/50 transition-colors group bg-surface-bright">
+<!-- Member Info -->
+<td class="px-space-md py-2">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-full bg-file-image text-on-primary flex items-center justify-center font-title-md text-title-md font-semibold flex-shrink-0 shadow-sm">
+                    AO
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate">Ada Okon</span>
+<span class="font-body-sm text-body-sm text-text-secondary truncate">ada@mactidar.com</span>
+</div>
+</div>
+</td>
+<!-- Role Pill Dropdown -->
+<td class="px-space-md py-2">
+<div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container text-text-secondary font-label-md text-label-md font-medium cursor-pointer hover:bg-surface-container-high transition-colors">
+<span>Member</span>
+<span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+</div>
+</td>
+<!-- Status -->
+<td class="px-space-md py-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-container/15 text-tertiary font-label-md text-label-md font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  Active
+                </span>
+</td>
+<!-- Storage Used -->
+<td class="px-space-md py-2">
+<div class="flex flex-col gap-1 w-full max-w-[200px]">
+<div class="flex items-center justify-between text-text-secondary font-label-sm text-label-sm">
+<span class="font-medium text-text-primary">2.1 GB</span>
+<span>of 5 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 42%;"></div>
+</div>
+</div>
+</td>
+<!-- Last Active -->
+<td class="px-space-md py-2 font-body-sm text-body-sm text-text-secondary">
+                14 minutes ago
+              </td>
+<!-- Actions Menu with Open Popup Simulation -->
+<td class="px-space-md py-2 text-right relative">
+<div class="relative inline-block text-left">
+<button class="w-8 h-8 rounded-lg bg-surface-container text-text-primary flex items-center justify-center shadow-sm" id="adaMenuTrigger" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<!-- Open Popup Simulation Menu -->
+<div class="absolute right-0 mt-2 w-48 rounded-xl bg-surface shadow-xl z-50 p-1.5 text-left transform origin-top-right transition-all" id="adaPopupMenu">
+<div class="px-2.5 py-1.5 mb-1 font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">
+                      Manage User
+                    </div>
+<button class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-text-primary hover:bg-surface-container font-body-sm text-body-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary">admin_panel_settings</span>
+                      Change role
+                    </button>
+<button class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-text-primary hover:bg-surface-container font-body-sm text-body-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary">forward_to_inbox</span>
+                      Resend invite
+                    </button>
+<div class="h-px bg-surface-container my-1"></div>
+<button class="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-danger hover:bg-error-container/40 font-body-sm text-body-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-danger">person_off</span>
+                      Deactivate member
+                    </button>
+</div>
+</div>
+</td>
+</tr>
+<!-- Row 3: Tunde Bello (Active Member) -->
+<tr class="h-16 hover:bg-surface-container-low/50 transition-colors group">
+<!-- Member Info -->
+<td class="px-space-md py-2">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-full bg-file-sheet text-on-primary flex items-center justify-center font-title-md text-title-md font-semibold flex-shrink-0 shadow-sm">
+                    TB
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate">Tunde Bello</span>
+<span class="font-body-sm text-body-sm text-text-secondary truncate">tunde@mactidar.com</span>
+</div>
+</div>
+</td>
+<!-- Role Pill Dropdown -->
+<td class="px-space-md py-2">
+<div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container text-text-secondary font-label-md text-label-md font-medium cursor-pointer hover:bg-surface-container-high transition-colors">
+<span>Member</span>
+<span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+</div>
+</td>
+<!-- Status -->
+<td class="px-space-md py-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-container/15 text-tertiary font-label-md text-label-md font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  Active
+                </span>
+</td>
+<!-- Storage Used -->
+<td class="px-space-md py-2">
+<div class="flex flex-col gap-1 w-full max-w-[200px]">
+<div class="flex items-center justify-between text-text-secondary font-label-sm text-label-sm">
+<span class="font-medium text-text-primary">1.5 GB</span>
+<span>of 5 GB</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 30%;"></div>
+</div>
+</div>
+</td>
+<!-- Last Active -->
+<td class="px-space-md py-2 font-body-sm text-body-sm text-text-secondary">
+                Yesterday at 4:12 PM
+              </td>
+<!-- Actions Menu -->
+<td class="px-space-md py-2 text-right relative">
+<button class="w-8 h-8 rounded-lg text-secondary hover:text-text-primary hover:bg-surface-container flex items-center justify-center transition-colors ml-auto" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Alex Taylor (Pending Invite) -->
+<tr class="h-16 hover:bg-surface-container-low/50 transition-colors group bg-surface-container-lowest">
+<!-- Member Info -->
+<td class="px-space-md py-2">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-full bg-surface-container text-text-secondary flex items-center justify-center font-title-md text-title-md font-semibold flex-shrink-0">
+                    AT
+                  </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-text-secondary truncate">Alex Taylor</span>
+<span class="px-1.5 py-0.2 rounded bg-warning/10 text-warning font-label-sm text-label-sm font-medium">Invited</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-secondary/80 truncate">alex.taylor@company.com</span>
+</div>
+</div>
+</td>
+<!-- Role Pill Dropdown -->
+<td class="px-space-md py-2">
+<div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container/70 text-text-secondary font-label-md text-label-md font-medium cursor-pointer hover:bg-surface-container transition-colors">
+<span>Member</span>
+<span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+</div>
+</td>
+<!-- Status (Pending Invite Badge) -->
+<td class="px-space-md py-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-warning/15 text-warning font-label-md text-label-md font-medium">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                  Pending acceptance
+                </span>
+</td>
+<!-- Storage Used (None yet) -->
+<td class="px-space-md py-2 font-body-sm text-body-sm text-text-secondary">
+<span class="px-2 py-0.5 rounded bg-surface-container-low text-text-secondary font-label-md text-label-md">—</span>
+</td>
+<!-- Last Active / Invited date -->
+<td class="px-space-md py-2 font-body-sm text-body-sm text-text-secondary">
+                Invited Oct 22, 2024
+              </td>
+<!-- Quick contextual buttons for invited user -->
+<td class="px-space-md py-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="h-8 px-2.5 rounded-lg bg-surface-container text-text-primary hover:bg-primary-fixed hover:text-primary font-label-md text-label-md font-medium flex items-center gap-1 transition-colors" title="Resend Invite" type="button">
+<span class="material-symbols-outlined text-[16px]">send</span>
+<span>Resend</span>
+</button>
+<button class="h-8 px-2.5 rounded-lg text-danger hover:bg-error-container/40 font-label-md text-label-md font-medium flex items-center gap-1 transition-colors" title="Revoke invitation" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+<span>Revoke</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Bottom Consolidated Statistics Bar -->
+<div class="bg-surface-container-low/80 px-space-md py-3.5 rounded-b-2xl flex flex-col sm:flex-row items-center justify-between gap-space-sm text-text-secondary font-label-md text-label-md">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="flex items-center gap-1.5 text-text-primary font-medium">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+            4 total seats
+          </span>
+<span class="text-secondary">·</span>
+<span>3 active</span>
+<span class="text-secondary">·</span>
+<span>1 invited</span>
+<span class="text-secondary">·</span>
+<span class="text-text-primary font-medium">6.2 GB aggregate team storage consumed</span>
+</div>
+<div class="flex items-center gap-3">
+<a class="text-primary hover:underline font-label-md text-label-md font-medium flex items-center gap-0.5" href="#">
+<span>Upgrade team plan</span>
+<span class="material-symbols-outlined text-[16px]">north_east</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Dialog Simulation for 'Invite Member' (Hidden by default, triggered via JS) -->
+<div class="fixed inset-0 bg-overlay-dark backdrop-blur-sm z-50 flex items-center justify-center p-space-md hidden" id="inviteModal">
+<div class="bg-surface w-full max-w-lg rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">group_add</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Invite a new member</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">They will get an email invitation to join your workspace.</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg text-secondary hover:text-text-primary hover:bg-surface-container flex items-center justify-center transition-colors" id="closeModalBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-md text-label-md font-medium text-text-primary">Email address</label>
+<input class="w-full h-10 px-3.5 rounded-lg bg-surface-container-low text-text-primary font-body-md text-body-md placeholder:text-text-secondary focus:outline-none focus:bg-surface focus:shadow-sm" placeholder="colleague@mactidar.com" type="email"/>
+</div>
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-md text-label-md font-medium text-text-primary">Account Role</label>
+<select class="w-full h-10 px-3 rounded-lg bg-surface-container-low text-text-primary font-body-md text-body-md focus:outline-none focus:bg-surface">
+<option value="member">Member (Can edit &amp; share)</option>
+<option value="admin">Admin (Full system control)</option>
+<option value="viewer">Viewer (Read-only)</option>
+</select>
+</div>
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-md text-label-md font-medium text-text-primary">Initial Storage Quota</label>
+<select class="w-full h-10 px-3 rounded-lg bg-surface-container-low text-text-primary font-body-md text-body-md focus:outline-none focus:bg-surface">
+<option value="5">5 GB (Standard)</option>
+<option value="10">10 GB (Extended)</option>
+<option value="custom">Shared team pool</option>
+</select>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-sm flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px] mt-0.5">info</span>
+<p class="font-body-sm text-body-sm text-text-secondary">
+            Your plan allows <strong>1 more member</strong> without incurring extra tier billing.
+          </p>
+</div>
+</div>
+<div class="bg-surface-container-low px-space-lg py-space-md flex items-center justify-end gap-space-sm">
+<button class="h-10 px-4 rounded-full text-text-secondary hover:text-text-primary font-title-md text-title-md hover:bg-surface transition-colors" id="cancelModalBtn" type="button">
+          Cancel
+        </button>
+<button class="h-10 px-5 rounded-full bg-primary-container text-on-primary font-title-md text-title-md shadow-md hover:bg-primary transition-colors" id="sendInviteSubmit" type="button">
+          Send invitation
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple Micro-interactions for Modal & Dropdowns
+  const inviteBtn = document.getElementById('inviteBtn');
+  const inviteModal = document.getElementById('inviteModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const cancelModalBtn = document.getElementById('cancelModalBtn');
+  const sendInviteSubmit = document.getElementById('sendInviteSubmit');
+
+  if (inviteBtn && inviteModal) {
+    inviteBtn.addEventListener('click', () => {
+      inviteModal.classList.remove('hidden');
+    });
+  }
+
+  const hideModal = () => {
+    if (inviteModal) inviteModal.classList.add('hidden');
+  };
+
+  if (closeModalBtn) closeModalBtn.addEventListener('click', hideModal);
+  if (cancelModalBtn) cancelModalBtn.addEventListener('click', hideModal);
+  if (sendInviteSubmit) {
+    sendInviteSubmit.addEventListener('click', () => {
+      hideModal();
+    });
+  }
+
+  // Toggle Ada Okon action popup
+  const adaTrigger = document.getElementById('adaMenuTrigger');
+  const adaPopup = document.getElementById('adaPopupMenu');
+  if (adaTrigger && adaPopup) {
+    adaTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      adaPopup.classList.toggle('hidden');
+    });
+    document.addEventListener('click', (e) => {
+      if (!adaPopup.contains(e.target) && e.target !== adaTrigger) {
+        adaPopup.classList.add('hidden');
+      }
+    });
+  }
+
+  // Client-side quick filter on search
+  const searchInput = document.getElementById('memberSearchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      const rows = document.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(term) ? '' : 'none';
+      });
+    });
+  }
+</script></main></div></body></html>

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-bright": "#f8f9fb", "on-tertiary-fixed-variant": "#005320", "background": "#f8f9fb", "danger": "#DC2626", "on-tertiary-fixed": "#002109", "surface-container-low": "#f2f4f6", "on-secondary-fixed-variant": "#40484f", "surface-container-lowest": "#ffffff", "on-secondary-container": "#5e656d", "on-primary": "#ffffff", "file-video": "#EC4899", "on-error": "#ffffff", "primary-fixed": "#dbe1ff", "canvas": "#F7F8FA", "on-background": "#191c1e", "text-secondary": "#6B7280", "file-folder": "#2563EB", "on-primary-fixed": "#00174b", "primary": "#004ac6", "surface-dim": "#d9dadc", "file-image": "#9333EA", "surface-container-highest": "#e1e2e4", "file-archive": "#6B7280", "surface-container": "#edeef0", "tertiary": "#006329", "on-primary-container": "#eeefff", "secondary-fixed-dim": "#c0c7d0", "tertiary-fixed": "#7ffc97", "on-secondary-fixed": "#151c23", "surface-variant": "#e1e2e4", "outline": "#737686", "on-surface": "#191c1e", "primary-container": "#2563eb", "warning": "#D97706", "outline-variant": "#c3c6d7", "error-container": "#ffdad6", "text-primary": "#111827", "overlay-dark": "rgba(17, 24, 39, 0.95)", "surface-container-high": "#e7e8ea", "file-pdf": "#DC2626", "tertiary-fixed-dim": "#62df7d", "on-tertiary-container": "#c7ffca", "on-error-container": "#93000a", "on-secondary": "#ffffff", "tertiary-container": "#007f36", "on-surface-variant": "#434655", "surface-tint": "#0053db", "surface": "#FFFFFF", "secondary-container": "#dce3ec", "border": "#E5E7EB", "inverse-primary": "#b4c5ff", "file-doc": "#4F46E5", "on-primary-fixed-variant": "#003ea8", "primary-fixed-dim": "#b4c5ff", "secondary": "#585f67", "error": "#ba1a1a", "on-tertiary": "#ffffff", "inverse-surface": "#2e3132", "secondary-fixed": "#dce3ec", "inverse-on-surface": "#f0f1f3", "file-sheet": "#16A34A" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-xl": "2rem", "margin-desktop": "2rem", "gutter": "1rem", "space-xs": "0.25rem", "gutter-desktop": "1.5rem", "margin": "1rem", "space-sm": "0.5rem", "space-md": "1rem", "space-lg": "1.5rem" }, fontFamily: { "headline-sm": ["Inter"], "title-md": ["Inter"], "label-sm": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "label-md": ["Inter"], "body-sm": ["Inter"] }, fontSize: { "headline-sm": ["16px", { lineHeight: "24px", fontWeight: "600" }], "title-md": ["14px", { lineHeight: "20px", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "500" }], "headline-lg": ["24px", { lineHeight: "32px", fontWeight: "600" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", fontWeight: "500" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }] } } } };</script></head><body class="bg-canvas text-on-surface font-body-md text-body-md antialiased min-h-screen"><aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface flex flex-col justify-between z-50 shadow-[0_1px_8px_rgba(0,0,0,0.04)] select-none"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]">cloud</span></div><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-bold">MacTidar</span></div></div><div class="px-space-md pt-space-xs pb-space-md"><button class="w-full h-10 px-space-lg bg-primary-container hover:bg-primary text-on-primary font-title-md text-title-md rounded-full flex items-center justify-between shadow-sm transition-colors group" type="button"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">add</span><span>New</span></div><span class="material-symbols-outlined text-[18px] opacity-80 group-hover:opacity-100 transition-opacity">arrow_drop_down</span></button></div><nav class="flex flex-col px-space-md gap-0.5" data-active-classes="bg-surface-container-low text-primary font-title-md rounded-lg"><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="my-files" href="#"><span class="material-symbols-outlined text-[20px] text-file-folder">folder</span><span>My Files</span></a><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="shared-with-me" href="#"><span class="material-symbols-outlined text-[20px]">group</span><span>Shared with me</span></a><a aria-current="page" class="flex items-center gap-space-md px-space-md py-2.5 transition-colors bg-surface-container-low text-primary font-title-md rounded-lg" data-path="recent" href="#"><span class="material-symbols-outlined text-[20px]">schedule</span><span>Recent</span></a><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="starred" href="#"><span class="material-symbols-outlined text-[20px]">star</span><span>Starred</span></a><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="trash" href="#"><span class="material-symbols-outlined text-[20px]">delete</span><span>Trash</span></a></nav><div class="px-space-lg pt-space-lg pb-space-xs"><span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Admin</span></div><nav class="flex flex-col px-space-md gap-0.5" data-active-classes="bg-surface-container-low text-primary font-title-md rounded-lg"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="members" href="#"><span class="material-symbols-outlined text-[20px]">verified_user</span><span>Members</span></a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="storage" href="#"><span class="material-symbols-outlined text-[20px]">hard_drive</span><span>Storage</span></a></nav></div><div class="p-space-md m-space-md rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center justify-between mb-space-xs"><div class="flex items-center gap-1.5 text-on-surface font-title-md text-title-md"><span class="material-symbols-outlined text-[18px] text-primary">cloud_queue</span><span>Storage</span></div><a class="font-label-md text-label-md text-primary font-semibold hover:text-on-primary-fixed-variant transition-colors" data-path="storage" href="#">Upgrade</a></div><div class="font-body-sm text-body-sm text-text-secondary mb-2">6.2 GB of 15 GB used</div><div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden"><div class="h-full bg-primary-container rounded-full" style="width: 41%"></div></div></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 px-space-lg flex items-center justify-between"><div class="w-full max-w-[540px]"><div class="relative flex items-center w-full"><span class="material-symbols-outlined absolute left-3 text-outline text-[20px] pointer-events-none">search</span><input class="w-full h-10 pl-10 pr-12 bg-surface-container-low text-on-surface placeholder:text-outline rounded-lg text-body-md font-body-md focus:bg-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all" placeholder="Search files, folders, or people..." type="search"/><div class="absolute right-3 flex items-center pointer-events-none"><kbd class="font-label-sm text-label-sm bg-surface text-on-surface-variant px-1.5 py-0.5 rounded shadow-sm">⌘K</kbd></div></div></div><div class="flex items-center gap-space-sm"><button aria-label="Help" class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">help_outline</span></button><button aria-label="Notifications" class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface relative transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary ring-2 ring-surface"></span></button><div class="h-6 w-px bg-surface-container-highest mx-space-xs"></div><div class="flex items-center gap-space-sm pl-space-xs py-1 cursor-pointer rounded-lg hover:bg-surface-container-low transition-colors"><div class="relative"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-tertiary ring-2 ring-surface"></span></div><div class="hidden md:flex flex-col text-left"><span class="font-title-md text-title-md text-on-surface leading-tight">Ukeme</span><span class="font-label-sm text-label-sm text-text-secondary leading-tight">Admin</span></div><span class="material-symbols-outlined text-outline text-[18px] ml-0.5">keyboard_arrow_down</span></div></div></header><main class="w-full pt-16 bg-canvas min-h-screen"><div class="flex flex-col w-full">
+<!-- Interactive View State & Floating Toast Layer -->
+<div class="fixed bottom-6 right-8 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-space-sm bg-overlay-dark text-on-primary px-space-md py-space-sm rounded-lg shadow-xl" id="toast-notify">
+<span class="material-symbols-outlined text-[20px] text-tertiary-fixed">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-primary" id="toast-text">File link copied to clipboard</span>
+</div>
+<!-- Main Content Stage -->
+<div class="px-space-md lg:px-margin-desktop py-space-lg flex flex-col gap-space-xl">
+<!-- Title & Action Bar -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Workspace Stream</span>
+<span class="inline-block w-1 h-1 rounded-full bg-outline"></span>
+<span class="font-label-sm text-label-sm text-text-secondary">Auto-sync active</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-text-primary tracking-tight">Recent</h1>
+<p class="font-body-md text-body-md text-text-secondary">Files and assets you recently opened, edited, or uploaded</p>
+</div>
+<!-- Filter & Quick Action Pill Group -->
+<div class="flex items-center gap-space-xs self-start md:self-auto bg-surface-container-low p-1 rounded-full shadow-sm">
+<button class="px-space-md py-1.5 rounded-full font-label-md text-label-md bg-surface text-primary shadow-sm transition-colors" type="button">
+          All Types
+        </button>
+<button class="px-space-md py-1.5 rounded-full font-label-md text-label-md text-text-secondary hover:text-text-primary transition-colors" type="button">
+          Docs &amp; PDFs
+        </button>
+<button class="px-space-md py-1.5 rounded-full font-label-md text-label-md text-text-secondary hover:text-text-primary transition-colors" type="button">
+          Media
+        </button>
+<button class="px-space-md py-1.5 rounded-full font-label-md text-label-md text-text-secondary hover:text-text-primary transition-colors" type="button">
+          Spreadsheets
+        </button>
+<div class="w-px h-4 bg-surface-container-highest mx-1"></div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface transition-colors" onclick="triggerToast('Recent activity history refreshed')" title="Refresh" type="button">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+</button>
+</div>
+</div>
+<!-- Top Section: Jump Back In (Quick Access Cards) -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">bolt</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary">Jump back in</h2>
+<span class="font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed-variant px-2 py-0.5 rounded-full">4 files</span>
+</div>
+<span class="font-label-sm text-label-sm text-text-secondary">Sorted by last interaction</span>
+</div>
+<!-- Responsive Grid: 4 Quick Access Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Card 1: brand-guide.pdf -->
+<div class="group relative flex flex-col bg-surface rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
+<div class="relative w-full h-36 bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="High-end studio graphic design brand guidelines manual cover, displaying clean Swiss typography, minimalist blue geometric grid system, and crisp architectural layout on matte tactile white paper stock." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFnucsQPwCMYpj0qweSl_PjCLI8-hl4e7KdDD0cgR3vUXh6LuwTFA6pBtEtEgaCCJpizuFpwW45C_FZPWYy_vU0Du9xa7Tj87LE2TqK2bnLPj3JT2MJ5R0ao_7aQrXMIp_bsy9clrk5u5qcfCTf38ULIK8L_tXaW7jEcSvBB4SXkdJbVnuyd--7LMn-vI8rCCjYS0xam6nqUjArmEwESuOK1v8dAEteXmDKR9SUK-9vCVM92UXkBo0Jw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<!-- Format Badge -->
+<div class="absolute top-3 left-3 flex items-center gap-1 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded-md shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-file-pdf">picture_as_pdf</span>
+<span class="font-label-sm text-label-sm text-file-pdf font-semibold">PDF</span>
+</div>
+<!-- Star Quick Action -->
+<button class="absolute top-3 right-3 w-7 h-7 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star file" type="button">
+<span class="material-symbols-outlined text-[16px]">star</span>
+</button>
+<div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-on-primary">
+<span class="font-label-sm text-label-sm text-white/90">v3.4 Production</span>
+<span class="font-label-sm text-label-sm bg-black/40 px-1.5 py-0.5 rounded backdrop-blur-xs text-white">4.8 MB</span>
+</div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 bg-surface">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">brand-guide.pdf</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary truncate">Projects / Q4 Campaign</p>
+</div>
+<div class="flex items-center justify-between mt-space-md pt-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="font-label-sm text-label-sm text-text-secondary">Opened 20m ago</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for brand-guide.pdf')" title="Copy share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: hero-banner.png -->
+<div class="group relative flex flex-col bg-surface rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
+<div class="relative w-full h-36 bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Futuristic scenic abstract high-tech digital banner graphic with vibrant ultraviolet neon lines, glossy geometric glass blocks, and flowing technological mesh on a deep slate gradient backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuRFxAe73nLQZf-BefSAckVGwxNUcZYjLgoJ_1RtMXlEVDzORA-nr2g9IR6B9CStmjTs7dvXcxcWsGGhBRw0x7O5oG3sZq_BsJdCie6EOP_-zsjjqCPmLdBaBeI1LB5WBXtqsdJOwVI34y0LM_89Uc2IIcdeOawtDn5YUG1pG7I0_sBkH_c6f1kouCbmaBEk6W6IEaHzlCG-2Z8jYAFsbLw7X3k54-LdRjjJM14KlmwGZP8y2lowQzEA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<!-- Format Badge -->
+<div class="absolute top-3 left-3 flex items-center gap-1 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded-md shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-file-image">image</span>
+<span class="font-label-sm text-label-sm text-file-image font-semibold">PNG</span>
+</div>
+<button class="absolute top-3 right-3 w-7 h-7 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star file" type="button">
+<span class="material-symbols-outlined text-[16px]">star</span>
+</button>
+<div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-on-primary">
+<span class="font-label-sm text-label-sm text-white/90">2880 × 1440</span>
+<span class="font-label-sm text-label-sm bg-black/40 px-1.5 py-0.5 rounded backdrop-blur-xs text-white">8.2 MB</span>
+</div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 bg-surface">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">hero-banner.png</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary truncate">Projects / Q4 Campaign / Designs</p>
+</div>
+<div class="flex items-center justify-between mt-space-md pt-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-file-image"></span>
+<span class="font-label-sm text-label-sm text-text-secondary">Edited 2h ago</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for hero-banner.png')" title="Copy share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3: demo-video.mp4 -->
+<div class="group relative flex flex-col bg-surface rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
+<div class="relative w-full h-36 bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="High tech software interface screencast preview inside modern sleek laptop workstation screen with purple and magenta cinematic studio backlighting and audio wave telemetry overlay." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRVfIBns_7dhKShsUIJI63XaKY792raEbPALA-TZTqChJcS5lp1veQ2-2l49-uRyyQwnW5DZZ5x8bUGAdp-5u965hLXwAEIC7HFJjhq44gho6vOZRT9oTPKYlIm3g2NBhHylt9_Zt10GPn1UTti-0pbKn5ELQBOa_foK8qgIbSRhSjtcLfkNwZDxtc6ri5Xrssw2WO_a1lDbbIAIh2eNJ96todQb1wFgCa2rvTg459SbX2KZCHydsNBQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<!-- Play Button Overlay -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-10 h-10 rounded-full bg-surface/90 backdrop-blur-md flex items-center justify-center text-file-video shadow-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<!-- Format Badge -->
+<div class="absolute top-3 left-3 flex items-center gap-1 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded-md shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-file-video">videocam</span>
+<span class="font-label-sm text-label-sm text-file-video font-semibold">MP4</span>
+</div>
+<button class="absolute top-3 right-3 w-7 h-7 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star file" type="button">
+<span class="material-symbols-outlined text-[16px]">star</span>
+</button>
+<div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-on-primary">
+<span class="font-label-sm text-label-sm bg-black/50 px-1.5 py-0.5 rounded backdrop-blur-xs font-mono text-white">02:45</span>
+<span class="font-label-sm text-label-sm bg-black/40 px-1.5 py-0.5 rounded backdrop-blur-xs text-white">42.1 MB</span>
+</div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 bg-surface">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">demo-video.mp4</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary truncate">Projects / Q4 Campaign / Videos</p>
+</div>
+<div class="flex items-center justify-between mt-space-md pt-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-file-video"></span>
+<span class="font-label-sm text-label-sm text-text-secondary">Uploaded today</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for demo-video.mp4')" title="Copy share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 4: budget.xlsx -->
+<div class="group relative flex flex-col bg-surface rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
+<div class="relative w-full h-36 bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Modern financial executive presentation worksheet dashboard with clean green gradient data metrics charts, enterprise spreadsheet grid columns, and neat currency balance totals on bright surface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQVI3UZd5R-cQbg933EvGTPPKm3Xgb_lM5I9QXhYIGQ5TphFWpNvIib0N7BCl68IeTxsxB82YHZeJG9xjTB3JCP60ysEKiJv1rPJUv0Z_ToATX9NWgPHI88gAsj3RueqfItIqDx3f98-pQjxU9MxPHXwr7pOgcUEt8RQrsqojvbQGxOH6wXQalhuSTH-GxY1C8ZUEHn-PDZO7BLdO_wR70ki5ZmQRbxgRqqkrcH29T6bcl6rXXCnNAHQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<!-- Format Badge -->
+<div class="absolute top-3 left-3 flex items-center gap-1 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded-md shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-file-sheet">table_chart</span>
+<span class="font-label-sm text-label-sm text-file-sheet font-semibold">XLSX</span>
+</div>
+<button class="absolute top-3 right-3 w-7 h-7 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star file" type="button">
+<span class="material-symbols-outlined text-[16px]">star</span>
+</button>
+<div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-on-primary">
+<span class="font-label-sm text-label-sm text-white/90">Q4 Forecast</span>
+<span class="font-label-sm text-label-sm bg-black/40 px-1.5 py-0.5 rounded backdrop-blur-xs text-white">1.1 MB</span>
+</div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 bg-surface">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">budget.xlsx</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary truncate">Finance / Q4</p>
+</div>
+<div class="flex items-center justify-between mt-space-md pt-space-xs">
+<div class="flex items-center gap-1.5">
+<div class="w-4 h-4 rounded-full bg-file-sheet text-on-primary flex items-center justify-center text-[9px] font-bold">T</div>
+<span class="font-label-sm text-label-sm text-text-secondary">Edited by Tunde</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for budget.xlsx')" title="Copy share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Chronological Activity Timeline Table -->
+<div class="flex flex-col gap-space-md">
+<!-- Section Header with Meta & Column Headers -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-text-secondary">history</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary">Activity Timeline</h2>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-text-secondary">7 events logged</span>
+<span class="inline-block w-1 h-1 rounded-full bg-surface-container-highest"></span>
+<button class="font-label-md text-label-md text-primary font-semibold hover:underline" type="button">
+            Export log
+          </button>
+</div>
+</div>
+<!-- Main Data Table Container -->
+<div class="bg-surface rounded-xl shadow-sm overflow-hidden">
+<!-- Column Header Labels -->
+<div class="grid grid-cols-12 px-space-md py-3 bg-surface-container-low font-label-sm text-label-sm uppercase tracking-wider text-outline select-none">
+<div class="col-span-6 sm:col-span-5 md:col-span-4 flex items-center gap-2">
+<span>Name</span>
+</div>
+<div class="hidden md:flex md:col-span-3 items-center">
+<span>Location</span>
+</div>
+<div class="col-span-3 sm:col-span-4 md:col-span-3 flex items-center">
+<span>Activity</span>
+</div>
+<div class="col-span-3 sm:col-span-3 md:col-span-2 flex items-center justify-end">
+<span>Actions</span>
+</div>
+</div>
+<!-- GROUP 1: TODAY -->
+<div class="flex flex-col">
+<!-- Timeline Group Separator Banner -->
+<div class="flex items-center gap-space-sm px-space-md py-2.5 bg-surface-container-low/50">
+<span class="material-symbols-outlined text-[16px] text-primary">today</span>
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-primary">Today</span>
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="font-label-sm text-label-sm text-text-secondary">3 activities</span>
+</div>
+<!-- Row 1: brand-guide.pdf -->
+<div class="group grid grid-cols-12 items-center px-space-md h-14 hover:bg-surface-container-low/70 transition-colors cursor-pointer">
+<div class="col-span-6 sm:col-span-5 md:col-span-4 flex items-center gap-space-sm min-w-0 pr-2">
+<div class="w-8 h-8 rounded-lg bg-file-pdf/10 text-file-pdf flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">brand-guide.pdf</span>
+<span class="md:hidden font-body-sm text-body-sm text-text-secondary truncate">Projects / Q4 Campaign</span>
+</div>
+</div>
+<div class="hidden md:flex md:col-span-3 items-center min-w-0 pr-3">
+<div class="flex items-center gap-1.5 text-text-secondary font-body-sm text-body-sm truncate">
+<span class="material-symbols-outlined text-[16px] text-outline">folder</span>
+<span class="truncate">Projects / Q4 Campaign</span>
+</div>
+</div>
+<div class="col-span-3 sm:col-span-4 md:col-span-3 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full font-label-md text-label-md bg-surface-container text-on-surface-variant shrink-0">
+                You opened
+              </span>
+<span class="hidden sm:inline font-body-sm text-body-sm text-text-secondary">20m ago</span>
+</div>
+<div class="col-span-3 sm:col-span-3 md:col-span-2 flex items-center justify-end gap-1">
+<div class="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for brand-guide.pdf')" title="Share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Downloading brand-guide.pdf')" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-text-primary transition-colors" onclick="event.stopPropagation();" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Row 2: hero-banner.png -->
+<div class="group grid grid-cols-12 items-center px-space-md h-14 hover:bg-surface-container-low/70 transition-colors cursor-pointer">
+<div class="col-span-6 sm:col-span-5 md:col-span-4 flex items-center gap-space-sm min-w-0 pr-2">
+<div class="w-8 h-8 rounded-lg bg-file-image/10 text-file-image flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">image</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">hero-banner.png</span>
+<span class="md:hidden font-body-sm text-body-sm text-text-secondary truncate">Projects / Q4 Campaign / Designs</span>
+</div>
+</div>
+<div class="hidden md:flex md:col-span-3 items-center min-w-0 pr-3">
+<div class="flex items-center gap-1.5 text-text-secondary font-body-sm text-body-sm truncate">
+<span class="material-symbols-outlined text-[16px] text-outline">folder</span>
+<span class="truncate">Projects / Q4 Campaign / Designs</span>
+</div>
+</div>
+<div class="col-span-3 sm:col-span-4 md:col-span-3 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full font-label-md text-label-md bg-secondary-fixed text-on-secondary-fixed-variant shrink-0">
+                Ada edited
+              </span>
+<span class="hidden sm:inline font-body-sm text-body-sm text-text-secondary">2h ago</span>
+</div>
+<div class="col-span-3 sm:col-span-3 md:col-span-2 flex items-center justify-end gap-1">
+<div class="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for hero-banner.png')" title="Share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Downloading hero-banner.png')" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-text-primary transition-colors" onclick="event.stopPropagation();" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Row 3: demo-video.mp4 -->
+<div class="group grid grid-cols-12 items-center px-space-md h-14 hover:bg-surface-container-low/70 transition-colors cursor-pointer">
+<div class="col-span-6 sm:col-span-5 md:col-span-4 flex items-center gap-space-sm min-w-0 pr-2">
+<div class="w-8 h-8 rounded-lg bg-file-video/10 text-file-video flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">videocam</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">demo-video.mp4</span>
+<span class="md:hidden font-body-sm text-body-sm text-text-secondary truncate">Projects / Q4 Campaign / Videos</span>
+</div>
+</div>
+<div class="hidden md:flex md:col-span-3 items-center min-w-0 pr-3">
+<div class="flex items-center gap-1.5 text-text-secondary font-body-sm text-body-sm truncate">
+<span class="material-symbols-outlined text-[16px] text-outline">folder</span>
+<span class="truncate">Projects / Q4 Campaign / Videos</span>
+</div>
+</div>
+<div class="col-span-3 sm:col-span-4 md:col-span-3 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full font-label-md text-label-md bg-tertiary-fixed text-on-tertiary-fixed-variant shrink-0">
+                You uploaded
+              </span>
+<span class="hidden sm:inline font-body-sm text-body-sm text-text-secondary">4h ago</span>
+</div>
+<div class="col-span-3 sm:col-span-3 md:col-span-2 flex items-center justify-end gap-1">
+<div class="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for demo-video.mp4')" title="Share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Downloading demo-video.mp4')" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-text-primary transition-colors" onclick="event.stopPropagation();" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- GROUP 2: YESTERDAY -->
+<div class="flex flex-col">
+<!-- Timeline Group Separator Banner -->
+<div class="flex items-center gap-space-sm px-space-md py-2.5 bg-surface-container-low/50">
+<span class="material-symbols-outlined text-[16px] text-outline">history_toggle_off</span>
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-text-secondary">Yesterday</span>
+<span class="font-label-sm text-label-sm text-outline">2 activities</span>
+</div>
+<!-- Row 4: budget.xlsx -->
+<div class="group grid grid-cols-12 items-center px-space-md h-14 hover:bg-surface-container-low/70 transition-colors cursor-pointer">
+<div class="col-span-6 sm:col-span-5 md:col-span-4 flex items-center gap-space-sm min-w-0 pr-2">
+<div class="w-8 h-8 rounded-lg bg-file-sheet/10 text-file-sheet flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">table_chart</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">budget.xlsx</span>
+<span class="md:hidden font-body-sm text-body-sm text-text-secondary truncate">Finance / Q4</span>
+</div>
+</div>
+<div class="hidden md:flex md:col-span-3 items-center min-w-0 pr-3">
+<div class="flex items-center gap-1.5 text-text-secondary font-body-sm text-body-sm truncate">
+<span class="material-symbols-outlined text-[16px] text-outline">folder</span>
+<span class="truncate">Finance / Q4</span>
+</div>
+</div>
+<div class="col-span-3 sm:col-span-4 md:col-span-3 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full font-label-md text-label-md bg-secondary-fixed text-on-secondary-fixed-variant shrink-0">
+                Tunde edited
+              </span>
+<span class="hidden sm:inline font-body-sm text-body-sm text-text-secondary">Yesterday, 3:45 PM</span>
+</div>
+<div class="col-span-3 sm:col-span-3 md:col-span-2 flex items-center justify-end gap-1">
+<div class="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for budget.xlsx')" title="Share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Downloading budget.xlsx')" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-text-primary transition-colors" onclick="event.stopPropagation();" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Row 5: notes.docx -->
+<div class="group grid grid-cols-12 items-center px-space-md h-14 hover:bg-surface-container-low/70 transition-colors cursor-pointer">
+<div class="col-span-6 sm:col-span-5 md:col-span-4 flex items-center gap-space-sm min-w-0 pr-2">
+<div class="w-8 h-8 rounded-lg bg-file-doc/10 text-file-doc flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">description</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">notes.docx</span>
+<span class="md:hidden font-body-sm text-body-sm text-text-secondary truncate">Projects / Strategy</span>
+</div>
+</div>
+<div class="hidden md:flex md:col-span-3 items-center min-w-0 pr-3">
+<div class="flex items-center gap-1.5 text-text-secondary font-body-sm text-body-sm truncate">
+<span class="material-symbols-outlined text-[16px] text-outline">folder</span>
+<span class="truncate">Projects / Strategy</span>
+</div>
+</div>
+<div class="col-span-3 sm:col-span-4 md:col-span-3 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full font-label-md text-label-md bg-surface-container text-on-surface-variant shrink-0">
+                You opened
+              </span>
+<span class="hidden sm:inline font-body-sm text-body-sm text-text-secondary">Yesterday, 11:20 AM</span>
+</div>
+<div class="col-span-3 sm:col-span-3 md:col-span-2 flex items-center justify-end gap-1">
+<div class="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for notes.docx')" title="Share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Downloading notes.docx')" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-text-primary transition-colors" onclick="event.stopPropagation();" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- GROUP 3: EARLIER THIS WEEK -->
+<div class="flex flex-col">
+<!-- Timeline Group Separator Banner -->
+<div class="flex items-center gap-space-sm px-space-md py-2.5 bg-surface-container-low/50">
+<span class="material-symbols-outlined text-[16px] text-outline">calendar_view_week</span>
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-text-secondary">Earlier this week</span>
+<span class="font-label-sm text-label-sm text-outline">2 activities</span>
+</div>
+<!-- Row 6: logo-pack.zip -->
+<div class="group grid grid-cols-12 items-center px-space-md h-14 hover:bg-surface-container-low/70 transition-colors cursor-pointer">
+<div class="col-span-6 sm:col-span-5 md:col-span-4 flex items-center gap-space-sm min-w-0 pr-2">
+<div class="w-8 h-8 rounded-lg bg-file-archive/10 text-file-archive flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">folder_zip</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">logo-pack.zip</span>
+<span class="md:hidden font-body-sm text-body-sm text-text-secondary truncate">Assets / Brand</span>
+</div>
+</div>
+<div class="hidden md:flex md:col-span-3 items-center min-w-0 pr-3">
+<div class="flex items-center gap-1.5 text-text-secondary font-body-sm text-body-sm truncate">
+<span class="material-symbols-outlined text-[16px] text-outline">folder</span>
+<span class="truncate">Assets / Brand</span>
+</div>
+</div>
+<div class="col-span-3 sm:col-span-4 md:col-span-3 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full font-label-md text-label-md bg-tertiary-fixed text-on-tertiary-fixed-variant shrink-0">
+                You uploaded
+              </span>
+<span class="hidden sm:inline font-body-sm text-body-sm text-text-secondary">Mon, Oct 21</span>
+</div>
+<div class="col-span-3 sm:col-span-3 md:col-span-2 flex items-center justify-end gap-1">
+<div class="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for logo-pack.zip')" title="Share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Downloading logo-pack.zip')" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-text-primary transition-colors" onclick="event.stopPropagation();" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Row 7: press-release.pdf -->
+<div class="group grid grid-cols-12 items-center px-space-md h-14 hover:bg-surface-container-low/70 transition-colors cursor-pointer">
+<div class="col-span-6 sm:col-span-5 md:col-span-4 flex items-center gap-space-sm min-w-0 pr-2">
+<div class="w-8 h-8 rounded-lg bg-file-pdf/10 text-file-pdf flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary group-hover:text-primary transition-colors truncate">press-release.pdf</span>
+<span class="md:hidden font-body-sm text-body-sm text-text-secondary truncate">Marketing / PR</span>
+</div>
+</div>
+<div class="hidden md:flex md:col-span-3 items-center min-w-0 pr-3">
+<div class="flex items-center gap-1.5 text-text-secondary font-body-sm text-body-sm truncate">
+<span class="material-symbols-outlined text-[16px] text-outline">folder</span>
+<span class="truncate">Marketing / PR</span>
+</div>
+</div>
+<div class="col-span-3 sm:col-span-4 md:col-span-3 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full font-label-md text-label-md bg-secondary-fixed text-on-secondary-fixed-variant shrink-0">
+                Ada edited
+              </span>
+<span class="hidden sm:inline font-body-sm text-body-sm text-text-secondary">Sun, Oct 20</span>
+</div>
+<div class="col-span-3 sm:col-span-3 md:col-span-2 flex items-center justify-end gap-1">
+<div class="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Link copied for press-release.pdf')" title="Share link" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface transition-colors" onclick="event.stopPropagation(); triggerToast('Downloading press-release.pdf')" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-warning transition-colors" onclick="event.stopPropagation(); toggleStar(this)" title="Star" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-text-primary transition-colors" onclick="event.stopPropagation();" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Insight Widget / Storage Notice -->
+<div class="flex flex-col sm:flex-row items-center justify-between p-space-md bg-surface rounded-xl shadow-sm gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">manage_history</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-text-primary">Recent tracking is enabled</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">MacTidar caches your recent items locally for instant offline previews.</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="px-space-md py-2 rounded-lg font-title-md text-title-md text-text-secondary hover:text-danger hover:bg-surface-container transition-colors" onclick="triggerToast('Timeline history cleared for current device')" type="button">
+            Clear Recent History
+          </button>
+<button class="px-space-md py-2 rounded-full font-title-md text-title-md bg-primary-container hover:bg-primary text-on-primary transition-colors shadow-sm" type="button">
+            Activity Settings
+          </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+    // Star toggle micro-interaction
+    function toggleStar(button) {
+      const icon = button.querySelector('.material-symbols-outlined');
+      const isStarred = icon.style.fontVariationSettings.includes("'FILL' 1");
+      if (isStarred) {
+        icon.style.fontVariationSettings = "'FILL' 0";
+        icon.classList.remove('text-warning');
+        icon.classList.add('text-outline');
+        triggerToast('Removed from Starred');
+      } else {
+        icon.style.fontVariationSettings = "'FILL' 1";
+        icon.classList.remove('text-outline');
+        icon.classList.add('text-warning');
+        triggerToast('Saved to Starred files');
+      }
+    }
+
+    // Floating notification toast trigger
+    let toastTimeout;
+    function triggerToast(message) {
+      const toast = document.getElementById('toast-notify');
+      const toastText = document.getElementById('toast-text');
+      if (!toast || !toastText) return;
+
+      toastText.textContent = message;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 2600);
+    }
+  </script>
+</div></main></div></body></html>
