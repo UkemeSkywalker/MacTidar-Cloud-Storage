@@ -50,3 +50,5 @@ next-env.d.ts
 *.tfvars
 !*.tfvars.example
 crash.log
+
+.DS_Store

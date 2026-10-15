@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_overlay" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "surface-container-high": "#e7e8ea",
+        "on-primary": "#ffffff",
+        "on-primary-container": "#eeefff",
+        "overlay-dark": "rgba(17, 24, 39, 0.95)",
+        "error-container": "#ffdad6",
+        "file-pdf": "#DC2626",
+        "surface-tint": "#0053db",
+        "primary-container": "#2563eb",
+        "tertiary-container": "#007f36",
+        "primary-fixed": "#dbe1ff",
+        "background": "#f8f9fb",
+        "on-tertiary-fixed-variant": "#005320",
+        "surface-container-highest": "#e1e2e4",
+        "secondary-fixed-dim": "#c0c7d0",
+        "canvas": "#F7F8FA",
+        "on-error-container": "#93000a",
+        "tertiary-fixed": "#7ffc97",
+        "file-video": "#EC4899",
+        "border": "#E5E7EB",
+        "outline-variant": "#c3c6d7",
+        "text-primary": "#111827",
+        "secondary": "#585f67",
+        "secondary-fixed": "#dce3ec",
+        "tertiary-fixed-dim": "#62df7d",
+        "on-background": "#191c1e",
+        "surface-variant": "#e1e2e4",
+        "inverse-on-surface": "#f0f1f3",
+        "primary-fixed-dim": "#b4c5ff",
+        "inverse-surface": "#2e3132",
+        "surface-bright": "#f8f9fb",
+        "danger": "#DC2626",
+        "surface-container-low": "#f2f4f6",
+        "text-secondary": "#6B7280",
+        "surface-container": "#edeef0",
+        "on-tertiary-fixed": "#002109",
+        "on-secondary": "#ffffff",
+        "on-tertiary-container": "#c7ffca",
+        "on-secondary-fixed-variant": "#40484f",
+        "on-secondary-fixed": "#151c23",
+        "inverse-primary": "#b4c5ff",
+        "on-tertiary": "#ffffff",
+        "surface-container-lowest": "#ffffff",
+        "file-sheet": "#16A34A",
+        "on-surface-variant": "#434655",
+        "on-primary-fixed-variant": "#003ea8",
+        "file-folder": "#2563EB",
+        "on-primary-fixed": "#00174b",
+        "on-secondary-container": "#5e656d",
+        "surface": "#FFFFFF",
+        "on-surface": "#191c1e",
+        "primary": "#004ac6",
+        "on-error": "#ffffff",
+        "file-image": "#9333EA",
+        "secondary-container": "#dce3ec",
+        "error": "#ba1a1a",
+        "file-doc": "#4F46E5",
+        "surface-dim": "#d9dadc",
+        "warning": "#D97706",
+        "tertiary": "#006329",
+        "file-archive": "#6B7280",
+        "outline": "#737686"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.25rem",
+        "lg": "0.5rem",
+        "xl": "0.75rem",
+        "full": "9999px"
+      },
+      "spacing": {
+        "space-md": "1rem",
+        "margin": "1rem",
+        "space-xl": "2rem",
+        "margin-desktop": "2rem",
+        "gutter": "1rem",
+        "space-xs": "0.25rem",
+        "space-lg": "1.5rem",
+        "gutter-desktop": "1.5rem",
+        "space-sm": "0.5rem"
+      },
+      "fontFamily": {
+        "body-md": [
+          "Inter"
+        ],
+        "headline-sm": [
+          "Inter"
+        ],
+        "headline-lg": [
+          "Inter"
+        ],
+        "body-sm": [
+          "Inter"
+        ],
+        "title-md": [
+          "Inter"
+        ],
+        "label-sm": [
+          "Inter"
+        ],
+        "label-md": [
+          "Inter"
+        ]
+      },
+      "fontSize": {
+        "body-md": [
+          "14px",
+          {
+            "lineHeight": "20px",
+            "fontWeight": "400"
+          }
+        ],
+        "headline-sm": [
+          "16px",
+          {
+            "lineHeight": "24px",
+            "fontWeight": "600"
+          }
+        ],
+        "headline-lg": [
+          "24px",
+          {
+            "lineHeight": "32px",
+            "fontWeight": "600"
+          }
+        ],
+        "body-sm": [
+          "13px",
+          {
+            "lineHeight": "18px",
+            "fontWeight": "400"
+          }
+        ],
+        "title-md": [
+          "14px",
+          {
+            "lineHeight": "20px",
+            "fontWeight": "600"
+          }
+        ],
+        "label-sm": [
+          "11px",
+          {
+            "lineHeight": "14px",
+            "letterSpacing": "0.02em",
+            "fontWeight": "500"
+          }
+        ],
+        "label-md": [
+          "12px",
+          {
+            "lineHeight": "16px",
+            "fontWeight": "500"
+          }
+        ]
+      }
+    },
+  },
+}</script></head><body class="bg-overlay-dark text-on-primary font-body-md text-body-md min-h-screen flex flex-col"><main class="w-full flex-1 flex flex-col"><div class="flex flex-col w-full text-on-primary select-none overflow-hidden h-screen max-h-screen">
+<!-- Top Bar: Translucent Dark Header -->
+<header class="w-full h-16 px-5 flex items-center justify-between bg-overlay-dark/80 backdrop-blur-md z-30 flex-shrink-0">
+<!-- Left Meta & Navigation -->
+<div class="flex items-center space-x-4 min-w-0">
+<button aria-label="Go Back" class="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 text-on-primary transition duration-150">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex items-center space-x-3 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-file-image/20 flex items-center justify-center text-file-image flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">image</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center space-x-2">
+<span class="font-headline-sm text-headline-sm text-white truncate max-w-xs md:max-w-md tracking-tight">hero-banner.png</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-label-sm bg-file-image/25 text-purple-200 uppercase tracking-wider font-semibold">PNG</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary-fixed-dim truncate">Projects / Q4 Campaign / hero-banner.png</span>
+</div>
+</div>
+</div>
+<!-- Right Primary Actions -->
+<div class="flex items-center space-x-2 flex-shrink-0">
+<!-- Share Pill Button -->
+<button class="flex items-center space-x-2 bg-primary-container hover:bg-surface-tint text-on-primary px-4 py-2 rounded-full font-label-md text-label-md transition shadow-sm">
+<span class="material-symbols-outlined text-[16px]">share</span>
+<span>Share</span>
+</button>
+<!-- Download Button -->
+<button aria-label="Download File" class="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 text-on-primary transition">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<!-- Star Button -->
+<button aria-label="Star File" class="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 text-on-primary transition" id="starBtn">
+<span class="material-symbols-outlined text-[18px]" id="starIcon">star</span>
+</button>
+<!-- More Actions -->
+<button aria-label="More Options" class="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 text-on-primary transition">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+<!-- Toggle Info Panel Button -->
+<button aria-label="Toggle Details Panel" class="w-9 h-9 rounded-full flex items-center justify-center bg-white/10 text-white hover:bg-white/20 transition ml-1" id="toggleSidebarBtn">
+<span class="material-symbols-outlined text-[18px]">info</span>
+</button>
+<!-- Close Viewport Button -->
+<button aria-label="Close Viewport" class="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 text-on-primary transition ml-1">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</header>
+<!-- Workspace Container: Center Stage + Inspector Sidebar -->
+<div class="flex flex-1 w-full min-h-0 relative overflow-hidden">
+<!-- Center Stage (Viewport Area) -->
+<main class="flex-1 relative flex items-center justify-center p-4 md:p-8 overflow-hidden bg-overlay-dark">
+<!-- Ambient Studio Lighting Glow -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30">
+<div class="w-[500px] h-[500px] bg-primary/20 blur-[130px] rounded-full"></div>
+<div class="w-[300px] h-[300px] bg-file-image/20 blur-[110px] rounded-full -mt-20"></div>
+</div>
+<!-- Left File Switcher -->
+<button aria-label="Previous File" class="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-surface-container-highest/20 hover:bg-surface-container-highest/40 text-white backdrop-blur-md flex items-center justify-center transition shadow-md">
+<span class="material-symbols-outlined text-[24px]">chevron_left</span>
+</button>
+<!-- Interactive Canvas Wrapper -->
+<div class="relative max-w-full max-h-full flex items-center justify-center transition-transform duration-200 ease-out z-10" id="imageStage">
+<div class="relative rounded-lg overflow-hidden shadow-2xl bg-neutral-900 group">
+<img alt="hero-banner.png preview" class="max-h-[737px] max-w-[80vw] object-contain select-none pointer-events-auto" data-alt="Modern high-fidelity digital infrastructure 3D banner graphic for MacTidar Cloud with glowing cyan and blue fiber networks, floating geometric server blocks, hyper-realistic reflections, glassmorphism prisms, cinematic studio lighting, dark graphite ambient background, photorealistic ultra-widescreen rendering." id="previewImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQQ4UPv74DAJOWbd5zBTyD0ZBx3SDY0P1Zr42GTupjsQ0meIhR-Gh02BtKMPbF7EYDCQgu5OmxPL0g603Vq0KGTIpdYcVQpnIl92wD8cbnCdt41QmWwDjSJM958gFLYgW0zPFRRJpCBQknh69gr4dQKATXATb1RhynSqw4onRTdYhsnLVDjXA-SHMvRqAsfVELjm6whzyIx7pALTxuOBBCPiEYccVmocyurA7882GOLCpdjwb4c7lktg"/>
+</div>
+</div>
+<!-- Right File Switcher -->
+<button aria-label="Next File" class="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-surface-container-highest/20 hover:bg-surface-container-highest/40 text-white backdrop-blur-md flex items-center justify-center transition shadow-md">
+<span class="material-symbols-outlined text-[24px]">chevron_right</span>
+</button>
+<!-- Floating Bottom Toolbar -->
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center space-x-1 bg-surface-container-highest/30 backdrop-blur-xl px-3 py-1.5 rounded-full text-white shadow-xl">
+<button aria-label="Zoom Out" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition" id="zoomOutBtn">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<button aria-label="Reset Zoom" class="px-2.5 h-8 rounded-full flex items-center justify-center font-label-md text-label-md hover:bg-white/10 transition text-white" id="zoomResetBtn">
+<span id="zoomLevel">100%</span>
+</button>
+<button aria-label="Zoom In" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition" id="zoomInBtn">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+<div class="h-4 w-px bg-white/20 mx-1"></div>
+<button aria-label="Fit to Screen" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition" id="fitScreenBtn">
+<span class="material-symbols-outlined text-[18px]">fullscreen</span>
+</button>
+<div class="h-4 w-px bg-white/20 mx-1"></div>
+<div class="px-2 font-label-sm text-label-sm text-secondary-fixed-dim whitespace-nowrap">
+          1 of 12 files
+        </div>
+</div>
+</main>
+<!-- Right Details Panel: Pure White Container -->
+<aside class="w-[340px] flex-shrink-0 bg-surface text-text-primary h-full flex flex-col z-30 transition-all duration-300 overflow-y-auto" id="inspectorPanel">
+<!-- Panel Header -->
+<div class="h-16 px-5 flex items-center justify-between flex-shrink-0 bg-surface">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-[20px] text-primary">description</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary tracking-tight">File details</h2>
+</div>
+<button aria-label="Close Details Panel" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-surface-container transition text-text-secondary" id="closePanelBtn">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="p-5 space-y-6 flex-1">
+<!-- Thumbnail Preview Card -->
+<div class="rounded-xl overflow-hidden bg-surface-container flex flex-col p-2 space-y-2">
+<div class="relative w-full h-36 rounded-lg overflow-hidden bg-neutral-900">
+<img alt="Thumbnail preview" class="w-full h-full object-cover" data-alt="MacTidar Cloud high tech ultra modern isometric digital banner render with vibrant blue cybernetic networks and crystal glass data containers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDryFtwC5pCc-Phho2bXjuOVN---7fb0OtbZDDgQRkS0oUDjuYZINyc7uyscOlI7SOX20Woc3PMX2a__toCrn7YzE3hqMNYbtG5fxzj3xTXZGk44gzTI1IgPqh-9_bkvSWZ5dBQSyFbbMK37DJV8GGBa8qSiPhvwdm6SxhtJAGd0GqUS3R38rd9aol7sXnTeSXtAAtqwnfRzbaSvwwzzdko5z5Db_8yqwGa_8zxAzMGs1jFSrsUFgUbEw"/>
+<span class="absolute bottom-2 left-2 px-2 py-0.5 rounded font-label-sm text-label-sm font-semibold bg-overlay-dark/80 text-white backdrop-blur-sm">
+              PNG · 4.2 MB
+            </span>
+</div>
+</div>
+<!-- Properties Section -->
+<div class="space-y-3">
+<h3 class="font-label-md text-label-md font-semibold text-text-secondary uppercase tracking-wider">Properties</h3>
+<div class="bg-surface-container-low rounded-xl p-3.5 space-y-3 font-body-sm text-body-sm">
+<div class="flex justify-between items-start">
+<span class="text-text-secondary">Type</span>
+<span class="font-medium text-text-primary text-right">PNG Image (image/png)</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-text-secondary">Size</span>
+<span class="font-medium text-text-primary">4.2 MB (4,404,019 B)</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-text-secondary">Dimensions</span>
+<span class="font-medium text-text-primary">3840 × 2160 px</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="text-text-secondary">Location</span>
+<span class="font-medium text-primary text-right hover:underline cursor-pointer">Projects / Q4 Campaign</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="text-text-secondary">Created</span>
+<span class="font-medium text-text-primary text-right">Oct 14, 2024, 10:24 AM</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="text-text-secondary">Modified</span>
+<span class="font-medium text-text-primary text-right">Oct 14, 2024, 02:45 PM</span>
+</div>
+<div class="flex justify-between items-center pt-1">
+<span class="text-text-secondary">Owner</span>
+<div class="flex items-center space-x-1.5">
+<div class="w-5 h-5 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-sm text-[10px] font-bold">U</div>
+<span class="font-medium text-text-primary">Ukeme (You)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Sharing & Permissions ('Who has access') -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<h3 class="font-label-md text-label-md font-semibold text-text-secondary uppercase tracking-wider">Who has access</h3>
+<button class="font-label-md text-label-md font-semibold text-primary hover:text-surface-tint">Manage</button>
+</div>
+<div class="bg-surface-container-low rounded-xl p-3.5 space-y-3.5">
+<!-- Collaborators List -->
+<div class="space-y-2.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-label-md text-xs font-semibold flex-shrink-0">
+                    UK
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary truncate">Ukeme</span>
+<span class="font-label-sm text-label-sm text-text-secondary truncate">ukeme@mactidar.cloud</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-indigo-50 text-indigo-700 font-medium">Owner</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center font-label-md text-xs font-semibold flex-shrink-0">
+                    AO
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary truncate">Ada Okon</span>
+<span class="font-label-sm text-label-sm text-text-secondary truncate">ada@mactidar.cloud</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-blue-50 text-primary-container font-medium">Editor</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center font-label-md text-xs font-semibold flex-shrink-0">
+                    TB
+                  </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-text-primary truncate">Tunde Bello</span>
+<span class="font-label-sm text-label-sm text-text-secondary truncate">tunde@partner.io</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-slate-100 text-secondary font-medium">Viewer</span>
+</div>
+</div>
+<!-- Public Link Section -->
+<div class="pt-2 bg-surface rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center space-x-2 min-w-0">
+<div class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse flex-shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-text-primary truncate">Public link is active</span>
+<span class="font-label-sm text-label-sm text-text-secondary">Expires in 6 days</span>
+</div>
+</div>
+<button aria-label="Copy public link" class="w-8 h-8 rounded-lg flex items-center justify-center bg-surface-container hover:bg-surface-container-high transition text-text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">link</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Activity Summary -->
+<div class="space-y-2 pb-2">
+<h3 class="font-label-md text-label-md font-semibold text-text-secondary uppercase tracking-wider">Activity</h3>
+<div class="flex items-center space-x-2 text-text-secondary font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px] text-tertiary">visibility</span>
+<span>Last viewed today at 11:32 AM by <strong class="text-text-primary font-medium">Ada Okon</strong></span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<script>
+  (function () {
+    let zoom = 100;
+    const stage = document.getElementById('imageStage');
+    const zoomText = document.getElementById('zoomLevel');
+    const zoomIn = document.getElementById('zoomInBtn');
+    const zoomOut = document.getElementById('zoomOutBtn');
+    const zoomReset = document.getElementById('zoomResetBtn');
+    const fitScreen = document.getElementById('fitScreenBtn');
+    const sidebar = document.getElementById('inspectorPanel');
+    const toggleSidebar = document.getElementById('toggleSidebarBtn');
+    const closePanel = document.getElementById('closePanelBtn');
+    const starBtn = document.getElementById('starBtn');
+    const starIcon = document.getElementById('starIcon');
+
+    function applyZoom(val) {
+      zoom = Math.max(25, Math.min(300, val));
+      stage.style.transform = `scale(${zoom / 100})`;
+      zoomText.textContent = `${zoom}%`;
+    }
+
+    zoomIn?.addEventListener('click', () => applyZoom(zoom + 25));
+    zoomOut?.addEventListener('click', () => applyZoom(zoom - 25));
+    zoomReset?.addEventListener('click', () => applyZoom(100));
+    fitScreen?.addEventListener('click', () => applyZoom(100));
+
+    function togglePanelState() {
+      if (sidebar.classList.contains('hidden')) {
+        sidebar.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('hidden');
+      }
+    }
+
+    toggleSidebar?.addEventListener('click', togglePanelState);
+    closePanel?.addEventListener('click', () => sidebar.classList.add('hidden'));
+
+    let isStarred = false;
+    starBtn?.addEventListener('click', () => {
+      isStarred = !isStarred;
+      if (isStarred) {
+        starIcon.style.fontVariationSettings = "'FILL' 1";
+        starIcon.classList.add('text-amber-400');
+      } else {
+        starIcon.style.fontVariationSettings = "'FILL' 0";
+        starIcon.classList.remove('text-amber-400');
+      }
+    });
+  })();
+</script></main></body></html>

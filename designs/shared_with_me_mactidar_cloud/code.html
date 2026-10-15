@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-bright": "#f8f9fb", "on-tertiary-fixed-variant": "#005320", "background": "#f8f9fb", "danger": "#DC2626", "on-tertiary-fixed": "#002109", "surface-container-low": "#f2f4f6", "on-secondary-fixed-variant": "#40484f", "surface-container-lowest": "#ffffff", "on-secondary-container": "#5e656d", "on-primary": "#ffffff", "file-video": "#EC4899", "on-error": "#ffffff", "primary-fixed": "#dbe1ff", "canvas": "#F7F8FA", "on-background": "#191c1e", "text-secondary": "#6B7280", "file-folder": "#2563EB", "on-primary-fixed": "#00174b", "primary": "#004ac6", "surface-dim": "#d9dadc", "file-image": "#9333EA", "surface-container-highest": "#e1e2e4", "file-archive": "#6B7280", "surface-container": "#edeef0", "tertiary": "#006329", "on-primary-container": "#eeefff", "secondary-fixed-dim": "#c0c7d0", "tertiary-fixed": "#7ffc97", "on-secondary-fixed": "#151c23", "surface-variant": "#e1e2e4", "outline": "#737686", "on-surface": "#191c1e", "primary-container": "#2563eb", "warning": "#D97706", "outline-variant": "#c3c6d7", "error-container": "#ffdad6", "text-primary": "#111827", "overlay-dark": "rgba(17, 24, 39, 0.95)", "surface-container-high": "#e7e8ea", "file-pdf": "#DC2626", "tertiary-fixed-dim": "#62df7d", "on-tertiary-container": "#c7ffca", "on-error-container": "#93000a", "on-secondary": "#ffffff", "tertiary-container": "#007f36", "on-surface-variant": "#434655", "surface-tint": "#0053db", "surface": "#FFFFFF", "secondary-container": "#dce3ec", "border": "#E5E7EB", "inverse-primary": "#b4c5ff", "file-doc": "#4F46E5", "on-primary-fixed-variant": "#003ea8", "primary-fixed-dim": "#b4c5ff", "secondary": "#585f67", "error": "#ba1a1a", "on-tertiary": "#ffffff", "inverse-surface": "#2e3132", "secondary-fixed": "#dce3ec", "inverse-on-surface": "#f0f1f3", "file-sheet": "#16A34A" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-xl": "2rem", "margin-desktop": "2rem", "gutter": "1rem", "space-xs": "0.25rem", "gutter-desktop": "1.5rem", "margin": "1rem", "space-sm": "0.5rem", "space-md": "1rem", "space-lg": "1.5rem" }, fontFamily: { "headline-sm": ["Inter"], "title-md": ["Inter"], "label-sm": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "label-md": ["Inter"], "body-sm": ["Inter"] }, fontSize: { "headline-sm": ["16px", { lineHeight: "24px", fontWeight: "600" }], "title-md": ["14px", { lineHeight: "20px", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "500" }], "headline-lg": ["24px", { lineHeight: "32px", fontWeight: "600" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", fontWeight: "500" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }] } } } };</script></head><body class="bg-canvas text-on-surface font-body-md text-body-md antialiased min-h-screen"><aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface flex flex-col justify-between z-50 shadow-[0_1px_8px_rgba(0,0,0,0.04)] select-none"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]">cloud</span></div><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-bold">MacTidar</span></div></div><div class="px-space-md pt-space-xs pb-space-md"><button class="w-full h-10 px-space-lg bg-primary-container hover:bg-primary text-on-primary font-title-md text-title-md rounded-full flex items-center justify-between shadow-sm transition-colors group" type="button"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">add</span><span>New</span></div><span class="material-symbols-outlined text-[18px] opacity-80 group-hover:opacity-100 transition-opacity">arrow_drop_down</span></button></div><nav class="flex flex-col px-space-md gap-0.5" data-active-classes="bg-surface-container-low text-primary font-title-md rounded-lg"><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="my-files" href="#"><span class="material-symbols-outlined text-[20px] text-file-folder">folder</span><span>My Files</span></a><a aria-current="page" class="flex items-center gap-space-md px-space-md py-2.5 transition-colors bg-surface-container-low text-primary font-title-md rounded-lg" data-path="shared-with-me" href="#"><span class="material-symbols-outlined text-[20px]">group</span><span>Shared with me</span></a><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="recent" href="#"><span class="material-symbols-outlined text-[20px]">schedule</span><span>Recent</span></a><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="starred" href="#"><span class="material-symbols-outlined text-[20px]">star</span><span>Starred</span></a><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="trash" href="#"><span class="material-symbols-outlined text-[20px]">delete</span><span>Trash</span></a></nav><div class="px-space-lg pt-space-lg pb-space-xs"><span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Admin</span></div><nav class="flex flex-col px-space-md gap-0.5" data-active-classes="bg-surface-container-low text-primary font-title-md rounded-lg"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="members" href="#"><span class="material-symbols-outlined text-[20px]">verified_user</span><span>Members</span></a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-title-md text-title-md" data-path="storage" href="#"><span class="material-symbols-outlined text-[20px]">hard_drive</span><span>Storage</span></a></nav></div><div class="p-space-md m-space-md rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center justify-between mb-space-xs"><div class="flex items-center gap-1.5 text-on-surface font-title-md text-title-md"><span class="material-symbols-outlined text-[18px] text-primary">cloud_queue</span><span>Storage</span></div><a class="font-label-md text-label-md text-primary font-semibold hover:text-on-primary-fixed-variant transition-colors" data-path="storage" href="#">Upgrade</a></div><div class="font-body-sm text-body-sm text-text-secondary mb-2">6.2 GB of 15 GB used</div><div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden"><div class="h-full bg-primary-container rounded-full" style="width: 41%"></div></div></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 px-space-lg flex items-center justify-between"><div class="w-full max-w-[540px]"><div class="relative flex items-center w-full"><span class="material-symbols-outlined absolute left-3 text-outline text-[20px] pointer-events-none">search</span><input class="w-full h-10 pl-10 pr-12 bg-surface-container-low text-on-surface placeholder:text-outline rounded-lg text-body-md font-body-md focus:bg-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all" placeholder="Search files, folders, or people..." type="search"/><div class="absolute right-3 flex items-center pointer-events-none"><kbd class="font-label-sm text-label-sm bg-surface text-on-surface-variant px-1.5 py-0.5 rounded shadow-sm">⌘K</kbd></div></div></div><div class="flex items-center gap-space-sm"><button aria-label="Help" class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">help_outline</span></button><button aria-label="Notifications" class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface relative transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary ring-2 ring-surface"></span></button><div class="h-6 w-px bg-surface-container-highest mx-space-xs"></div><div class="flex items-center gap-space-sm pl-space-xs py-1 cursor-pointer rounded-lg hover:bg-surface-container-low transition-colors"><div class="relative"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-tertiary ring-2 ring-surface"></span></div><div class="hidden md:flex flex-col text-left"><span class="font-title-md text-title-md text-on-surface leading-tight">Ukeme</span><span class="font-label-sm text-label-sm text-text-secondary leading-tight">Admin</span></div><span class="material-symbols-outlined text-outline text-[18px] ml-0.5">keyboard_arrow_down</span></div></div></header><main class="w-full pt-16 bg-canvas min-h-screen"><div class="flex flex-col w-full">
+<div class="px-margin-desktop py-space-xl max-w-[1400px] w-full mx-auto flex flex-col gap-space-lg">
+<!-- Top Action / Title Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Workspace Collaboration</span>
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+<span class="font-label-sm text-label-sm text-text-secondary">6 items shared</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-text-primary tracking-tight">Shared with me</h1>
+<p class="font-body-md text-body-md text-text-secondary">Files and folders shared directly with your account or team.</p>
+</div>
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<button class="h-10 px-space-md bg-surface-container-lowest hover:bg-surface-container-low text-text-primary font-title-md text-title-md rounded-full shadow-sm transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">archive</span>
+<span>Download All</span>
+</button>
+<button class="h-10 px-space-md bg-primary-container hover:bg-primary text-on-primary font-title-md text-title-md rounded-full shadow-sm transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span>Manage Access</span>
+</button>
+</div>
+</div>
+<!-- Filter and Search Controls Toolbar -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md">
+<!-- Filter Chips -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 lg:pb-0" id="filter-chips">
+<button class="filter-chip h-8 px-space-md rounded-full font-label-md text-label-md bg-primary-container text-on-primary shadow-sm transition-all flex items-center gap-1.5" data-filter="all" type="button">
+<span>All</span>
+<span class="text-xs px-1.5 py-0.2 rounded-full bg-surface-container-lowest/20">6</span>
+</button>
+<button class="filter-chip h-8 px-space-md rounded-full font-label-md text-label-md bg-surface-container-low text-text-secondary hover:text-text-primary hover:bg-surface-container transition-all flex items-center gap-1.5" data-filter="folders" type="button">
+<span class="material-symbols-outlined text-[16px]">folder</span>
+<span>Folders</span>
+<span class="text-xs px-1.5 py-0.2 rounded-full bg-surface-container-highest">2</span>
+</button>
+<button class="filter-chip h-8 px-space-md rounded-full font-label-md text-label-md bg-surface-container-low text-text-secondary hover:text-text-primary hover:bg-surface-container transition-all flex items-center gap-1.5" data-filter="files" type="button">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span>Files</span>
+<span class="text-xs px-1.5 py-0.2 rounded-full bg-surface-container-highest">4</span>
+</button>
+</div>
+<!-- Controls Right: Collaborator Dropdown, Filter input, Sort -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<!-- Shared By Dropdown -->
+<div class="relative">
+<button class="h-9 px-space-md bg-surface-container-low hover:bg-surface-container text-text-primary rounded-lg font-body-sm text-body-sm flex items-center gap-2 transition-colors" id="collaborator-btn" type="button">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">people</span>
+<span id="collaborator-label">All collaborators</span>
+<span class="material-symbols-outlined text-[16px] text-text-secondary">expand_more</span>
+</button>
+<div class="hidden absolute left-0 mt-1 w-56 bg-surface-container-lowest rounded-xl shadow-md p-1.5 z-30 flex flex-col gap-0.5" id="collaborator-menu">
+<button class="collab-option w-full text-left px-3 py-2 rounded-lg font-body-sm text-body-sm hover:bg-surface-container-low text-primary font-medium flex items-center justify-between" data-collaborator="all" type="button">
+<span>All collaborators</span>
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<button class="collab-option w-full text-left px-3 py-2 rounded-lg font-body-sm text-body-sm hover:bg-surface-container-low text-text-primary flex items-center gap-2" data-collaborator="ada" type="button">
+<span class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm flex items-center justify-center font-bold">AO</span>
+<span>Ada Okon</span>
+</button>
+<button class="collab-option w-full text-left px-3 py-2 rounded-lg font-body-sm text-body-sm hover:bg-surface-container-low text-text-primary flex items-center gap-2" data-collaborator="tunde" type="button">
+<span class="w-6 h-6 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm flex items-center justify-center font-bold">TB</span>
+<span>Tunde Bello</span>
+</button>
+</div>
+</div>
+<!-- In-view Search -->
+<div class="relative flex-1 sm:w-64">
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-text-secondary text-[18px] pointer-events-none">search</span>
+<input class="w-full h-9 pl-9 pr-3 bg-surface-container-low text-text-primary placeholder:text-outline rounded-lg text-body-sm font-body-sm focus:bg-surface-container-lowest focus:outline-none transition-all" id="shared-search" placeholder="Filter shared items..." type="search"/>
+</div>
+<!-- Sort Toggle -->
+<button class="h-9 px-space-md bg-surface-container-low hover:bg-surface-container text-text-primary rounded-lg font-body-sm text-body-sm flex items-center gap-1.5 transition-colors" id="sort-btn" title="Sort order" type="button">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">sort</span>
+<span class="hidden sm:inline">Date shared</span>
+<span class="material-symbols-outlined text-[16px] text-text-secondary">arrow_downward</span>
+</button>
+</div>
+</div>
+<!-- Active Selection Bar (Hidden by default, shown when items checked) -->
+<div class="hidden bg-primary-fixed text-on-primary-fixed px-space-md py-2.5 rounded-xl shadow-sm flex items-center justify-between transition-all" id="selection-bar">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-primary">check_circle</span>
+<span class="font-title-md text-title-md font-semibold" id="selected-count">1 item selected</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="px-3 py-1 rounded-lg hover:bg-primary-fixed-dim font-body-sm text-body-sm flex items-center gap-1.5 text-on-primary-fixed transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Download</span>
+</button>
+<button class="px-3 py-1 rounded-lg hover:bg-primary-fixed-dim font-body-sm text-body-sm flex items-center gap-1.5 text-on-primary-fixed transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+<span>Add Star</span>
+</button>
+<button class="px-3 py-1 rounded-lg hover:bg-primary-fixed-dim font-body-sm text-body-sm flex items-center gap-1.5 text-on-primary-fixed transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">link</span>
+<span>Copy link</span>
+</button>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse" id="shared-table">
+<thead>
+<tr class="h-11 bg-surface-container-low text-text-secondary font-label-md text-label-md select-none">
+<th class="w-12 px-space-md text-center" scope="col">
+<input class="w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer accent-primary-container" id="select-all" type="checkbox"/>
+</th>
+<th class="px-space-md font-semibold text-text-primary" scope="col">Name</th>
+<th class="px-space-md font-semibold text-text-secondary hidden md:table-cell" scope="col">Shared by</th>
+<th class="px-space-md font-semibold text-text-secondary hidden sm:table-cell" scope="col">Date shared</th>
+<th class="px-space-md font-semibold text-text-secondary" scope="col">Your access</th>
+<th class="px-space-md font-semibold text-text-secondary hidden lg:table-cell" scope="col">Size</th>
+<th class="w-24 px-space-md text-right font-semibold text-text-secondary" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-transparent font-body-md text-body-md text-text-primary">
+<!-- Item 1: Folder 'Q4 Campaign Assets' -->
+<tr class="item-row h-14 hover:bg-surface-container-low/70 transition-colors group cursor-pointer" data-id="1" data-owner="Ada Okon" data-type="folder">
+<td class="w-12 px-space-md text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer accent-primary-container" type="checkbox"/>
+</td>
+<td class="px-space-md min-w-[220px]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-file-folder text-[22px]" style="font-variation-settings: 'FILL' 1;">folder</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate group-hover:text-primary transition-colors">Q4 Campaign Assets</span>
+<span class="font-label-sm text-label-sm text-text-secondary md:hidden truncate">Ada Okon • Oct 24</span>
+</div>
+</div>
+</td>
+<td class="px-space-md hidden md:table-cell">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-label-md text-label-md font-bold shadow-xs">
+                    AO
+                  </div>
+<span class="font-body-sm text-body-sm text-text-primary font-medium">Ada Okon</span>
+</div>
+</td>
+<td class="px-space-md hidden sm:table-cell font-body-sm text-body-sm text-text-secondary">
+                Oct 24, 2024
+              </td>
+<td class="px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-primary-fixed/40 text-primary font-medium">
+                  Editor
+                </span>
+</td>
+<td class="px-space-md hidden lg:table-cell font-body-sm text-body-sm text-text-secondary">
+                1.4 GB <span class="text-outline text-xs">(18 files)</span>
+</td>
+<td class="px-space-md text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Star item" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="More options" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 2: File 'brand-guide-v2.pdf' -->
+<tr class="item-row h-14 hover:bg-surface-container-low/70 transition-colors group cursor-pointer" data-id="2" data-owner="Ada Okon" data-type="file">
+<td class="w-12 px-space-md text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer accent-primary-container" type="checkbox"/>
+</td>
+<td class="px-space-md min-w-[220px]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-file-pdf text-[22px]">picture_as_pdf</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate group-hover:text-primary transition-colors">brand-guide-v2.pdf</span>
+<span class="font-label-sm text-label-sm text-text-secondary md:hidden truncate">Ada Okon • Oct 22</span>
+</div>
+</div>
+</td>
+<td class="px-space-md hidden md:table-cell">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-label-md text-label-md font-bold shadow-xs">
+                    AO
+                  </div>
+<span class="font-body-sm text-body-sm text-text-primary font-medium">Ada Okon</span>
+</div>
+</td>
+<td class="px-space-md hidden sm:table-cell font-body-sm text-body-sm text-text-secondary">
+                Oct 22, 2024
+              </td>
+<td class="px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-primary-fixed/40 text-primary font-medium">
+                  Editor
+                </span>
+</td>
+<td class="px-space-md hidden lg:table-cell font-body-sm text-body-sm text-text-secondary">
+                14.2 MB
+              </td>
+<td class="px-space-md text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Star item" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="More options" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 3: File 'annual-budget-2025.xlsx' -->
+<tr class="item-row h-14 hover:bg-surface-container-low/70 transition-colors group cursor-pointer" data-id="3" data-owner="Tunde Bello" data-type="file">
+<td class="w-12 px-space-md text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer accent-primary-container" type="checkbox"/>
+</td>
+<td class="px-space-md min-w-[220px]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-file-sheet text-[22px]">table_chart</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate group-hover:text-primary transition-colors">annual-budget-2025.xlsx</span>
+<span class="font-label-sm text-label-sm text-text-secondary md:hidden truncate">Tunde Bello • Oct 19</span>
+</div>
+</div>
+</td>
+<td class="px-space-md hidden md:table-cell">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center font-label-md text-label-md font-bold shadow-xs">
+                    TB
+                  </div>
+<span class="font-body-sm text-body-sm text-text-primary font-medium">Tunde Bello</span>
+</div>
+</td>
+<td class="px-space-md hidden sm:table-cell font-body-sm text-body-sm text-text-secondary">
+                Oct 19, 2024
+              </td>
+<td class="px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-text-secondary font-medium">
+                  Viewer
+                </span>
+</td>
+<td class="px-space-md hidden lg:table-cell font-body-sm text-body-sm text-text-secondary">
+                2.1 MB
+              </td>
+<td class="px-space-md text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Star item" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="More options" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 4: Folder 'Legal Compliance & DPA' -->
+<tr class="item-row h-14 hover:bg-surface-container-low/70 transition-colors group cursor-pointer" data-id="4" data-owner="Tunde Bello" data-type="folder">
+<td class="w-12 px-space-md text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer accent-primary-container" type="checkbox"/>
+</td>
+<td class="px-space-md min-w-[220px]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-file-folder text-[22px]" style="font-variation-settings: 'FILL' 1;">folder</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate group-hover:text-primary transition-colors">Legal Compliance &amp; DPA</span>
+<span class="font-label-sm text-label-sm text-text-secondary md:hidden truncate">Tunde Bello • Oct 15</span>
+</div>
+</div>
+</td>
+<td class="px-space-md hidden md:table-cell">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center font-label-md text-label-md font-bold shadow-xs">
+                    TB
+                  </div>
+<span class="font-body-sm text-body-sm text-text-primary font-medium">Tunde Bello</span>
+</div>
+</td>
+<td class="px-space-md hidden sm:table-cell font-body-sm text-body-sm text-text-secondary">
+                Oct 15, 2024
+              </td>
+<td class="px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-text-secondary font-medium">
+                  Viewer
+                </span>
+</td>
+<td class="px-space-md hidden lg:table-cell font-body-sm text-body-sm text-text-secondary">
+                45 MB <span class="text-outline text-xs">(8 files)</span>
+</td>
+<td class="px-space-md text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Star item" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="More options" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 5: File 'product-keynote-deck.pdf' -->
+<tr class="item-row h-14 hover:bg-surface-container-low/70 transition-colors group cursor-pointer" data-id="5" data-owner="Ada Okon" data-type="file">
+<td class="w-12 px-space-md text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer accent-primary-container" type="checkbox"/>
+</td>
+<td class="px-space-md min-w-[220px]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-file-pdf text-[22px]">picture_as_pdf</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate group-hover:text-primary transition-colors">product-keynote-deck.pdf</span>
+<span class="font-label-sm text-label-sm text-text-secondary md:hidden truncate">Ada Okon • Oct 10</span>
+</div>
+</div>
+</td>
+<td class="px-space-md hidden md:table-cell">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-label-md text-label-md font-bold shadow-xs">
+                    AO
+                  </div>
+<span class="font-body-sm text-body-sm text-text-primary font-medium">Ada Okon</span>
+</div>
+</td>
+<td class="px-space-md hidden sm:table-cell font-body-sm text-body-sm text-text-secondary">
+                Oct 10, 2024
+              </td>
+<td class="px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-primary-fixed/40 text-primary font-medium">
+                  Editor
+                </span>
+</td>
+<td class="px-space-md hidden lg:table-cell font-body-sm text-body-sm text-text-secondary">
+                38.6 MB
+              </td>
+<td class="px-space-md text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Star item" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="More options" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 6: File 'team-headshots.zip' -->
+<tr class="item-row h-14 hover:bg-surface-container-low/70 transition-colors group cursor-pointer" data-id="6" data-owner="Tunde Bello" data-type="file">
+<td class="w-12 px-space-md text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer accent-primary-container" type="checkbox"/>
+</td>
+<td class="px-space-md min-w-[220px]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-file-archive text-[22px]">folder_zip</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-text-primary truncate group-hover:text-primary transition-colors">team-headshots.zip</span>
+<span class="font-label-sm text-label-sm text-text-secondary md:hidden truncate">Tunde Bello • Oct 05</span>
+</div>
+</div>
+</td>
+<td class="px-space-md hidden md:table-cell">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center font-label-md text-label-md font-bold shadow-xs">
+                    TB
+                  </div>
+<span class="font-body-sm text-body-sm text-text-primary font-medium">Tunde Bello</span>
+</div>
+</td>
+<td class="px-space-md hidden sm:table-cell font-body-sm text-body-sm text-text-secondary">
+                Oct 05, 2024
+              </td>
+<td class="px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-text-secondary font-medium">
+                  Viewer
+                </span>
+</td>
+<td class="px-space-md hidden lg:table-cell font-body-sm text-body-sm text-text-secondary">
+                182 MB
+              </td>
+<td class="px-space-md text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Star item" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="Download" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-container" title="More options" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Empty State / Filter Null Result (Hidden) -->
+<div class="hidden py-space-xl flex-col items-center justify-center text-center p-space-lg" id="no-results">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-text-secondary mb-space-sm">
+<span class="material-symbols-outlined text-[24px]">folder_off</span>
+</div>
+<p class="font-title-md text-title-md text-text-primary mb-1">No shared items found</p>
+<p class="font-body-sm text-body-sm text-text-secondary max-w-sm mb-space-md">Adjust your search or clear selected collaborator filters to discover assets.</p>
+<button class="px-space-md py-1.5 rounded-full bg-surface-container font-title-md text-title-md text-text-primary hover:bg-surface-container-high transition-colors" id="reset-filters-btn" type="button">
+          Reset filters
+        </button>
+</div>
+<!-- Footer Info Strip inside table container -->
+<div class="h-12 px-space-md bg-surface-container-lowest flex items-center justify-between text-text-secondary font-label-md text-label-md">
+<div class="flex items-center gap-2">
+<span>Showing 6 of 6 shared items</span>
+<span class="hidden sm:inline">•</span>
+<span class="hidden sm:inline">2.08 GB total shared storage</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-tertiary">lock</span>
+<span>End-to-end encrypted sharing</span>
+</div>
+</div>
+</div>
+<!-- Storage and Collaboration Snapshot Bento Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md pt-space-xs">
+<!-- Collaborator Card 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-title-md text-title-md font-bold">
+            AO
+          </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-text-primary">Ada Okon</span>
+<span class="font-body-sm text-body-sm text-text-secondary">3 shared items • Marketing Lead</span>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container-low text-text-secondary hover:text-text-primary" title="View profile" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<!-- Collaborator Card 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center font-title-md text-title-md font-bold">
+            TB
+          </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-text-primary">Tunde Bello</span>
+<span class="font-body-sm text-body-sm text-text-secondary">3 shared items • Operations Director</span>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container-low text-text-secondary hover:text-text-primary" title="View profile" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<!-- Quick Action / Security Note Card -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary-container text-on-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-text-primary">Permission Audit</span>
+<span class="font-body-sm text-body-sm text-text-secondary">All links set to domain authenticated</span>
+</div>
+</div>
+<button class="px-2.5 py-1 rounded-full bg-surface-container-low hover:bg-surface-container font-label-md text-label-md text-primary font-semibold transition-colors" type="button">
+          Audit
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function () {
+    // Highlight active link in sidebar navigation
+    const sharedNavLink = document.querySelector('a[data-path="shared-with-me"]');
+    if (sharedNavLink) {
+      document.querySelectorAll('aside nav a').forEach(el => {
+        el.classList.remove('bg-surface-container-low', 'text-primary');
+      });
+      sharedNavLink.classList.add('bg-surface-container-low', 'text-primary');
+    }
+
+    // State
+    let currentFilter = 'all';
+    let currentCollaborator = 'all';
+    let searchQuery = '';
+    let sortAsc = false;
+
+    const rows = document.querySelectorAll('.item-row');
+    const selectAllCheckbox = document.getElementById('select-all');
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    const selectionBar = document.getElementById('selection-bar');
+    const selectedCountLabel = document.getElementById('selected-count');
+    const searchInput = document.getElementById('shared-search');
+    const filterButtons = document.querySelectorAll('.filter-chip');
+    const collaboratorBtn = document.getElementById('collaborator-btn');
+    const collaboratorMenu = document.getElementById('collaborator-menu');
+    const collaboratorLabel = document.getElementById('collaborator-label');
+    const collabOptions = document.querySelectorAll('.collab-option');
+    const sortBtn = document.getElementById('sort-btn');
+    const noResults = document.getElementById('no-results');
+    const tableBody = document.querySelector('#shared-table tbody');
+
+    // Selection Handling
+    function updateSelection() {
+      const selected = Array.from(rowCheckboxes).filter(cb => cb.checked);
+      if (selected.length > 0) {
+        selectionBar.classList.remove('hidden');
+        selectedCountLabel.textContent = `${selected.length} ${selected.length === 1 ? 'item' : 'items'} selected`;
+        selectAllCheckbox.checked = selected.length === rowCheckboxes.length;
+      } else {
+        selectionBar.classList.add('hidden');
+        selectAllCheckbox.checked = false;
+      }
+
+      rows.forEach(row => {
+        const cb = row.querySelector('.row-checkbox');
+        if (cb && cb.checked) {
+          row.classList.add('bg-primary-fixed/20');
+        } else {
+          row.classList.remove('bg-primary-fixed/20');
+        }
+      });
+    }
+
+    selectAllCheckbox.addEventListener('change', (e) => {
+      rowCheckboxes.forEach(cb => {
+        const row = cb.closest('.item-row');
+        if (row && row.style.display !== 'none') {
+          cb.checked = e.target.checked;
+        }
+      });
+      updateSelection();
+    });
+
+    rowCheckboxes.forEach(cb => {
+      cb.addEventListener('change', updateSelection);
+    });
+
+    // Row selection on row click
+    rows.forEach(row => {
+      row.addEventListener('click', (e) => {
+        const cb = row.querySelector('.row-checkbox');
+        if (cb && e.target.type !== 'checkbox') {
+          cb.checked = !cb.checked;
+          updateSelection();
+        }
+      });
+    });
+
+    // Filtering & Search
+    function applyFilters() {
+      let visibleCount = 0;
+
+      rows.forEach(row => {
+        const type = row.getAttribute('data-type');
+        const owner = row.getAttribute('data-owner');
+        const name = row.querySelector('.font-title-md').textContent.toLowerCase();
+
+        let matchesType = true;
+        if (currentFilter === 'folders' && type !== 'folder') matchesType = false;
+        if (currentFilter === 'files' && type !== 'file') matchesType = false;
+
+        let matchesCollaborator = true;
+        if (currentCollaborator === 'ada' && !owner.includes('Ada Okon')) matchesCollaborator = false;
+        if (currentCollaborator === 'tunde' && !owner.includes('Tunde Bello')) matchesCollaborator = false;
+
+        let matchesSearch = true;
+        if (searchQuery.trim() !== '') {
+          matchesSearch = name.includes(searchQuery.toLowerCase()) || owner.toLowerCase().includes(searchQuery.toLowerCase());
+        }
+
+        if (matchesType && matchesCollaborator && matchesSearch) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+          const cb = row.querySelector('.row-checkbox');
+          if (cb) cb.checked = false;
+        }
+      });
+
+      if (visibleCount === 0) {
+        noResults.classList.remove('hidden');
+        noResults.classList.add('flex');
+        tableBody.classList.add('hidden');
+      } else {
+        noResults.classList.add('hidden');
+        noResults.classList.remove('flex');
+        tableBody.classList.remove('hidden');
+      }
+
+      updateSelection();
+    }
+
+    // Filter Chips
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm');
+          b.classList.add('bg-surface-container-low', 'text-text-secondary');
+        });
+        btn.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm');
+        btn.classList.remove('bg-surface-container-low', 'text-text-secondary');
+
+        currentFilter = btn.getAttribute('data-filter');
+        applyFilters();
+      });
+    });
+
+    // Collaborator Dropdown
+    collaboratorBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      collaboratorMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+      collaboratorMenu.classList.add('hidden');
+    });
+
+    collabOptions.forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = opt.getAttribute('data-collaborator');
+        currentCollaborator = val;
+        
+        if (val === 'ada') collaboratorLabel.textContent = 'Ada Okon';
+        else if (val === 'tunde') collaboratorLabel.textContent = 'Tunde Bello';
+        else collaboratorLabel.textContent = 'All collaborators';
+
+        collabOptions.forEach(o => {
+          o.classList.remove('text-primary', 'font-medium');
+          o.classList.add('text-text-primary');
+          const check = o.querySelector('.material-symbols-outlined');
+          if (check && check.textContent === 'check') check.remove();
+        });
+
+        opt.classList.add('text-primary', 'font-medium');
+        opt.classList.remove('text-text-primary');
+        if (!opt.querySelector('.material-symbols-outlined:last-child')) {
+          const checkIcon = document.createElement('span');
+          checkIcon.className = 'material-symbols-outlined text-[18px] ml-auto';
+          checkIcon.textContent = 'check';
+          opt.appendChild(checkIcon);
+        }
+
+        collaboratorMenu.classList.add('hidden');
+        applyFilters();
+      });
+    });
+
+    // Search Input
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      applyFilters();
+    });
+
+    // Reset Filters from Empty State
+    const resetBtn = document.getElementById('reset-filters-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchQuery = '';
+        currentFilter = 'all';
+        currentCollaborator = 'all';
+        collaboratorLabel.textContent = 'All collaborators';
+
+        filterButtons.forEach(b => {
+          if (b.getAttribute('data-filter') === 'all') {
+            b.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm');
+            b.classList.remove('bg-surface-container-low', 'text-text-secondary');
+          } else {
+            b.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm');
+            b.classList.add('bg-surface-container-low', 'text-text-secondary');
+          }
+        });
+
+        applyFilters();
+      });
+    }
+
+    // Sort Toggle Interaction
+    sortBtn.addEventListener('click', () => {
+      sortAsc = !sortAsc;
+      const icon = sortBtn.querySelector('.material-symbols-outlined:last-child');
+      if (icon) {
+        icon.textContent = sortAsc ? 'arrow_upward' : 'arrow_downward';
+      }
+      
+      const rowsArray = Array.from(rows);
+      rowsArray.reverse().forEach(r => tableBody.appendChild(r));
+    });
+
+  })();
+</script></main></div></body></html>
