@@ -52,3 +52,6 @@ next-env.d.ts
 crash.log
 
 .DS_Store
+
+# lambda bundles
+infra/modules/workers/.build/

@@ -1,0 +1,155 @@
+# Scheduled cleanup jobs — see docs/architecture.md §10.
+
+variable "name" { type = string }
+variable "table_name" { type = string }
+variable "table_arn" { type = string }
+variable "bucket_name" { type = string }
+variable "bucket_arn" { type = string }
+
+data "archive_file" "code" {
+  type        = "zip"
+  source_dir  = "${path.module}/src"
+  output_path = "${path.module}/.build/workers.zip"
+}
+
+data "aws_iam_policy_document" "lambda_assume" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "lambda" {
+  name               = "${var.name}-workers"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume.json
+}
+
+resource "aws_iam_role_policy_attachment" "logs" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+data "aws_iam_policy_document" "lambda" {
+  statement {
+    actions = [
+      "dynamodb:Query", "dynamodb:Scan", "dynamodb:DeleteItem", "dynamodb:UpdateItem",
+      "dynamodb:BatchWriteItem", "dynamodb:ConditionCheckItem",
+    ]
+    resources = [var.table_arn, "${var.table_arn}/index/*"]
+  }
+  statement {
+    actions   = ["s3:DeleteObject", "s3:AbortMultipartUpload"]
+    resources = ["${var.bucket_arn}/*"]
+  }
+}
+
+resource "aws_iam_role_policy" "lambda" {
+  name   = "cleanup-access"
+  role   = aws_iam_role.lambda.id
+  policy = data.aws_iam_policy_document.lambda.json
+}
+
+locals {
+  jobs = {
+    purge-trash = {
+      description = "Permanently deletes items that have been in the trash for 30 days"
+      schedule    = "cron(0 2 * * ? *)" # daily 02:00 Africa/Johannesburg
+      timeout     = 300
+    }
+    cleanup-uploads = {
+      description = "Cancels uploads left unfinished for 24 hours and releases their reserved space"
+      schedule    = "rate(1 hour)"
+      timeout     = 120
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_group" "job" {
+  for_each          = local.jobs
+  name              = "/aws/lambda/${var.name}-${each.key}"
+  retention_in_days = 30
+}
+
+resource "aws_lambda_function" "job" {
+  for_each         = local.jobs
+  function_name    = "${var.name}-${each.key}"
+  description      = each.value.description
+  role             = aws_iam_role.lambda.arn
+  runtime          = "nodejs22.x"
+  architectures    = ["arm64"]
+  handler          = "${each.key}.handler"
+  filename         = data.archive_file.code.output_path
+  source_code_hash = data.archive_file.code.output_base64sha256
+  timeout          = each.value.timeout
+  memory_size      = 256
+
+  environment {
+    variables = {
+      TABLE_NAME   = var.table_name
+      FILES_BUCKET = var.bucket_name
+    }
+  }
+
+  depends_on = [aws_cloudwatch_log_group.job, aws_iam_role_policy_attachment.logs]
+}
+
+data "aws_iam_policy_document" "scheduler_assume" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["scheduler.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "scheduler" {
+  name               = "${var.name}-workers-scheduler"
+  assume_role_policy = data.aws_iam_policy_document.scheduler_assume.json
+}
+
+resource "aws_iam_role_policy" "scheduler" {
+  name = "invoke-workers"
+  role = aws_iam_role.scheduler.id
+  policy = jsonencode({
+    Version   = "2012-10-17"
+    Statement = [{ Effect = "Allow", Action = "lambda:InvokeFunction", Resource = [for f in aws_lambda_function.job : f.arn] }]
+  })
+}
+
+resource "aws_scheduler_schedule" "job" {
+  for_each                     = local.jobs
+  name                         = "${var.name}-${each.key}"
+  schedule_expression          = each.value.schedule
+  schedule_expression_timezone = "Africa/Johannesburg"
+
+  flexible_time_window {
+    mode = "OFF"
+  }
+
+  target {
+    arn      = aws_lambda_function.job[each.key].arn
+    role_arn = aws_iam_role.scheduler.arn
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "errors" {
+  for_each            = local.jobs
+  alarm_name          = "${var.name}-${each.key}-errors"
+  namespace           = "AWS/Lambda"
+  metric_name         = "Errors"
+  dimensions          = { FunctionName = aws_lambda_function.job[each.key].function_name }
+  statistic           = "Sum"
+  period              = 3600
+  evaluation_periods  = 1
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+}
+
+output "function_names" {
+  value = [for f in aws_lambda_function.job : f.function_name]
+}

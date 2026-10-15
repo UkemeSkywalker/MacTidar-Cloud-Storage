@@ -53,6 +53,15 @@ module "hosting" {
   from_email          = module.email.from_email
 }
 
+module "workers" {
+  source      = "./modules/workers"
+  name        = local.name
+  table_name  = module.database.table_name
+  table_arn   = module.database.table_arn
+  bucket_name = module.storage.bucket_name
+  bucket_arn  = module.storage.bucket_arn
+}
+
 module "monitoring" {
   source             = "./modules/monitoring"
   name               = local.name
