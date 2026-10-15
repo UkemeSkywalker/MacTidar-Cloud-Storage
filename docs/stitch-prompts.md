@@ -189,3 +189,84 @@ SCREEN 4 — Abuse reports queue. Title "Abuse reports" with tabs Open (3), Revi
 
 SCREEN 5 — "Report abuse" dialog on the public shared-link page (outside visitor view). Small link "Report abuse" in the page footer opens a dialog: title "Report this content", reason radio list (Copyright infringement, Malware or phishing, Spam, Illegal or harmful content, Something else), optional details textarea (0/500), optional email field "Your email (so we can follow up)", bot check placeholder area, buttons "Cancel" and red "Submit report". Show the success state in an inset: green check, "Thanks — our team will review this within 24 hours."
 ```
+
+---
+
+## Batch 11 — Homepage redesign (1 screen)
+
+A dedicated prompt for the public homepage, replacing the Batch 6 "Screen 1" landing page. Generate it on its own (one screen per prompt) so Stitch can spend its full effort on it.
+
+```
+Using the MacTidar Cloud design system (Inter, primary blue #2563EB, canvas #F7F8FA, 8px radius on inputs, pill-shaped primary buttons, Material Symbols icons), design the public HOMEPAGE for MacTidar Cloud at cloud.mactidar.com. Desktop 1440px, long scrolling page, plus the mobile (390px) version of the hero beside it.
+
+GOAL
+Turn visitors into sign-ups. The page tells one story: "Your work, safely in one place — and easy to share with the people who need it." Primary action everywhere: "Get started free". Secondary action: "Sign in" (header only) and "Create a company workspace" (company sections only).
+
+DESIGN PRINCIPLES (apply throughout)
+- Human first: every major section includes real people — warm, natural, editorial-style photography of African professionals and creatives (Lagos, Nairobi, Accra, Cape Town settings), genuine moments (working, laughing with a colleague, presenting, on a phone in a café), never stiff stock poses. Consistent photo treatment: soft natural light, 24px rounded corners, subtle warm tone. Product UI cards float over or beside the photos so people and product appear together.
+- Clear hierarchy: one H1, one headline per section (40px desktop / 28px mobile), short supporting line (max 2 lines, max-width 640px). Body copy is scannable — bullets of max 8 words, no paragraphs longer than 3 lines.
+- Benefit-led copy, not jargon: say what the user gets ("Find any file in seconds"), never technical terms (no "multipart", "recursive inheritance", "egress").
+- Varied rhythm: alternate backgrounds (white, canvas #F7F8FA, one deep navy #0B1B3F section, soft blue gradient banners) and alternate layouts (split image/text, zig-zag rows, full-width banners, compact grids) so no two adjacent sections look alike.
+- Consistent actions: the primary CTA is always the same blue pill "Get started free" with a right arrow; secondary actions are text links with an arrow. Never two competing primary buttons side by side.
+- Social proof near decisions: avatars and short quotes appear right before or beside each call to action.
+- Generous whitespace: 120px vertical section padding on desktop, 72px on mobile; 8-point spacing grid.
+- Accessibility: WCAG AA contrast on all text (including text over photos, using a gradient scrim), visible focus states, icons always paired with labels.
+- Mobile: every split section stacks image-first or text-first logically; CTAs become full-width buttons; the sticky header shows only the logo, "Sign in" and a compact "Get started" button.
+
+HONESTY RULES (important)
+Only use these true claims: free 3 GB personal account, no credit card needed, files encrypted at rest (AES-256) and in transit (HTTPS), data stored in Africa (AWS Cape Town), private by default, sharing outside a company is off until an admin allows it, password-protected links that expire, deleted files recoverable for 30 days, preview images/video/audio/PDF/text in the browser, download folders as .zip, max 5 GB per file. Do NOT mention certifications (ISO, SOC 2), "zero-knowledge", "end-to-end encryption", user counts ("thousands of teams"), uptime percentages, CAD previews, tagging/colour-coding, or multi-region routing. Testimonials are clearly placeholder content: use the small label "Sample testimonial" in the design.
+
+SECTIONS, IN ORDER
+
+1. STICKY HEADER (white, 72px, subtle shadow on scroll)
+MacTidar Cloud logo (blue cloud icon + "MacTidar Cloud"); nav: Features, For teams, Security, Pricing, FAQ; right: "Sign in" text link and blue pill "Get started free".
+
+2. HERO (white with a very soft blue radial glow behind the visual)
+Left (6 columns): small pill label "Free 3 GB · No credit card"; H1 (56px, bold) "Your work, safely in one place."; subline "Store, preview and share your files with your team — or anyone — on your terms."; blue pill "Get started free →" and text link "See how it works ↓"; under the buttons a social-proof row: a stack of 5 overlapping circular face photos + "Made for freelancers, creatives and growing teams across Africa".
+Right (6 columns): a large photo of a young Nigerian woman in a bright creative studio, smiling at her laptop. Overlapping the photo edges: (a) an upload card "Brand Kit 2026.zip · Uploaded ✓" with a green progress bar, (b) a share card showing two small face avatars "Shared with Ada & Tunde · Editor", (c) a small link card "Link expires in 7 days · 🔒 Password". Cards have white backgrounds, 16px radius and soft shadows.
+
+3. "WHO IT'S FOR" STRIP (canvas background)
+Section headline "Built around the way you work". Three tall photo cards side by side, each with a person photo filling the top 60%, then a title, one line and a text link:
+- "Freelancers & creatives" — photographer reviewing shots on a tablet — "Send clients beautiful, password-protected links."
+- "Small businesses" — two shop owners with a laptop at a counter — "Keep invoices, contracts and photos organised."
+- "Teams & agencies" — a team around a meeting table — "One shared space with the right access for everyone."
+
+4. FEATURE STORY — THREE ZIG-ZAG ROWS (white)
+Each row: photo with an overlapping UI card on one side, text on the other; sides alternate.
+Row A "Everything in one place" — photo of a man at a co-working desk dragging files from his desktop; overlay: the My Files list with folders and a drag-and-drop highlight. Bullets: Drag and drop any file up to 5 GB · Folders that stay tidy · Preview photos, videos and PDFs instantly. Link "Explore your files →".
+Row B "Share with your team, your way" — photo of two colleagues looking at one screen and smiling; overlay: Share dialog with three face avatars and Viewer/Editor badges. Bullets: Viewer or Editor access in one click · Share a folder, everything inside follows · Remove access any time. Link "How sharing works →".
+Row C "Send to anyone, safely" — photo of a client receiving a link on her phone in a café; overlay: public link card with password field and "Expires 30 Oct" chip. Bullets: Password-protect any link · Set links to expire · Turn downloads on or off. Link "About secure links →".
+
+5. CTA BANNER 1 — FULL-WIDTH IMAGE BANNER
+Full-bleed (rounded 32px within the page container) photo of a small team celebrating around a laptop, with a left-to-right deep-blue gradient scrim. Left text in white: "Start with 3 GB free. Upgrade never required." + supporting line "Set up in under a minute — no credit card." White pill button "Get started free →". Right side: three small floating white stat chips over the photo: "Free 3 GB", "Data stored in Africa", "Encrypted at rest".
+
+6. "AND THERE'S MORE" — COMPACT FEATURE GRID (canvas)
+Headline "Small details that save you time". 6 compact tiles (icon in a soft-tinted circle, title, one line) in 3×2: Download folders as .zip · Find any file in seconds (search) · Star what matters · Recent files, one click away · Undo deletes for 30 days · Switch between personal and company workspaces. Tiles are lighter than cards (no heavy shadows), so this section feels quick to scan.
+
+7. HOW IT WORKS (white)
+Headline "Up and running in three steps". Horizontal timeline with a thin connecting line and numbered blue circles; under each step a small UI thumbnail (not just text): 1 "Create your free account" (sign-up form thumbnail) · 2 "Add your files" (drag-and-drop thumbnail) · 3 "Share or send a link" (share dialog thumbnail). Centered blue pill "Get started free →" below the steps.
+
+8. FOR COMPANIES — SPLIT SECTION (canvas)
+Left: photo of a founder presenting to her team in a glass meeting room, with an overlay of the Members list (face avatars, Admin/Member badges, storage bars). Right: label "For teams", headline "Bring your whole team", bullets with check icons: Invite your team in seconds · Admins and members, clearly separated · One storage pool for the company · Outside sharing stays off until you allow it. Primary pill "Create a company workspace →" and text link "Talk to us".
+
+9. TESTIMONIALS (white)
+Headline "People who keep their work here". Three quote cards in a row (one slightly raised to break the grid): circular photo, quote in 18px (max 2 sentences), name, role and city, and the small grey label "Sample testimonial". Examples: "I send every client delivery as a password link now. It looks professional and I sleep better." — Amaka O., Photographer, Lagos. "Our whole studio finally works from one folder." — Kwame A., Creative director, Accra. "Setting up the team took five minutes." — Wanjiru M., Operations lead, Nairobi.
+
+10. SECURITY & PRIVACY — DARK SECTION (deep navy #0B1B3F, white text)
+Left: headline "Private by default. Secure by design." and a short line "Your files are yours. We don't sell your data or use it for ads." Right: 2×2 grid of points with outline icons in light blue: Encrypted at rest and in transit · Stored in Africa (Cape Town) · Links with passwords and expiry · Admin control over outside sharing. A subtle illustration of a shield over a map pin on Africa. Text link "Read about security →" in light blue.
+
+11. CTA BANNER 2 — TEAM INVITE BANNER
+Soft blue gradient band (light, not dark) with a cluster of 6 smiling face avatars arranged in a loose circle on the right. Left: "Your team is one invite away." + "Create a company workspace and add your colleagues by email." Primary pill "Create a company workspace →" and text link "Or start with a personal account".
+
+12. PRICING TEASER (canvas)
+Headline "Simple pricing". Two cards: "Free" (highlighted with a blue ring and "Available now" badge, ₦0/month, 3 GB storage, personal workspace, secure links, previews and .zip downloads; pill "Get started free") and "Team" ("Coming soon" badge, muted, more storage and admin controls; outlined button "Notify me"). Link "See full pricing →".
+
+13. FAQ (white, centered, max-width 760px)
+Accordion with 6 questions, first open: "Is it really free?" (Yes — 3 GB, no card needed.) · "Where are my files stored?" (On Amazon Web Services in Cape Town, South Africa, encrypted at rest.) · "Can people without an account see what I share?" (Yes, through a secure link you control, or by verifying their email with a one-time code.) · "Can I use it for my company?" · "What happens if I delete something by mistake?" (It stays in Trash for 30 days.) · "How do I delete my account?". Below: "Still have questions? Contact us →".
+
+14. FINAL CTA (white page, large rounded blue gradient card)
+Split inside the card: left white text "Your files deserve a better home." + "Get started free — 3 GB included, no credit card." + white pill "Get started free →"; right a photo of a smiling young man with headphones working on a laptop, cut out or framed with rounded corners, overlapping the card edge for depth.
+
+15. FOOTER (white, top border)
+Logo and one-line description "Cloud storage for people and teams in Africa and beyond."; columns Product (Features, Pricing, Security), Company (About, Contact), Legal (Terms of Service, Privacy Policy, Report abuse); bottom row "© 2026 MacTidar" and small "Data stored in Cape Town" with a map-pin icon.
+```
