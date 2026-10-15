@@ -79,3 +79,46 @@ export async function addUsedBytes(userId: string, bytes: number, { alsoFree = f
     }),
   );
 }
+
+// Changes the quota; refuses to go below what's already used or reserved.
+export async function setQuota(oldQuota: number, newQuota: number) {
+  const delta = newQuota - oldQuota;
+  try {
+    await ddb().send(
+      new UpdateCommand({
+        TableName: TABLE(),
+        Key: keys.team(),
+        UpdateExpression: "SET quotaBytes = :new, freeBytes = freeBytes + :delta REMOVE alertSentAt",
+        ConditionExpression: "quotaBytes = :old AND freeBytes >= :need",
+        ExpressionAttributeValues: { ":new": newQuota, ":old": oldQuota, ":delta": delta, ":need": Math.max(0, -delta) },
+      }),
+    );
+    return true;
+  } catch (err) {
+    if (isConditionFailed(err)) return false;
+    throw err;
+  }
+}
+
+export async function updateTeamFields(fields: { maxFileBytes?: number; alertPercent?: number; alertSentAt?: string | null }) {
+  const set: string[] = [];
+  const remove: string[] = [];
+  const values: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(fields)) {
+    if (v === undefined) continue;
+    if (v === null) remove.push(k);
+    else {
+      set.push(`${k} = :${k}`);
+      values[`:${k}`] = v;
+    }
+  }
+  if (!set.length && !remove.length) return;
+  await ddb().send(
+    new UpdateCommand({
+      TableName: TABLE(),
+      Key: keys.team(),
+      UpdateExpression: [set.length ? `SET ${set.join(", ")}` : "", remove.length ? `REMOVE ${remove.join(", ")}` : ""].join(" "),
+      ExpressionAttributeValues: Object.keys(values).length ? values : undefined,
+    }),
+  );
+}

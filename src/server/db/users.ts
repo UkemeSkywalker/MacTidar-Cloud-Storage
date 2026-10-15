@@ -16,6 +16,7 @@ export type User = {
   sessionVersion: number;
   createdAt: string;
   lastActiveAt?: string;
+  notifyShares?: boolean;
 };
 
 export async function getUser(id: string): Promise<User | null> {
@@ -106,7 +107,7 @@ export async function createUser(input: { id: string; email: string; name: strin
 
 export async function updateUser(
   id: string,
-  fields: Partial<Pick<User, "name" | "role" | "status" | "lastActiveAt">>,
+  fields: Partial<Pick<User, "name" | "role" | "status" | "lastActiveAt" | "notifyShares">>,
 ) {
   const entries = Object.entries(fields).filter(([, v]) => v !== undefined);
   if (!entries.length) return;
