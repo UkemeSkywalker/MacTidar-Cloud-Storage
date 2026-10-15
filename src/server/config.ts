@@ -12,6 +12,7 @@ const schema = z.object({
   SES_FROM_EMAIL: z.string().email(),
   SSM_PREFIX: z.string().default("/mactidar"),
   APP_URL: z.string().url(),
+  ZIP_FUNCTION: z.string().default("mactidar-zip-folder"),
 });
 
 export type Config = z.infer<typeof schema>;

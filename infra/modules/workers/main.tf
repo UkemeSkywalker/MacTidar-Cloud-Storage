@@ -44,6 +44,21 @@ data "aws_iam_policy_document" "lambda" {
     actions   = ["s3:DeleteObject", "s3:AbortMultipartUpload"]
     resources = ["${var.bucket_arn}/*"]
   }
+  statement {
+    sid       = "ZipRead"
+    actions   = ["s3:GetObject"]
+    resources = ["${var.bucket_arn}/files/*"]
+  }
+  statement {
+    sid       = "ZipWrite"
+    actions   = ["s3:PutObject"]
+    resources = ["${var.bucket_arn}/tmp/zips/*"]
+  }
+  statement {
+    sid       = "ZipJobs"
+    actions   = ["dynamodb:GetItem"]
+    resources = [var.table_arn]
+  }
 }
 
 resource "aws_iam_role_policy" "lambda" {
@@ -150,6 +165,48 @@ resource "aws_cloudwatch_metric_alarm" "errors" {
   treat_missing_data  = "notBreaching"
 }
 
+# Folder downloads: invoked asynchronously by the app, streams S3 → zip → S3.
+resource "aws_cloudwatch_log_group" "zip" {
+  name              = "/aws/lambda/${var.name}-zip-folder"
+  retention_in_days = 30
+}
+
+resource "aws_lambda_function" "zip" {
+  function_name    = "${var.name}-zip-folder"
+  description      = "Builds a .zip of a folder for download"
+  role             = aws_iam_role.lambda.arn
+  runtime          = "nodejs22.x"
+  architectures    = ["arm64"]
+  handler          = "zip-folder.handler"
+  filename         = data.archive_file.code.output_path
+  source_code_hash = data.archive_file.code.output_base64sha256
+  timeout          = 900
+  memory_size      = 1024
+
+  environment {
+    variables = {
+      TABLE_NAME   = var.table_name
+      FILES_BUCKET = var.bucket_name
+    }
+  }
+
+  depends_on = [aws_cloudwatch_log_group.zip, aws_iam_role_policy_attachment.logs]
+}
+
+# Async invocations: don't retry a failed zip (the app shows the error instead).
+resource "aws_lambda_function_event_invoke_config" "zip" {
+  function_name          = aws_lambda_function.zip.function_name
+  maximum_retry_attempts = 0
+}
+
 output "function_names" {
-  value = [for f in aws_lambda_function.job : f.function_name]
+  value = concat([for f in aws_lambda_function.job : f.function_name], [aws_lambda_function.zip.function_name])
+}
+
+output "zip_function_arn" {
+  value = aws_lambda_function.zip.arn
+}
+
+output "zip_function_name" {
+  value = aws_lambda_function.zip.function_name
 }

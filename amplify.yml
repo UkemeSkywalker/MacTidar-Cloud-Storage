@@ -8,7 +8,7 @@ frontend:
       commands:
         # Amplify env vars exist only at build time; write the server-side
         # ones to .env.production so SSR/API routes can read them at runtime.
-        - env | grep -E '^(DATA_REGION|TABLE_NAME|FILES_BUCKET|COGNITO_USER_POOL_ID|COGNITO_CLIENT_ID|SES_FROM_EMAIL|SSM_PREFIX|APP_URL)=' >> .env.production
+        - env | grep -E '^(DATA_REGION|TABLE_NAME|FILES_BUCKET|COGNITO_USER_POOL_ID|COGNITO_CLIENT_ID|SES_FROM_EMAIL|SSM_PREFIX|APP_URL|ZIP_FUNCTION)=' >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next

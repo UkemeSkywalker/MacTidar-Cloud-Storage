@@ -1,6 +1,7 @@
 import "server-only";
 import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { LambdaClient } from "@aws-sdk/client-lambda";
 import { S3Client } from "@aws-sdk/client-s3";
 import { SESv2Client } from "@aws-sdk/client-sesv2";
 import { SSMClient } from "@aws-sdk/client-ssm";
@@ -18,6 +19,7 @@ let clients:
       cognito: CognitoIdentityProviderClient;
       ses: SESv2Client;
       ssm: SSMClient;
+      lambda: LambdaClient;
     }
   | undefined;
 
@@ -30,6 +32,7 @@ export function aws() {
     cognito: new CognitoIdentityProviderClient({ region: region() }),
     ses: new SESv2Client({ region: region() }),
     ssm: new SSMClient({ region: region() }),
+    lambda: new LambdaClient({ region: region() }),
   };
   return clients;
 }

@@ -21,5 +21,6 @@ output "env" {
     COGNITO_CLIENT_ID    = module.auth.client_id
     SES_FROM_EMAIL       = module.email.from_email
     SSM_PREFIX           = module.hosting.ssm_prefix
+    ZIP_FUNCTION         = module.workers.zip_function_name
   }
 }

@@ -17,6 +17,8 @@ variable "user_pool_id" { type = string }
 variable "user_pool_client_id" { type = string }
 variable "ses_identity_arn" { type = string }
 variable "from_email" { type = string }
+variable "zip_function_arn" { type = string }
+variable "zip_function_name" { type = string }
 
 variable "access_token" {
   type      = string
@@ -115,6 +117,12 @@ data "aws_iam_policy_document" "compute" {
   }
 
   statement {
+    sid       = "ZipJobs"
+    actions   = ["lambda:InvokeFunction"]
+    resources = [var.zip_function_arn]
+  }
+
+  statement {
     sid       = "Secrets"
     actions   = ["ssm:GetParameter", "ssm:GetParameters"]
     resources = ["arn:aws:ssm:${var.data_region}:${data.aws_caller_identity.current.account_id}:parameter${local.ssm_prefix}/*"]
@@ -162,6 +170,7 @@ resource "aws_amplify_branch" "main" {
     SES_FROM_EMAIL       = var.from_email
     SSM_PREFIX           = local.ssm_prefix
     APP_URL              = "https://${var.domain_name}"
+    ZIP_FUNCTION         = var.zip_function_name
   }
 }
 

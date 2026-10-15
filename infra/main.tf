@@ -51,6 +51,8 @@ module "hosting" {
   client_secret       = module.auth.client_secret
   ses_identity_arn    = module.email.identity_arn
   from_email          = module.email.from_email
+  zip_function_arn    = module.workers.zip_function_arn
+  zip_function_name   = module.workers.zip_function_name
 }
 
 module "workers" {

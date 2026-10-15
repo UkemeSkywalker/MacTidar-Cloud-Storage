@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { formatBytes, formatDate } from "@/lib/format";
+import { appZip, downloadFolderZip } from "@/lib/zipDownload";
 import { Avatar } from "../Avatar";
 import { Icon } from "../Icon";
 import { toast } from "../toast";
@@ -165,8 +166,9 @@ export function FileBrowser({
   };
 
   const downloadMany = (list: BrowserRow[]) => {
+    // Folders download as server-built zips; files download directly.
+    list.filter((r) => r.type === "folder").forEach((r) => downloadFolderZip(r.name, appZip, r.id));
     const fileRows = list.filter((r) => r.type === "file");
-    if (!fileRows.length) return toast("Folders can't be downloaded yet — open the folder and download its files.", { tone: "info" });
     fileRows.forEach((r, i) => setTimeout(() => {
       const a = document.createElement("a");
       a.href = downloadUrl(r);
@@ -222,7 +224,7 @@ export function FileBrowser({
       {can(r.role, "EDITOR") && (
         <IconBtn label="Share" icon="share" onClick={() => onShare(r)} />
       )}
-      {r.type === "file" && <IconBtn label="Download" icon="download" onClick={() => downloadMany([r])} />}
+      <IconBtn label={r.type === "folder" ? "Download as .zip" : "Download"} icon="download" onClick={() => downloadMany([r])} />
       <IconBtn label={r.starred ? "Unstar" : "Star"} icon="star" fill={r.starred} className={r.starred ? "text-[#f59e0b]" : ""} onClick={() => toggleStar(r)} />
       <RowMenu
         items={[
@@ -257,6 +259,14 @@ export function FileBrowser({
                   <Icon name="create_new_folder" className="text-[20px] text-primary" /> New folder
                 </button>
               </>
+            )}
+            {folder && rows.length > 0 && (
+              <button
+                onClick={() => downloadFolderZip(folder.id.startsWith("root-") ? "My Files" : folder.name, appZip, folder.id)}
+                className="flex h-11 items-center gap-2 rounded-full bg-surface px-5 font-title-md text-title-md text-text-primary shadow-sm hover:bg-surface-container-low"
+              >
+                <Icon name="folder_zip" className="text-[20px] text-on-surface-variant" /> Download .zip
+              </button>
             )}
             {folder && !canUpload && (
               <span className="flex items-center gap-1.5 rounded-full bg-surface-container-high px-3 py-1.5 font-label-md text-label-md text-on-surface-variant">
@@ -460,7 +470,7 @@ export function FileBrowser({
                     items={[
                       { label: "Open", icon: "open_in_new", onClick: () => open(r) },
                       ...(can(r.role, "EDITOR") ? [{ label: "Share", icon: "share", onClick: () => onShare(r) }] : []),
-                      ...(r.type === "file" ? [{ label: "Download", icon: "download", onClick: () => downloadMany([r]) }] : []),
+                      { label: r.type === "folder" ? "Download as .zip" : "Download", icon: "download", onClick: () => downloadMany([r]) },
                       { label: r.starred ? "Unstar" : "Star", icon: "star", onClick: () => toggleStar(r) },
                       ...(can(r.role, "EDITOR")
                         ? [
