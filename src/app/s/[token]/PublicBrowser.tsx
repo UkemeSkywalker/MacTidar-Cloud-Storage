@@ -8,6 +8,7 @@ import type { Row } from "@/components/files/types";
 import { Icon } from "@/components/Icon";
 import { Toaster } from "@/components/toast";
 import { formatBytes, formatDate } from "@/lib/format";
+import { downloadFolderZip, linkZip } from "@/lib/zipDownload";
 
 export function PublicBrowser({
   token,
@@ -83,9 +84,17 @@ export function PublicBrowser({
             )}
           </div>
         </div>
-        {allowDownload && files.length > 0 && (
+        {allowDownload && root.type === "file" && (
           <button onClick={downloadAll} className="flex h-12 items-center gap-2 rounded-full bg-primary-container px-6 font-title-md text-[15px] text-on-primary shadow-md hover:bg-primary">
-            <Icon name="cloud_download" className="text-[22px]" /> {files.length === 1 ? "Download" : `Download all (${files.length})`}
+            <Icon name="cloud_download" className="text-[22px]" /> Download
+          </button>
+        )}
+        {allowDownload && root.type === "folder" && items.length > 0 && (
+          <button
+            onClick={() => downloadFolderZip(folder && !folder.isRoot ? folder.name : root.name, linkZip(token), folder && !folder.isRoot ? folder.id : undefined)}
+            className="flex h-12 items-center gap-2 rounded-full bg-primary-container px-6 font-title-md text-[15px] text-on-primary shadow-md hover:bg-primary"
+          >
+            <Icon name="cloud_download" className="text-[22px]" /> Download all (.zip)
           </button>
         )}
       </div>
