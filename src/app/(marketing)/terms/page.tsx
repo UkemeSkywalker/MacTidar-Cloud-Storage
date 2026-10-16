@@ -107,8 +107,8 @@ export default function TermsPage() {
           body: (
             <>
               <p>
-                You can stop using MacTidar Cloud at any time. To delete your account and all of its files, email <a href="mailto:admin@mactidar.com">admin@mactidar.com</a> from the address on
-                your account. Deleted data is removed from our systems, including backup copies, within 30 days.
+                You can stop using MacTidar Cloud at any time and delete your account in Settings → Delete account. Your personal workspace and its files are deleted; files you keep in a
+                company workspace are handed to another member of that workspace. Deleted data is removed from our systems, including backup copies, within 30 days.
               </p>
               <p>We may suspend or close accounts or workspaces that break these terms or put other people or the service at risk. Where reasonable, we&apos;ll tell you first.</p>
             </>

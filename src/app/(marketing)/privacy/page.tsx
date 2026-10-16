@@ -92,7 +92,7 @@ export default function PrivacyPage() {
               <li>Files you delete stay in Trash for 30 days, then are permanently deleted.</li>
               <li>Earlier versions of overwritten or deleted files are kept for up to 30 days as a safety net.</li>
               <li>Recent-activity entries expire after 30 days; unused invites after 7 days.</li>
-              <li>When you ask us to delete your account, we delete it and its files within 30 days.</li>
+              <li>When you delete your account, its data is removed from our systems, including backup copies, within 30 days.</li>
             </ul>
           ),
         },
@@ -102,8 +102,8 @@ export default function PrivacyPage() {
           body: (
             <>
               <p>
-                You can access, correct, download or delete your personal data. You can update your name in Settings, download your files at any time, and ask us to delete your account
-                by emailing <a href="mailto:admin@mactidar.com">admin@mactidar.com</a>.
+                You can access, correct, download or delete your personal data. You can update your name in Settings, download your files at any time, and delete your account in
+                Settings → Delete account.
               </p>
               <p>We handle personal data in line with the Nigeria Data Protection Act 2023 and other laws that apply to you.</p>
             </>

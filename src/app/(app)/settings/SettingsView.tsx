@@ -12,6 +12,7 @@ import { api } from "@/lib/api";
 import { formatDate } from "@/lib/format";
 import { passwordRules } from "@/lib/passwords";
 import { TurnOnSharingDialog } from "@/components/TurnOnSharing";
+import { DeleteAccountDialog } from "@/components/DeleteAccount";
 import { formatBytes } from "@/lib/format";
 
 type U = { id: string; name: string; email: string; role: string; notifyShares: boolean; createdAt: string };
@@ -22,6 +23,7 @@ export function SettingsView({ user, personal }: { user: U; personal: Personal }
   const router = useRouter();
   const [tab, setTab] = useState<"profile" | "security" | "sharing" | "notifications">("profile");
   const [confirmSharing, setConfirmSharing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [name, setName] = useState(user.name);
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
@@ -288,6 +290,18 @@ export function SettingsView({ user, personal }: { user: U; personal: Personal }
             Save notification preferences
           </button>
         </div>
+      </section>
+      <section className="mb-6 rounded-2xl bg-surface p-7 shadow-[0_1px_2px_rgba(0,0,0,0.05),inset_0_0_0_1px_#fecaca]">
+        <p className="font-headline-sm text-[17px] text-danger">Delete account</p>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
+          <p className="max-w-xl font-body-md text-body-md text-text-secondary">
+            Permanently delete your account and your personal workspace. Files you keep in company workspaces are handed to another member.
+          </p>
+          <button onClick={() => setDeleting(true)} className="flex h-10 items-center gap-2 rounded-full px-5 font-title-md text-title-md text-danger shadow-[inset_0_0_0_1px_#DC2626] hover:bg-error-container/40">
+            <Icon name="person_remove" className="text-[18px]" /> Delete account
+          </button>
+        </div>
+        <DeleteAccountDialog open={deleting} email={user.email} onClose={() => setDeleting(false)} />
       </section>
     </div>
   );

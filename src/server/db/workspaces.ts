@@ -184,7 +184,7 @@ export async function updateMembership(workspaceId: string, userId: string, fiel
   );
 }
 
-export async function updateWorkspace(id: string, fields: Partial<Pick<Workspace, "name" | "sharingEnabled">>) {
+export async function updateWorkspace(id: string, fields: Partial<Pick<Workspace, "name" | "sharingEnabled" | "ownerId" | "status">>) {
   const entries = Object.entries(fields).filter(([, v]) => v !== undefined);
   if (!entries.length) return;
   await ddb().send(
