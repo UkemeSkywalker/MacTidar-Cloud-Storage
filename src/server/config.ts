@@ -15,6 +15,10 @@ const schema = z.object({
   ZIP_FUNCTION: z.string().default("mactidar-zip-folder"),
   // Comma-separated emails allowed into the platform admin console (/platform).
   PLATFORM_ADMINS: z.string().default("admin@mactidar.com"),
+  // Public Cloudflare Turnstile key. TURNSTILE_TEST_MODE=1 (local only) swaps in
+  // Cloudflare's always-pass test keys so the check works on localhost.
+  TURNSTILE_SITE_KEY: z.string().default("0x4AAAAAAFYWCMTaf45GC3U5"),
+  TURNSTILE_TEST_MODE: z.enum(["0", "1"]).default("0"),
 });
 
 export type Config = z.infer<typeof schema>;

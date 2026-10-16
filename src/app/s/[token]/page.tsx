@@ -5,6 +5,7 @@ import { listChildren } from "@/server/db/items";
 import { getUser } from "@/server/db/users";
 import { itemInLink, resolveLink } from "@/server/linkAccess";
 import { PublicBrowser } from "./PublicBrowser";
+import { turnstileSiteKey } from "@/server/turnstile";
 import { ReportAbuse } from "./ReportAbuse";
 import { UnlockForm } from "./UnlockForm";
 
@@ -229,7 +230,7 @@ export default async function PublicLinkPage({
           resolved.state === "locked") && (
           <>
             <span className="hidden h-1 w-1 rounded-full bg-outline-variant sm:block" />
-            <ReportAbuse token={token} />
+            <ReportAbuse token={token} siteKey={turnstileSiteKey()} />
           </>
         )}
       </footer>

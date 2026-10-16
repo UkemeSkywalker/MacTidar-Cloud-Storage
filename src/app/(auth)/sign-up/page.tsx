@@ -4,6 +4,7 @@ import { BrandPanel } from "@/components/auth/BrandPanel";
 import { Icon } from "@/components/Icon";
 import { Logo } from "@/components/Logo";
 import { currentUser } from "@/server/session";
+import { turnstileSiteKey } from "@/server/turnstile";
 import { SignUpForm } from "./SignUpForm";
 
 export const metadata = { title: "Create your account · MacTidar Cloud" };
@@ -32,7 +33,7 @@ export default async function SignUpPage() {
               <Icon name="cloud_done" className="text-[18px] text-tertiary" /> Free forever · 3 GB of storage · No credit card
             </p>
           </div>
-          <SignUpForm />
+          <SignUpForm siteKey={turnstileSiteKey()} />
         </div>
         <div className="flex w-full max-w-[440px] items-center justify-center gap-2 pt-6 text-text-secondary">
           <Icon name="lock" className="text-[15px] text-tertiary" />
