@@ -30,7 +30,7 @@ export async function handler() {
     if (item.parentId) {
       await ddb.send(new DeleteCommand({ TableName: TABLE, Key: { PK: `ITEM#${item.parentId}`, SK: `NAME#${item.nameLower}` } }));
     }
-    await releaseFree(item.size ?? 0);
+    await releaseFree(item.workspaceId, item.size ?? 0);
     cleaned++;
   }
   console.log(JSON.stringify({ stale: stale.length, cleaned }));

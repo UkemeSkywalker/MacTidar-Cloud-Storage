@@ -9,7 +9,7 @@ export const metadata = { title: "Recent · MacTidar Cloud" };
 
 export default async function RecentPage() {
   const user = await requirePageUser();
-  const recent = await listRecent(user.id, 100);
+  const recent = await listRecent(user.workspaceId, user.id, 100);
   const items = await getItems(recent.map((r) => r.itemId));
   const { items: visible, roleOf, location } = await visibleItems(user, [...items.values()]);
   const rows = new Map((await toRows(user, visible, roleOf, location)).map((r) => [r.id, r]));

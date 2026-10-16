@@ -14,13 +14,14 @@ import {
 } from "./db/items";
 import { ddb, keys, now, strip, TABLE } from "./db/table";
 import { addUsedBytes } from "./db/team";
-import { getUser, type User } from "./db/users";
+import { getMembership } from "./db/workspaces";
+import type { Viewer } from "./session";
 import { badRequest, forbidden, notFound } from "./errors";
 import { newId } from "./ids";
 import { requireAccess } from "./permissions";
 import { deleteObjects } from "./storage";
 
-export async function createFolder(user: User, parentId: string, rawName: string) {
+export async function createFolder(user: Viewer, parentId: string, rawName: string) {
   const { item: parent } = await requireAccess(user, parentId, "EDITOR");
   if (parent.type !== "folder") throw badRequest("You can only create folders inside a folder.");
   const name = validateName(rawName);
@@ -29,6 +30,7 @@ export async function createFolder(user: User, parentId: string, rawName: string
   const build = (finalName: string) => {
     const folder: Item = {
       id,
+      workspaceId: parent.workspaceId,
       type: "folder",
       name: finalName,
       nameLower: finalName.toLowerCase(),
@@ -49,7 +51,7 @@ export async function createFolder(user: User, parentId: string, rawName: string
   return { id, name: finalName };
 }
 
-export async function renameItem(user: User, id: string, rawName: string) {
+export async function renameItem(user: Viewer, id: string, rawName: string) {
   const { item } = await requireAccess(user, id, "EDITOR");
   if (!item.parentId) throw badRequest("Your My Files folder can't be renamed.");
   const name = validateName(rawName);
@@ -78,7 +80,7 @@ export async function renameItem(user: User, id: string, rawName: string) {
   );
 }
 
-export async function moveItems(user: User, ids: string[], targetId: string) {
+export async function moveItems(user: Viewer, ids: string[], targetId: string) {
   const { item: target } = await requireAccess(user, targetId, "EDITOR");
   if (target.type !== "folder") throw badRequest("Choose a folder to move into.");
   const moved: string[] = [];
@@ -132,14 +134,14 @@ export async function moveItems(user: User, ids: string[], targetId: string) {
   return moved;
 }
 
-export async function trashItems(user: User, ids: string[]) {
+export async function trashItems(user: Viewer, ids: string[]) {
   for (const id of ids) {
     const { item } = await requireAccess(user, id, "EDITOR");
     if (!item.parentId) throw badRequest("Your My Files folder can't be deleted.");
     const at = now();
     await setItemFields(
       item.id,
-      { status: "TRASHED", trashRootId: item.id, trashedAt: at, trashedBy: user.id, GSI2PK: `TRASH#${user.id}`, GSI2SK: at },
+      { status: "TRASHED", trashRootId: item.id, trashedAt: at, trashedBy: user.id, GSI2PK: `TRASH#${item.workspaceId}#${user.id}`, GSI2SK: at },
       ["GSI1PK", "GSI1SK"],
     );
     await releaseName(item.parentId, item.nameLower);
@@ -151,32 +153,34 @@ export async function trashItems(user: User, ids: string[]) {
   }
 }
 
-export async function listTrash(user: User): Promise<Item[]> {
+export async function listTrash(user: Viewer): Promise<Item[]> {
   const res = await ddb().send(
     new QueryCommand({
       TableName: TABLE(),
       IndexName: "GSI2",
       KeyConditionExpression: "GSI2PK = :pk",
-      ExpressionAttributeValues: { ":pk": `TRASH#${user.id}` },
+      ExpressionAttributeValues: { ":pk": `TRASH#${user.workspaceId}#${user.id}` },
       ScanIndexForward: false,
     }),
   );
   return (res.Items ?? []).map((i) => strip(i) as Item);
 }
 
-async function requireTrashRoot(user: User, id: string) {
+async function requireTrashRoot(user: Viewer, id: string) {
   const item = await getItem(id);
-  if (!item || item.status !== "TRASHED" || item.trashRootId !== item.id) throw notFound("This item isn't in the trash.");
+  if (!item || item.status !== "TRASHED" || item.trashRootId !== item.id || item.workspaceId !== user.workspaceId) {
+    throw notFound("This item isn't in the trash.");
+  }
   if (item.trashedBy !== user.id && item.ownerId !== user.id) throw forbidden();
   return item;
 }
 
-export async function restoreItem(user: User, id: string) {
+export async function restoreItem(user: Viewer, id: string) {
   const item = await requireTrashRoot(user, id);
   // Go back to the original folder if it still exists, otherwise to the owner's My Files.
   let parent = item.parentId ? await getItem(item.parentId) : null;
   if (!parent || parent.status !== "ACTIVE") {
-    const owner = await getUser(item.ownerId);
+    const owner = await getMembership(item.workspaceId, item.ownerId);
     parent = owner ? await getItem(owner.rootFolderId) : null;
     if (!parent) throw badRequest("The original location no longer exists.");
   }
@@ -217,7 +221,7 @@ export async function restoreItem(user: User, id: string) {
 }
 
 // Permanently removes a trashed item and everything under it.
-export async function deleteForever(user: User, id: string, { system = false } = {}) {
+export async function deleteForever(user: Viewer, id: string, { system = false } = {}) {
   const item = system ? await getItem(id) : await requireTrashRoot(user, id);
   if (!item) return;
   if (!system && item.ownerId !== user.id) throw forbidden("Only the owner can delete items forever.");
@@ -254,11 +258,11 @@ export async function deleteForever(user: User, id: string, { system = false } =
   // Give the space back, per uploader.
   const byUser = new Map<string, number>();
   for (const d of doomed) if (d.type === "file" && d.size) byUser.set(d.createdBy, (byUser.get(d.createdBy) ?? 0) + d.size);
-  for (const [uid, bytes] of byUser) await addUsedBytes(uid, -bytes, { alsoFree: true }).catch((e) => console.error(e));
+  for (const [uid, bytes] of byUser) await addUsedBytes(item.workspaceId, uid, -bytes, { alsoFree: true }).catch((e) => console.error(e));
   return doomed.length;
 }
 
-export async function emptyTrash(user: User) {
+export async function emptyTrash(user: Viewer) {
   let count = 0;
   for (const t of await listTrash(user)) {
     if (t.ownerId === user.id) count += (await deleteForever(user, t.id)) ?? 0;

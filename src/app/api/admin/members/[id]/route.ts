@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { setCognitoUserEnabled } from "@/server/cognito";
-import { bumpSessionVersion, getUser, listMembers, updateUser } from "@/server/db/users";
+import { getMembership, listWorkspaceMembers, updateMembership } from "@/server/db/workspaces";
 import { badRequest, notFound, route } from "@/server/errors";
 import { requireAdmin } from "@/server/session";
 
@@ -9,24 +8,20 @@ const body = z.object({
   status: z.enum(["ACTIVE", "DISABLED"]).optional(),
 });
 
+// Changes a member's role or access within the admin's current workspace.
 export const PATCH = route<{ params: Promise<{ id: string }> }>(async (req, { params }) => {
   const admin = await requireAdmin();
   const { id } = await params;
   const { role, status } = body.parse(await req.json());
-  const member = await getUser(id);
+  const member = await getMembership(admin.workspaceId, id);
   if (!member) throw notFound("Member not found.");
-  if (member.id === admin.id && (role === "MEMBER" || status === "DISABLED")) {
+  if (id === admin.id && (role === "MEMBER" || status === "DISABLED")) {
     throw badRequest("You can't remove your own admin access or deactivate yourself.");
   }
-  if (role === "MEMBER" && member.role === "ADMIN") {
-    const admins = (await listMembers()).filter((m) => m.role === "ADMIN" && m.status === "ACTIVE");
-    if (admins.length <= 1) throw badRequest("The team needs at least one admin.");
+  if ((role === "MEMBER" || status === "DISABLED") && member.role === "ADMIN") {
+    const admins = (await listWorkspaceMembers(admin.workspaceId)).filter((m) => m.role === "ADMIN" && m.status === "ACTIVE");
+    if (admins.length <= 1) throw badRequest("The workspace needs at least one admin.");
   }
-
-  if (status && status !== member.status) {
-    await setCognitoUserEnabled(member.id, status === "ACTIVE");
-    if (status === "DISABLED") await bumpSessionVersion(member.id);
-  }
-  await updateUser(member.id, { role, status });
+  await updateMembership(admin.workspaceId, id, { role, status });
   return Response.json({ ok: true });
 });

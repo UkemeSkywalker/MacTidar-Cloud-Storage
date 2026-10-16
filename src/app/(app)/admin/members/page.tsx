@@ -1,6 +1,6 @@
 import { listInvites } from "@/server/db/invites";
 import { getTeamSettings } from "@/server/db/team";
-import { listMembers } from "@/server/db/users";
+import { listWorkspaceMembers } from "@/server/db/workspaces";
 import { requirePageAdmin } from "@/server/session";
 import { MembersView } from "./MembersView";
 
@@ -8,7 +8,11 @@ export const metadata = { title: "Members · MacTidar Cloud" };
 
 export default async function MembersPage() {
   const admin = await requirePageAdmin();
-  const [members, invites, team] = await Promise.all([listMembers(), listInvites(), getTeamSettings()]);
+  const [members, invites, team] = await Promise.all([
+    listWorkspaceMembers(admin.workspaceId),
+    listInvites(admin.workspaceId),
+    getTeamSettings(admin.workspaceId),
+  ]);
   members.sort((a, b) => (a.id === admin.id ? -1 : b.id === admin.id ? 1 : a.name.localeCompare(b.name)));
   return (
     <MembersView
@@ -18,7 +22,7 @@ export default async function MembersPage() {
         name: m.name,
         email: m.email,
         role: m.role,
-        status: m.status,
+        status: m.status === "ACTIVE" && m.userStatus === "ACTIVE" ? "ACTIVE" : "DISABLED",
         usedBytes: m.usedBytes ?? 0,
         lastActiveAt: m.lastActiveAt,
       }))}

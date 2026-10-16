@@ -10,7 +10,8 @@ export const epochSeconds = (date: Date) => Math.floor(date.getTime() / 1000);
 
 // Key builders — see docs/architecture.md §5.
 export const keys = {
-  team: () => ({ PK: "TEAM", SK: "SETTINGS" }),
+  workspace: (id: string) => ({ PK: `WS#${id}`, SK: "META" }),
+  member: (workspaceId: string, userId: string) => ({ PK: `WS#${workspaceId}`, SK: `MEMBER#${userId}` }),
   user: (id: string) => ({ PK: `USER#${id}`, SK: "PROFILE" }),
   invite: (hash: string) => ({ PK: `INVITE#${hash}`, SK: "META" }),
   item: (id: string) => ({ PK: `ITEM#${id}`, SK: "META" }),

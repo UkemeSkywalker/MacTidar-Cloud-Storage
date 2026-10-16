@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { findMemberByEmail } from "@/server/db/users";
+import { findUserByEmail } from "@/server/db/users";
+import { getMembership } from "@/server/db/workspaces";
 import { listInvites } from "@/server/db/invites";
 import { conflict, route } from "@/server/errors";
 import { inviteMember } from "@/server/invitations";
@@ -16,9 +17,10 @@ export const POST = route(async (req) => {
   const { emails, role, message } = body.parse(await req.json());
   const unique = [...new Set(emails)];
 
-  const pending = new Set((await listInvites()).map((i) => i.email));
+  const pending = new Set((await listInvites(admin.workspaceId)).map((i) => i.email));
   for (const email of unique) {
-    if (await findMemberByEmail(email)) throw conflict(`${email} is already a member.`);
+    const existing = await findUserByEmail(email);
+    if (existing && (await getMembership(admin.workspaceId, existing.id))) throw conflict(`${email} is already a member.`);
     if (pending.has(email)) throw conflict(`${email} already has a pending invite. Use "Resend invite" instead.`);
   }
 

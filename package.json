@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "create-invite": "node --env-file=.env.local --conditions=react-server --import tsx scripts/create-invite.ts",
-    "build:workers": "esbuild infra/modules/workers/zip/zip-folder.mjs --bundle --platform=node --target=node22 --format=esm --external:@aws-sdk/client-s3 --external:@aws-sdk/client-dynamodb --external:@aws-sdk/lib-dynamodb --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\" --legal-comments=none --outfile=infra/modules/workers/src/zip-folder.mjs"
+    "build:workers": "esbuild infra/modules/workers/zip/zip-folder.mjs --bundle --platform=node --target=node22 --format=esm --external:@aws-sdk/client-s3 --external:@aws-sdk/client-dynamodb --external:@aws-sdk/lib-dynamodb --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\" --legal-comments=none --outfile=infra/modules/workers/src/zip-folder.mjs",
+    "migrate:workspaces": "node --env-file=.env.local --conditions=react-server --import tsx scripts/migrate-workspaces.ts",
+    "recompute:usage": "node --env-file=.env.local --conditions=react-server --import tsx scripts/recompute-usage.ts"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.1149.0",

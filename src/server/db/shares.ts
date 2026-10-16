@@ -3,7 +3,7 @@ import { DeleteCommand, GetCommand, PutCommand, QueryCommand, UpdateCommand } fr
 import type { AccessRole } from "../permissions";
 import { ddb, keys, now, TABLE } from "./table";
 
-export type Share = { itemId: string; userId: string; role: Exclude<AccessRole, "OWNER">; grantedBy: string; createdAt: string };
+export type Share = { workspaceId?: string; itemId: string; userId: string; role: Exclude<AccessRole, "OWNER">; grantedBy: string; createdAt: string };
 
 export async function listSharesOn(itemId: string): Promise<Share[]> {
   const res = await ddb().send(
@@ -22,14 +22,15 @@ export async function getShare(itemId: string, userId: string): Promise<Share | 
 }
 
 // Grants or changes access. Returns true when the share is new.
-export async function putShare(itemId: string, userId: string, role: Share["role"], grantedBy: string) {
+export async function putShare(workspaceId: string, itemId: string, userId: string, role: Share["role"], grantedBy: string) {
   const existing = await getShare(itemId, userId);
   await ddb().send(
     new PutCommand({
       TableName: TABLE(),
       Item: {
         ...keys.share(itemId, userId),
-        GSI1PK: `SHAREDWITH#${userId}`,
+        GSI1PK: `SHAREDWITH#${workspaceId}#${userId}`,
+        workspaceId,
         GSI1SK: existing?.createdAt ?? now(),
         itemId,
         userId,
@@ -60,13 +61,13 @@ async function adjustSharedCount(itemId: string, by: number) {
   ).catch(() => {});
 }
 
-export async function sharedWithUser(userId: string): Promise<Share[]> {
+export async function sharedWithUser(workspaceId: string, userId: string): Promise<Share[]> {
   const res = await ddb().send(
     new QueryCommand({
       TableName: TABLE(),
       IndexName: "GSI1",
       KeyConditionExpression: "GSI1PK = :pk",
-      ExpressionAttributeValues: { ":pk": `SHAREDWITH#${userId}` },
+      ExpressionAttributeValues: { ":pk": `SHAREDWITH#${workspaceId}#${userId}` },
       ScanIndexForward: false,
     }),
   );

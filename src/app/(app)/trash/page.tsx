@@ -1,5 +1,5 @@
 import { getItems, pathIds } from "@/server/db/items";
-import { listMembers } from "@/server/db/users";
+import { listWorkspaceMembers } from "@/server/db/workspaces";
 import { listTrash } from "@/server/files";
 import { requirePageUser } from "@/server/session";
 import { TrashView } from "./TrashView";
@@ -10,11 +10,11 @@ export default async function TrashPage() {
   const user = await requirePageUser();
   const items = await listTrash(user);
   const parents = await getItems(items.flatMap((i) => pathIds(i.path).slice(0, -1)));
-  const names = new Map((await listMembers()).map((m) => [m.id, m.name]));
+  const names = new Map((await listWorkspaceMembers(user.workspaceId)).map((m) => [m.id, m.name]));
   const location = (path: string) =>
     pathIds(path)
       .slice(0, -1)
-      .map((id) => (id.startsWith("root-") ? "My Files" : (parents.get(id)?.name ?? "…")))
+      .map((id) => (parents.get(id)?.parentId === null || id.startsWith("root-") ? "My Files" : (parents.get(id)?.name ?? "…")))
       .join(" / ");
   return (
     <TrashView

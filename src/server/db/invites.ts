@@ -5,6 +5,7 @@ import { ddb, epochSeconds, keys, now, strip, TABLE } from "./table";
 import type { Role } from "./users";
 
 export type Invite = {
+  workspaceId: string;
   id: string; // sha256 of the token; the token itself is never stored
   email: string;
   role: Role;
@@ -16,10 +17,11 @@ export type Invite = {
 
 const INVITE_DAYS = 7;
 
-export async function createInvite(input: { email: string; role: Role; invitedBy: string; invitedByName: string }) {
+export async function createInvite(input: { workspaceId: string; email: string; role: Role; invitedBy: string; invitedByName: string }) {
   const token = randomToken();
   const invite: Invite = {
     id: sha256(token),
+    workspaceId: input.workspaceId,
     email: input.email.toLowerCase(),
     role: input.role,
     invitedBy: input.invitedBy,
@@ -30,7 +32,7 @@ export async function createInvite(input: { email: string; role: Role; invitedBy
   await ddb().send(
     new PutCommand({
       TableName: TABLE(),
-      Item: { ...keys.invite(invite.id), GSI1PK: "INVITES", GSI1SK: invite.createdAt, ...invite },
+      Item: { ...keys.invite(invite.id), GSI1PK: `INVITES#${invite.workspaceId}`, GSI1SK: invite.createdAt, ...invite },
     }),
   );
   return { invite, token };
@@ -48,13 +50,13 @@ export async function getInvite(id: string): Promise<Invite | null> {
   return invite;
 }
 
-export async function listInvites(): Promise<Invite[]> {
+export async function listInvites(workspaceId: string): Promise<Invite[]> {
   const res = await ddb().send(
     new QueryCommand({
       TableName: TABLE(),
       IndexName: "GSI1",
       KeyConditionExpression: "GSI1PK = :pk",
-      ExpressionAttributeValues: { ":pk": "INVITES" },
+      ExpressionAttributeValues: { ":pk": `INVITES#${workspaceId}` },
       ScanIndexForward: false,
     }),
   );

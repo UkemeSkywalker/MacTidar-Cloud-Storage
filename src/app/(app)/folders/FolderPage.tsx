@@ -10,7 +10,7 @@ export async function FolderPage({ folderId }: { folderId: string }) {
   const user = await requirePageUser();
   const { item: folder, role } = await orNotFound(() => requireAccess(user, folderId, "VIEWER"));
   const [{ crumbs, viaShare }, children] = await Promise.all([breadcrumb(user, folder), listChildren(folder.id)]);
-  if (folder.parentId) recordRecent(user.id, folder.id, "opened").catch(() => {});
+  if (folder.parentId) recordRecent(user.id, folder.workspaceId, folder.id, "opened").catch(() => {});
   const rows = await toRows(user, children, () => role);
   return (
     <FolderView

@@ -3,6 +3,7 @@ import { BatchGetCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb, keys, TABLE } from "./db/table";
 import { getItem, getItems, pathIds, type Item } from "./db/items";
 import type { User } from "./db/users";
+import type { Viewer } from "./session";
 import { forbidden, notFound } from "./errors";
 
 export type AccessRole = "VIEWER" | "EDITOR" | "OWNER";
@@ -32,9 +33,11 @@ export async function effectiveRole(user: User, item: Item): Promise<AccessRole 
 
 // Loads an item and checks the user has at least `min` access. Trashed items
 // are only reachable through the trash routes.
-export async function requireAccess(user: User, id: string, min: AccessRole, { allowTrashed = false } = {}) {
+export async function requireAccess(user: Viewer, id: string, min: AccessRole, { allowTrashed = false } = {}) {
   const item = await getItem(id);
   if (!item || item.status === "UPLOADING" || (item.status === "TRASHED" && !allowTrashed)) throw notFound("This item doesn't exist or was deleted.");
+  // Workspace isolation: items from other workspaces don't exist for this viewer.
+  if (item.workspaceId !== user.workspaceId) throw notFound("This item doesn't exist or was deleted.");
   const role = await effectiveRole(user, item);
   if (!role) throw notFound("This item doesn't exist or was deleted.");
   if (!atLeast(role, min)) {
