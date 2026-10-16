@@ -27,8 +27,10 @@ module "auth" {
 
 module "email" {
   source      = "./modules/email"
+  name        = local.name
   domain_name = var.domain_name
   zone_id     = module.dns.zone_id
+  alert_email = var.alert_email
 }
 
 module "hosting" {
@@ -56,12 +58,13 @@ module "hosting" {
 }
 
 module "workers" {
-  source      = "./modules/workers"
-  name        = local.name
-  table_name  = module.database.table_name
-  table_arn   = module.database.table_arn
-  bucket_name = module.storage.bucket_name
-  bucket_arn  = module.storage.bucket_arn
+  source               = "./modules/workers"
+  name                 = local.name
+  table_name           = module.database.table_name
+  table_arn            = module.database.table_arn
+  bucket_name          = module.storage.bucket_name
+  bucket_arn           = module.storage.bucket_arn
+  ses_events_topic_arn = module.email.events_topic_arn
 }
 
 module "monitoring" {

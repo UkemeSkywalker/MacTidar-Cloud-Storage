@@ -5,6 +5,7 @@ variable "table_name" { type = string }
 variable "table_arn" { type = string }
 variable "bucket_name" { type = string }
 variable "bucket_arn" { type = string }
+variable "ses_events_topic_arn" { type = string }
 
 data "archive_file" "code" {
   type        = "zip"
@@ -163,6 +164,48 @@ resource "aws_cloudwatch_metric_alarm" "errors" {
   threshold           = 0
   comparison_operator = "GreaterThanThreshold"
   treat_missing_data  = "notBreaching"
+}
+
+# SES bounces: cancel pending invites to addresses that hard-bounce.
+resource "aws_cloudwatch_log_group" "ses_events" {
+  name              = "/aws/lambda/${var.name}-ses-events"
+  retention_in_days = 30
+}
+
+resource "aws_lambda_function" "ses_events" {
+  function_name    = "${var.name}-ses-events"
+  description      = "Cancels invites to email addresses that bounce"
+  role             = aws_iam_role.lambda.arn
+  runtime          = "nodejs22.x"
+  architectures    = ["arm64"]
+  handler          = "ses-events.handler"
+  filename         = data.archive_file.code.output_path
+  source_code_hash = data.archive_file.code.output_base64sha256
+  timeout          = 60
+  memory_size      = 256
+
+  environment {
+    variables = {
+      TABLE_NAME   = var.table_name
+      FILES_BUCKET = var.bucket_name
+    }
+  }
+
+  depends_on = [aws_cloudwatch_log_group.ses_events, aws_iam_role_policy_attachment.logs]
+}
+
+resource "aws_lambda_permission" "ses_events" {
+  statement_id  = "AllowSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.ses_events.function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = var.ses_events_topic_arn
+}
+
+resource "aws_sns_topic_subscription" "ses_events" {
+  topic_arn = var.ses_events_topic_arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.ses_events.arn
 }
 
 # Folder downloads: invoked asynchronously by the app, streams S3 → zip → S3.
