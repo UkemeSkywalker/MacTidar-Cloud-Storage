@@ -43,6 +43,41 @@ export const GB = 1024 ** 3;
 export const DEFAULT_QUOTA: Record<WorkspaceType, number> = { PERSONAL: 3 * GB, COMPANY: 3 * GB };
 export const DEFAULT_MAX_FILE = 5 * GB;
 
+// Every workspace is listed under GSI2 "WORKSPACES" for the platform admin console.
+export const workspaceIndex = (ws: Pick<Workspace, "createdAt">) => ({ GSI2PK: "WORKSPACES", GSI2SK: ws.createdAt });
+
+export async function listAllWorkspaces(): Promise<Workspace[]> {
+  const out: Workspace[] = [];
+  let start: Record<string, unknown> | undefined;
+  do {
+    const res = await ddb().send(
+      new QueryCommand({
+        TableName: TABLE(),
+        IndexName: "GSI2",
+        KeyConditionExpression: "GSI2PK = :pk",
+        ExpressionAttributeValues: { ":pk": "WORKSPACES" },
+        ScanIndexForward: false,
+        ExclusiveStartKey: start,
+      }),
+    );
+    out.push(...(res.Items ?? []).map((i) => strip(i) as Workspace));
+    start = res.LastEvaluatedKey;
+  } while (start);
+  return out;
+}
+
+export async function countMembers(workspaceId: string): Promise<number> {
+  const res = await ddb().send(
+    new QueryCommand({
+      TableName: TABLE(),
+      KeyConditionExpression: "PK = :pk AND begins_with(SK, :m)",
+      ExpressionAttributeValues: { ":pk": `WS#${workspaceId}`, ":m": "MEMBER#" },
+      Select: "COUNT",
+    }),
+  );
+  return res.Count ?? 0;
+}
+
 export async function getWorkspace(id: string): Promise<Workspace | null> {
   const res = await ddb().send(new GetCommand({ TableName: TABLE(), Key: keys.workspace(id) }));
   return res.Item ? (strip(res.Item) as Workspace) : null;
@@ -162,7 +197,7 @@ export async function createWorkspace(input: { name: string; type: WorkspaceType
   };
   await ddb().send(
     new TransactWriteCommand({
-      TransactItems: [{ Put: { TableName: TABLE(), Item: { ...keys.workspace(ws.id), ...ws }, ConditionExpression: "attribute_not_exists(PK)" } }],
+      TransactItems: [{ Put: { TableName: TABLE(), Item: { ...keys.workspace(ws.id), ...workspaceIndex(ws), ...ws }, ConditionExpression: "attribute_not_exists(PK)" } }],
     }),
   );
   const membership = await addMember(ws.id, input.ownerId, "ADMIN");

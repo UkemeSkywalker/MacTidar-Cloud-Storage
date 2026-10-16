@@ -13,6 +13,8 @@ const schema = z.object({
   SSM_PREFIX: z.string().default("/mactidar"),
   APP_URL: z.string().url(),
   ZIP_FUNCTION: z.string().default("mactidar-zip-folder"),
+  // Comma-separated emails allowed into the platform admin console (/platform).
+  PLATFORM_ADMINS: z.string().default("admin@mactidar.com"),
 });
 
 export type Config = z.infer<typeof schema>;

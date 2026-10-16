@@ -13,7 +13,7 @@ export function AppShell({
   quotaBytes,
   children,
 }: {
-  user: { id: string; name: string; email: string; role: string };
+  user: { id: string; name: string; email: string; role: string; platformAdmin?: boolean };
   workspace: { id: string; name: string; type: "PERSONAL" | "COMPANY" };
   workspaces: WorkspaceOption[];
   usedBytes: number;

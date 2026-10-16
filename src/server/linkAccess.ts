@@ -4,7 +4,9 @@ import { promisify } from "node:util";
 import { cookies } from "next/headers";
 import { getItem, type Item } from "./db/items";
 import { getLink, isExpired, type PublicLink } from "./db/links";
+import { getWorkspace } from "./db/workspaces";
 import { secrets } from "./secrets";
+import { currentUser, isPlatformAdmin } from "./session";
 
 const scrypt = promisify(scryptCb) as (pw: string, salt: Buffer, len: number) => Promise<Buffer>;
 
@@ -52,14 +54,20 @@ export type LinkState =
   | { state: "suspended" }
   | { state: "expired"; link: PublicLink; root: Item | null }
   | { state: "locked"; link: PublicLink; root: Item }
-  | { state: "open"; link: PublicLink; root: Item };
+  | { state: "open"; link: PublicLink; root: Item; review?: boolean };
 
 export async function resolveLink(token: string): Promise<LinkState> {
   const link = await getLink(token);
   if (!link) return { state: "missing" };
   const root = await getItem(link.itemId);
   if (!root || root.status !== "ACTIVE") return { state: "missing" };
-  if (link.suspendedAt) return { state: "suspended" };
+  const ws = await getWorkspace(root.workspaceId);
+  if (link.suspendedAt || ws?.status === "SUSPENDED") {
+    // Platform staff can still open reported content to review it.
+    const viewer = await currentUser();
+    if (viewer && isPlatformAdmin(viewer)) return { state: "open", link, root, review: true };
+    return { state: "suspended" };
+  }
   if (isExpired(link)) return { state: "expired", link, root };
   if (!(await isUnlocked(link))) return { state: "locked", link, root };
   return { state: "open", link, root };

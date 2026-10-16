@@ -3,6 +3,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
+import { config } from "./config";
 import { getUser, updateUser, type User } from "./db/users";
 import { listUserWorkspaces, type Role, type WorkspaceType } from "./db/workspaces";
 import { forbidden, unauthorized } from "./errors";
@@ -117,6 +118,24 @@ export async function requirePageUser(): Promise<Viewer> {
 export async function requirePageAdmin(): Promise<Viewer> {
   const user = await requirePageUser();
   if (user.role !== "ADMIN") redirect("/files");
+  return user;
+}
+
+// Platform staff (config PLATFORM_ADMINS) can open /platform.
+export function isPlatformAdmin(user: Pick<User, "email">) {
+  const allowed = config().PLATFORM_ADMINS.split(",").map((e) => e.trim().toLowerCase());
+  return allowed.includes(user.email.toLowerCase());
+}
+
+export async function requirePagePlatformAdmin(): Promise<Viewer> {
+  const user = await requirePageUser();
+  if (!isPlatformAdmin(user)) redirect("/files");
+  return user;
+}
+
+export async function requirePlatformAdmin(): Promise<Viewer> {
+  const user = await requireUser();
+  if (!isPlatformAdmin(user)) throw forbidden("Only platform admins can do this.");
   return user;
 }
 

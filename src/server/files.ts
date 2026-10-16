@@ -138,19 +138,32 @@ export async function trashItems(user: Viewer, ids: string[]) {
   for (const id of ids) {
     const { item } = await requireAccess(user, id, "EDITOR");
     if (!item.parentId) throw badRequest("Your My Files folder can't be deleted.");
-    const at = now();
-    await setItemFields(
-      item.id,
-      { status: "TRASHED", trashRootId: item.id, trashedAt: at, trashedBy: user.id, GSI2PK: `TRASH#${item.workspaceId}#${user.id}`, GSI2SK: at },
-      ["GSI1PK", "GSI1SK"],
-    );
-    await releaseName(item.parentId, item.nameLower);
-    if (item.type === "folder") {
-      for (const d of await listSubtree(item.rootId, item.path)) {
-        if (d.id !== item.id && d.status === "ACTIVE") await setItemFields(d.id, { status: "TRASHED", trashRootId: item.id });
-      }
+    await moveToTrash(item, user.id);
+  }
+}
+
+async function moveToTrash(item: Item, byUserId: string) {
+  const at = now();
+  await setItemFields(
+    item.id,
+    { status: "TRASHED", trashRootId: item.id, trashedAt: at, trashedBy: byUserId, GSI2PK: `TRASH#${item.workspaceId}#${byUserId}`, GSI2SK: at },
+    ["GSI1PK", "GSI1SK"],
+  );
+  if (item.parentId) await releaseName(item.parentId, item.nameLower);
+  if (item.type === "folder") {
+    for (const d of await listSubtree(item.rootId, item.path)) {
+      if (d.id !== item.id && d.status === "ACTIVE") await setItemFields(d.id, { status: "TRASHED", trashRootId: item.id });
     }
   }
+}
+
+// Platform staff removing reported content: trash it, then delete it for good.
+export async function removeItemAsPlatform(admin: Viewer, item: Item) {
+  if (!item.parentId) throw badRequest("A member's My Files folder can't be removed. Suspend the workspace instead.");
+  if (item.status === "ACTIVE") await moveToTrash(item, item.ownerId);
+  const fresh = await getItem(item.id);
+  if (fresh?.status === "TRASHED" && fresh.trashRootId === fresh.id) return deleteForever(admin, fresh.id, { system: true });
+  return 0;
 }
 
 export async function listTrash(user: Viewer): Promise<Item[]> {

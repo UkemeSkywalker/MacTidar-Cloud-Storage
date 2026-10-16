@@ -7,7 +7,7 @@ import { api } from "@/lib/api";
 import { Avatar } from "../Avatar";
 import { Icon } from "../Icon";
 
-export function TopBar({ user, onMenu }: { user: { id: string; name: string; email: string; role: string }; onMenu: () => void }) {
+export function TopBar({ user, onMenu }: { user: { id: string; name: string; email: string; role: string; platformAdmin?: boolean }; onMenu: () => void }) {
   const router = useRouter();
   const params = useSearchParams();
   const [q, setQ] = useState(params.get("q") ?? "");
@@ -93,6 +93,11 @@ export function TopBar({ user, onMenu }: { user: { id: string; name: string; ema
               <Link href="/settings" onClick={() => setMenu(false)} className="flex items-center gap-3 px-4 py-2.5 font-body-md text-body-md hover:bg-surface-container-low">
                 <Icon name="settings" className="text-[20px] text-on-surface-variant" /> Settings
               </Link>
+              {user.platformAdmin && (
+                <Link href="/platform" onClick={() => setMenu(false)} className="flex items-center gap-3 px-4 py-2.5 font-body-md text-body-md hover:bg-surface-container-low">
+                  <Icon name="admin_panel_settings" className="text-[20px] text-file-image" /> Platform admin
+                </Link>
+              )}
               <button onClick={signOut} className="flex w-full items-center gap-3 px-4 py-2.5 text-left font-body-md text-body-md text-danger hover:bg-surface-container-low">
                 <Icon name="logout" className="text-[20px]" /> Sign out
               </button>
