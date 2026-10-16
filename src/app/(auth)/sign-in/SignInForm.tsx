@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { Icon } from "@/components/Icon";
 import { inputClass, PasswordInput } from "@/components/PasswordInput";
-import { api } from "@/lib/api";
+import { api, type ApiError } from "@/lib/api";
 
-export function SignInForm({ next }: { next: string }) {
-  const [email, setEmail] = useState("");
+export function SignInForm({ next, initialEmail }: { next: string; initialEmail: string }) {
+  const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,9 +18,13 @@ export function SignInForm({ next }: { next: string }) {
     setBusy(true);
     setError(null);
     try {
-      await api("/api/auth/sign-in", { body: { email, password, remember } });
-      window.location.href = next;
+      const res = await api<{ redirect: string | null }>("/api/auth/sign-in", { body: { email, password, remember } });
+      window.location.href = res.redirect ?? next;
     } catch (err) {
+      if ((err as ApiError).code === "not_confirmed") {
+        window.location.href = `/verify-email?email=${encodeURIComponent(email.trim().toLowerCase())}&resend=1`;
+        return;
+      }
       setError((err as Error).message);
       setBusy(false);
     }
@@ -80,7 +84,12 @@ export function SignInForm({ next }: { next: string }) {
         </button>
       </div>
       <div className="rounded-lg bg-surface-container-low p-3 text-center">
-        <p className="font-body-sm text-body-sm text-text-secondary">Access is by invitation only. Ask your admin for an invite.</p>
+        <p className="font-body-sm text-body-sm text-text-secondary">
+          New to MacTidar Cloud?{" "}
+          <Link href="/sign-up" className="font-semibold text-primary-container hover:underline">
+            Create a free account
+          </Link>
+        </p>
       </div>
     </form>
   );

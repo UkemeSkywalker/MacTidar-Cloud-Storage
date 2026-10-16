@@ -1,6 +1,11 @@
 import "server-only";
 import {
   AdminCreateUserCommand,
+  AdminDeleteUserCommand,
+  AdminGetUserCommand,
+  ConfirmSignUpCommand,
+  ResendConfirmationCodeCommand,
+  SignUpCommand,
   AdminDisableUserCommand,
   AdminEnableUserCommand,
   AdminSetUserPasswordCommand,
@@ -42,6 +47,9 @@ export async function verifyPassword(email: string, password: string): Promise<s
     if (!idToken) throw new HttpError(401, "Sign-in needs an extra step that isn't supported.");
     return decodeSub(idToken);
   } catch (err) {
+    if (name(err) === "UserNotConfirmedException") {
+      throw new HttpError(403, "Please verify your email address first.", "not_confirmed");
+    }
     if (["NotAuthorizedException", "UserNotFoundException"].includes(name(err) ?? "")) {
       throw new HttpError(401, "Incorrect email or password", "invalid_credentials");
     }
@@ -142,4 +150,89 @@ export async function setPassword(username: string, password: string) {
 export async function setCognitoUserEnabled(username: string, enabled: boolean) {
   const Cmd = enabled ? AdminEnableUserCommand : AdminDisableUserCommand;
   await aws().cognito.send(new Cmd({ UserPoolId: config().COGNITO_USER_POOL_ID, Username: username }));
+}
+
+// Public self sign-up. Cognito emails a 6-digit verification code.
+export async function signUp(email: string, password: string, fullName: string) {
+  const attempt = async () =>
+    aws().cognito.send(
+      new SignUpCommand({
+        ClientId: config().COGNITO_CLIENT_ID,
+        SecretHash: await secretHash(email),
+        Username: email,
+        Password: password,
+        UserAttributes: [
+          { Name: "email", Value: email },
+          { Name: "name", Value: fullName },
+        ],
+      }),
+    );
+  try {
+    await attempt();
+  } catch (err) {
+    if (name(err) === "UsernameExistsException") {
+      // An abandoned, never-verified sign-up can be replaced; a real account can't.
+      const existing = await aws()
+        .cognito.send(new AdminGetUserCommand({ UserPoolId: config().COGNITO_USER_POOL_ID, Username: email }))
+        .catch(() => null);
+      if (existing?.UserStatus === "UNCONFIRMED") {
+        await aws().cognito.send(new AdminDeleteUserCommand({ UserPoolId: config().COGNITO_USER_POOL_ID, Username: email }));
+        await attempt();
+        return;
+      }
+      throw conflict("An account with this email already exists. Sign in instead.", "exists");
+    }
+    if (name(err) === "InvalidPasswordException") throw badRequest("Password doesn't meet the requirements.");
+    if (name(err) === "LimitExceededException" || name(err) === "TooManyRequestsException") {
+      throw new HttpError(429, "Too many attempts. Please wait a few minutes and try again.");
+    }
+    throw err;
+  }
+}
+
+export async function confirmSignUp(email: string, code: string) {
+  try {
+    await aws().cognito.send(
+      new ConfirmSignUpCommand({
+        ClientId: config().COGNITO_CLIENT_ID,
+        SecretHash: await secretHash(email),
+        Username: email,
+        ConfirmationCode: code,
+      }),
+    );
+  } catch (err) {
+    switch (name(err)) {
+      case "CodeMismatchException":
+        throw badRequest("That code isn't right. Check the email and try again.", "bad_code");
+      case "ExpiredCodeException":
+        throw badRequest("That code has expired. Request a new one.", "expired_code");
+      case "NotAuthorizedException":
+        return; // already confirmed
+      case "UserNotFoundException":
+        throw badRequest("We couldn't find a sign-up for this email. Create your account again.");
+      case "LimitExceededException":
+      case "TooManyFailedAttemptsException":
+        throw new HttpError(429, "Too many attempts. Please wait a few minutes and try again.");
+    }
+    throw err;
+  }
+}
+
+export async function resendSignUpCode(email: string) {
+  try {
+    await aws().cognito.send(
+      new ResendConfirmationCodeCommand({ ClientId: config().COGNITO_CLIENT_ID, SecretHash: await secretHash(email), Username: email }),
+    );
+  } catch (err) {
+    if (name(err) === "UserNotFoundException" || name(err) === "InvalidParameterException") return;
+    if (name(err) === "LimitExceededException") throw new HttpError(429, "Too many requests. Please wait a few minutes.");
+    throw err;
+  }
+}
+
+// Name and email as stored in Cognito (used when provisioning a new account).
+export async function cognitoProfile(userId: string) {
+  const res = await aws().cognito.send(new AdminGetUserCommand({ UserPoolId: config().COGNITO_USER_POOL_ID, Username: userId }));
+  const attr = (n: string) => res.UserAttributes?.find((a) => a.Name === n)?.Value;
+  return { email: (attr("email") ?? "").toLowerCase(), name: attr("name") ?? "" };
 }

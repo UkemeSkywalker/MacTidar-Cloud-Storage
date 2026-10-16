@@ -11,12 +11,17 @@ import { toast } from "@/components/toast";
 import { api } from "@/lib/api";
 import { formatDate } from "@/lib/format";
 import { passwordRules } from "@/lib/passwords";
+import { TurnOnSharingDialog } from "@/components/TurnOnSharing";
+import { formatBytes } from "@/lib/format";
 
 type U = { id: string; name: string; email: string; role: string; notifyShares: boolean; createdAt: string };
 
-export function SettingsView({ user }: { user: U }) {
+type Personal = { name: string; sharingEnabled: boolean; usedBytes: number; quotaBytes: number } | null;
+
+export function SettingsView({ user, personal }: { user: U; personal: Personal }) {
   const router = useRouter();
-  const [tab, setTab] = useState<"profile" | "security" | "notifications">("profile");
+  const [tab, setTab] = useState<"profile" | "security" | "sharing" | "notifications">("profile");
+  const [confirmSharing, setConfirmSharing] = useState(false);
   const [name, setName] = useState(user.name);
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
@@ -51,6 +56,7 @@ export function SettingsView({ user }: { user: U }) {
           [
             ["profile", "person", "Profile"],
             ["security", "shield", "Security"],
+            ...(personal ? ([["sharing", "share", "Sharing"]] as const) : []),
             ["notifications", "notifications", "Notifications"],
           ] as const
         ).map(([key, icon, label]) => (
@@ -183,6 +189,68 @@ export function SettingsView({ user }: { user: U }) {
           </button>
         </div>
       </section>
+
+      {personal && (
+        <section id="settings-sharing" className={`${card} ${section("sharing")} scroll-mt-24`}>
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="font-headline-sm text-[17px]">Sharing · {personal.name}</p>
+              <p className="font-body-md text-body-md text-text-secondary">Controls public links for your personal workspace.</p>
+            </div>
+            <span className="rounded-full bg-surface-container-low px-3 py-1 font-label-md text-label-md text-on-surface-variant">
+              {formatBytes(personal.usedBytes)} of {formatBytes(personal.quotaBytes, 0)} used
+            </span>
+          </div>
+          {personal.sharingEnabled ? (
+            <div className="flex flex-wrap items-center gap-4 rounded-xl bg-tertiary-fixed/30 p-5">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-surface text-tertiary">
+                <Icon name="share" className="text-[24px]" />
+              </span>
+              <div className="flex-1">
+                <p className="font-title-md text-[15px]">Sharing is on</p>
+                <p className="font-body-md text-body-md text-text-secondary">You can create public links. Turning sharing off won&apos;t remove existing links — disable them from each file.</p>
+              </div>
+              <button
+                className={btn.secondary}
+                onClick={() =>
+                  run("sharing", async () => {
+                    await api("/api/workspaces/current", { method: "PATCH", body: { sharingEnabled: false } });
+                    toast("Sharing turned off");
+                    router.refresh();
+                  })
+                }
+              >
+                Turn off sharing
+              </button>
+            </div>
+          ) : (
+            <div className="rounded-xl bg-surface-container-low p-6">
+              <div className="mb-5 flex items-start gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-primary-container">
+                  <Icon name="lock" className="text-[24px]" />
+                </span>
+                <div>
+                  <p className="flex items-center gap-2 font-title-md text-[16px]">
+                    Sharing is off <span className="rounded-full bg-surface px-2 font-label-md text-label-md text-text-secondary">Default</span>
+                  </p>
+                  <p className="font-body-md text-[15px] text-text-secondary">Files in your personal workspace are private. Turn on sharing to create public links.</p>
+                </div>
+              </div>
+              <button className={btn.primary} onClick={() => setConfirmSharing(true)}>
+                <Icon name="lock_open" className="text-[18px]" /> Turn on sharing
+              </button>
+            </div>
+          )}
+          <TurnOnSharingDialog
+            open={confirmSharing}
+            onClose={() => setConfirmSharing(false)}
+            onDone={() => {
+              setConfirmSharing(false);
+              router.refresh();
+            }}
+          />
+        </section>
+      )}
 
       <section id="settings-notifications" className={`${card} ${section("notifications")} scroll-mt-24`}>
         <p className="font-headline-sm text-[17px]">Notification Preferences</p>

@@ -11,6 +11,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <AppShell
       user={{ id: user.id, name: user.name, email: user.email, role: user.role }}
       workspace={{ id: user.workspaceId, name: user.workspaceName, type: user.workspaceType }}
+      workspaces={user.workspaces}
       usedBytes={team.usedBytes}
       quotaBytes={team.quotaBytes}
     >

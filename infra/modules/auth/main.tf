@@ -1,4 +1,5 @@
-# Invite-only Cognito user pool — see docs/architecture.md §3.
+# Cognito user pool: public self sign-up with an emailed code, plus admin-created
+# accounts for invites — see docs/architecture.md §3 and §16.
 
 variable "name" {
   type = string
@@ -11,7 +12,13 @@ resource "aws_cognito_user_pool" "this" {
   deletion_protection      = "ACTIVE"
 
   admin_create_user_config {
-    allow_admin_create_user_only = true
+    allow_admin_create_user_only = false
+  }
+
+  verification_message_template {
+    default_email_option = "CONFIRM_WITH_CODE"
+    email_subject        = "Your MacTidar Cloud verification code"
+    email_message        = "Welcome to MacTidar Cloud! Your verification code is {####}. It expires in 24 hours. If you didn't sign up, you can ignore this email."
   }
 
   password_policy {

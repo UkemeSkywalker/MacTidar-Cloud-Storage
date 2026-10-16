@@ -2,7 +2,6 @@ import "server-only";
 import { config } from "./config";
 import { createInvite, type Invite } from "./db/invites";
 import type { Role } from "./db/users";
-import type { Viewer } from "./session";
 import { inviteEmail, sendEmail } from "./email";
 
 export type InviteResult = { email: string; sent: boolean; link: string };
@@ -10,11 +9,12 @@ export type InviteResult = { email: string; sent: boolean; link: string };
 // Creates an invite and emails it. The link is returned too, because SES may be
 // in sandbox mode and unable to reach new addresses yet.
 export async function inviteMember(
-  admin: Viewer,
+  admin: { id: string; name: string },
+  workspaceId: string,
   input: { email: string; role: Role; message?: string },
 ): Promise<InviteResult> {
   const { token } = await createInvite({
-    workspaceId: admin.workspaceId,
+    workspaceId,
     email: input.email,
     role: input.role,
     invitedBy: admin.id,

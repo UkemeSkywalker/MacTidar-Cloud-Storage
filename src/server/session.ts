@@ -61,7 +61,7 @@ export type Viewer = User & {
   role: Role;
   rootFolderId: string;
   usedBytes: number;
-  workspaces: { id: string; name: string; type: WorkspaceType; role: Role }[];
+  workspaces: { id: string; name: string; type: WorkspaceType; role: Role; usedBytes: number; quotaBytes: number }[];
 };
 
 // The signed-in, active viewer for this request, or null. Cached per request.
@@ -86,7 +86,14 @@ export const currentUser = cache(async (): Promise<Viewer | null> => {
     role: active.membership.role,
     rootFolderId: active.membership.rootFolderId,
     usedBytes: active.membership.usedBytes ?? 0,
-    workspaces: all.map((w) => ({ id: w.workspace.id, name: w.workspace.name, type: w.workspace.type, role: w.membership.role })),
+    workspaces: all.map((w) => ({
+      id: w.workspace.id,
+      name: w.workspace.name,
+      type: w.workspace.type,
+      role: w.membership.role,
+      usedBytes: w.workspace.usedBytes,
+      quotaBytes: w.workspace.quotaBytes,
+    })),
   };
 });
 

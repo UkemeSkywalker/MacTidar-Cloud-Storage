@@ -21,6 +21,8 @@ export type Workspace = {
   alertPercent: number;
   alertSentAt?: string;
   externalSharing: boolean;
+  // Personal workspaces: public links are off until the owner turns sharing on.
+  sharingEnabled?: boolean;
   createdAt: string;
 };
 
@@ -174,6 +176,21 @@ export async function updateMembership(workspaceId: string, userId: string, fiel
     new UpdateCommand({
       TableName: TABLE(),
       Key: keys.member(workspaceId, userId),
+      UpdateExpression: "SET " + entries.map(([k]) => `#${k} = :${k}`).join(", "),
+      ExpressionAttributeNames: Object.fromEntries(entries.map(([k]) => [`#${k}`, k])),
+      ExpressionAttributeValues: Object.fromEntries(entries.map(([k, v]) => [`:${k}`, v])),
+      ConditionExpression: "attribute_exists(PK)",
+    }),
+  );
+}
+
+export async function updateWorkspace(id: string, fields: Partial<Pick<Workspace, "name" | "sharingEnabled">>) {
+  const entries = Object.entries(fields).filter(([, v]) => v !== undefined);
+  if (!entries.length) return;
+  await ddb().send(
+    new UpdateCommand({
+      TableName: TABLE(),
+      Key: keys.workspace(id),
       UpdateExpression: "SET " + entries.map(([k]) => `#${k} = :${k}`).join(", "),
       ExpressionAttributeNames: Object.fromEntries(entries.map(([k]) => [`#${k}`, k])),
       ExpressionAttributeValues: Object.fromEntries(entries.map(([k, v]) => [`:${k}`, v])),

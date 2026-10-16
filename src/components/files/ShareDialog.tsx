@@ -8,12 +8,14 @@ import { btn } from "../Dialog";
 import { Icon } from "../Icon";
 import { toast } from "../toast";
 import { FileIcon } from "./FileIcon";
+import { TurnOnSharingDialog } from "../TurnOnSharing";
 import type { AccessRole } from "./types";
 
 type Entry = { userId: string; name: string; email: string; role: AccessRole; inheritedFrom?: { id: string; name: string } };
 type LinkInfo = { url: string; allowDownload: boolean; hasPassword: boolean; expiresAt: string | null };
 type Data = {
   item: { id: string; name: string; type: "folder" | "file"; size: number };
+  workspace: { type: "PERSONAL" | "COMPANY"; sharingEnabled: boolean };
   myRole: AccessRole;
   entries: Entry[];
   members: { id: string; name: string; email: string }[];
@@ -31,15 +33,22 @@ const EXPIRY = [
 export function ShareDialog({ itemId, meId, onClose, onChanged }: { itemId: string; meId: string; onClose: () => void; onChanged: () => void }) {
   const [data, setData] = useState<Data | null>(null);
   const [tab, setTab] = useState<"people" | "link">("people");
+  const [tabSet, setTabSet] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
-      setData(await api<Data>(`/api/items/${itemId}/shares`));
+      const d = await api<Data>(`/api/items/${itemId}/shares`);
+      setData(d);
+      // Personal workspaces have no teammates, so open on the link tab.
+      if (!tabSet && d.workspace.type === "PERSONAL") {
+        setTab("link");
+        setTabSet(true);
+      }
     } catch (e) {
       setError((e as Error).message);
     }
-  }, [itemId]);
+  }, [itemId, tabSet]);
 
   useEffect(() => {
     load();
@@ -116,7 +125,25 @@ export function ShareDialog({ itemId, meId, onClose, onChanged }: { itemId: stri
   );
 }
 
-function People({ data, meId, onChanged }: { data: Data; meId: string; onChanged: () => Promise<void> }) {
+function People(props: { data: Data; meId: string; onChanged: () => Promise<void> }) {
+  return props.data.workspace.type === "PERSONAL" ? <PersonalPeople /> : <TeamPeople {...props} />;
+}
+
+function PersonalPeople() {
+  {
+    return (
+      <div className="flex flex-col items-center gap-3 py-6 text-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#f3e8ff] text-file-image">
+          <Icon name="person" className="text-[28px]" />
+        </span>
+        <p className="font-title-md text-[15px]">This is your personal workspace</p>
+        <p className="max-w-sm font-body-md text-body-md text-text-secondary">Only you can see these files. To work with others, create a company workspace from the sidebar — or send a public link.</p>
+      </div>
+    );
+  }
+}
+
+function TeamPeople({ data, meId, onChanged }: { data: Data; meId: string; onChanged: () => Promise<void> }) {
   const [query, setQuery] = useState("");
   const [pick, setPick] = useState<{ id: string; name: string; email: string } | null>(null);
   const [role, setRole] = useState<"VIEWER" | "EDITOR">("EDITOR");
@@ -272,6 +299,30 @@ function PublicLink({ data, onChanged }: { data: Data; onChanged: () => Promise<
     setAllowDownload(link?.allowDownload ?? true);
     setRequirePw(link?.hasPassword ?? false);
   }, [link?.allowDownload, link?.hasPassword]);
+
+  const [confirm, setConfirm] = useState(false);
+  if (isOwner && !data.workspace.sharingEnabled) {
+    return (
+      <div className="flex flex-col items-center gap-3 py-6 text-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-fixed text-primary-container">
+          <Icon name="lock" className="text-[28px]" />
+        </span>
+        <p className="font-title-md text-[15px]">Sharing is turned off for your personal workspace</p>
+        <p className="max-w-sm font-body-md text-body-md text-text-secondary">Turn it on to create public links with passwords and expiry dates.</p>
+        <button className={btn.primary} onClick={() => setConfirm(true)}>
+          <Icon name="lock_open" className="text-[18px]" /> Turn on sharing
+        </button>
+        <TurnOnSharingDialog
+          open={confirm}
+          onClose={() => setConfirm(false)}
+          onDone={async () => {
+            setConfirm(false);
+            await onChanged();
+          }}
+        />
+      </div>
+    );
+  }
 
   if (!isOwner) {
     return (
