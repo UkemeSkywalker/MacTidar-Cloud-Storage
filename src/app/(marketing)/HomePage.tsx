@@ -2,9 +2,11 @@ import Link from "next/link";
 // Public homepage, converted from designs/homepage_with_visible_footer_mactidar_cloud.
 /* eslint-disable @next/next/no-img-element */
 import { MarketingFooter, MarketingHeader } from "./chrome";
+import { HashScroll } from "./HashScroll";
 export function HomePage() {
   return (
-    <div className="min-h-screen scroll-smooth bg-canvas font-body-md text-body-md text-on-surface">
+    <div className="min-h-screen bg-canvas font-body-md text-body-md text-on-surface">
+<HashScroll />
 <MarketingHeader /><main className="w-full pt-16 bg-canvas"><div className="flex flex-col w-full">
 {/* SECTION 2: HERO */}
 <section className="relative bg-surface overflow-hidden py-24 lg:py-28">
@@ -99,7 +101,7 @@ export function HomePage() {
 </div>
 </section>
 {/* SECTION 3: WHO IT'S FOR STRIP */}
-<section className="bg-canvas py-28 lg:py-32" id="who-its-for">
+<section className="scroll-mt-20 bg-canvas py-28 lg:py-32" id="who-its-for">
 <div className="max-w-7xl mx-auto px-6 lg:px-12">
 <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-16">
 <span className="font-label-md text-label-md text-primary uppercase tracking-wider mb-2 font-semibold">Audiences</span>
