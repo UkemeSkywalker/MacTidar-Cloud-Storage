@@ -78,12 +78,12 @@ export function RecentView({ entries, meId }: { entries: Entry[]; meId: string }
           <h1 className="font-headline-lg text-[28px] text-text-primary">Recent</h1>
           <p className="font-body-md text-body-md text-text-secondary">Files and folders you recently opened, uploaded, or were given.</p>
         </div>
-        <div className="flex items-center gap-1 rounded-xl bg-surface p-1 shadow-sm">
+        <div className="flex max-w-full flex-wrap items-center gap-1 rounded-xl bg-surface p-1 shadow-sm">
           {FILTERS.map((f) => (
             <button
               key={f.key}
               onClick={() => setFilter(f.key)}
-              className={`rounded-lg px-4 py-2 font-title-md text-title-md ${filter === f.key ? "bg-primary-soft text-primary" : "text-on-surface-variant hover:text-text-primary"}`}
+              className={`shrink-0 whitespace-nowrap rounded-lg px-3 py-2 font-title-md text-title-md sm:px-4 ${filter === f.key ? "bg-primary-soft text-primary" : "text-on-surface-variant hover:text-text-primary"}`}
             >
               {f.label}
             </button>
@@ -153,7 +153,41 @@ export function RecentView({ entries, meId }: { entries: Entry[]; meId: string }
             </h2>
             <span className="font-body-sm text-body-sm text-text-secondary">{shown.length} events logged</span>
           </div>
-          <div className="overflow-x-auto rounded-xl bg-surface shadow-sm">
+          <div className="space-y-4 md:hidden">
+            {groups.map((g) => (
+              <div key={g.key}>
+                <p className="mb-2 flex items-center gap-2 px-1 font-label-md text-label-md uppercase tracking-wider text-primary">
+                  <Icon name={g.icon} className="text-[18px]" /> {g.label}
+                </p>
+                <ul className="divide-y divide-border rounded-xl bg-surface shadow-sm [&>li:first-child]:rounded-t-xl [&>li:last-child]:rounded-b-xl">
+                  {g.items.map((e) => {
+                    const a = ACTION[e.action] ?? ACTION.opened;
+                    return (
+                      <li key={e.id} className="flex items-center gap-3 py-2.5 pl-3 pr-1">
+                        <button onClick={() => open(e)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
+                          <FileIcon type={e.type} name={e.name} mime={e.mimeType} />
+                          <span className="min-w-0">
+                            <span className="block truncate font-title-md text-title-md text-text-primary">{e.name}</span>
+                            <span className="block truncate font-body-sm text-body-sm text-text-secondary">
+                              {a.label} · {g.key === "today" ? timeAgo(e.at) : formatDate(e.at)}
+                            </span>
+                          </span>
+                        </button>
+                        <RowMenu
+                          items={[
+                            { label: "Open", icon: "open_in_new", onClick: () => open(e) },
+                            { label: e.starred ? "Remove star" : "Star", icon: "star", onClick: () => star(e) },
+                            ...(e.type === "file" ? [{ label: "Download", icon: "download", onClick: () => (window.location.href = downloadUrl(e)) }] : []),
+                          ]}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <div className="hidden overflow-x-auto rounded-xl bg-surface shadow-sm md:block">
             <table className="w-full min-w-[820px] text-left">
               <thead className="bg-surface-container-low/60">
                 <tr className="font-label-md text-label-md uppercase tracking-wider text-text-secondary">

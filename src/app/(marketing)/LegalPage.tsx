@@ -20,7 +20,7 @@ export function LegalPage({
   other: { href: string; label: string };
 }) {
   return (
-    <div className="min-h-screen scroll-smooth bg-canvas font-body-md text-body-md text-on-surface">
+    <div className="min-h-screen bg-canvas font-body-md text-body-md text-on-surface">
       <MarketingHeader />
       <main className="mx-auto max-w-7xl px-6 pb-20 pt-28 lg:px-12">
         <nav className="mb-2 flex items-center gap-2 font-body-sm text-body-sm text-text-secondary">

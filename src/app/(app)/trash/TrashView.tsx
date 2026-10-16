@@ -93,10 +93,10 @@ export function TrashView({ rows, meId }: { rows: TrashRow[]; meId: string }) {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="relative">
+        <div className="flex w-full items-center gap-3 sm:w-auto">
+          <div className="relative min-w-0 flex-1 sm:flex-none">
             <Icon name="search" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[20px] text-outline" />
-            <input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Filter trash..." className="h-11 w-64 rounded-full bg-surface pl-10 pr-4 font-body-md text-body-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-container/20" />
+            <input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Filter trash..." className="h-11 w-full rounded-full bg-surface pl-10 sm:w-64 pr-4 font-body-md text-body-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-container/20" />
           </div>
           <select value={type} onChange={(e) => setType(e.target.value as typeof type)} className="h-11 rounded-full bg-surface px-4 font-title-md text-title-md shadow-sm">
             <option value="all">All types</option>
@@ -158,7 +158,45 @@ export function TrashView({ rows, meId }: { rows: TrashRow[]; meId: string }) {
           <p className="mt-1 font-body-md text-body-md text-text-secondary">Items you delete will appear here for 30 days.</p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl bg-surface shadow-sm">
+        <>
+        <ul className="divide-y divide-border overflow-hidden rounded-xl bg-surface shadow-sm md:hidden">
+          {shown.map((r) => {
+            const left = daysLeft(r.trashedAt);
+            const isSel = selected.has(r.id);
+            return (
+              <li key={r.id} className={`flex items-center gap-3 py-2.5 pl-3 pr-2 ${isSel ? "bg-primary-soft" : ""}`}>
+                <input
+                  type="checkbox"
+                  aria-label={`Select ${r.name}`}
+                  checked={isSel}
+                  onChange={() =>
+                    setSelected((s) => {
+                      const n = new Set(s);
+                      if (n.has(r.id)) n.delete(r.id);
+                      else n.add(r.id);
+                      return n;
+                    })
+                  }
+                  className="h-4 w-4 shrink-0 accent-primary-container"
+                />
+                <FileIcon type={r.type} name={r.name} mime={r.mimeType} />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-title-md text-title-md text-text-primary">{r.name}</p>
+                  <p className="truncate font-body-sm text-body-sm text-text-secondary">
+                    <span className={left <= 3 ? "font-medium text-danger" : ""}>{left} day{left === 1 ? "" : "s"} left</span> · {r.location}
+                  </p>
+                </div>
+                <button aria-label={`Restore ${r.name}`} onClick={() => restore([r])} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-primary hover:bg-primary-soft">
+                  <Icon name="restore" className="text-[22px]" />
+                </button>
+              </li>
+            );
+          })}
+          <li className="px-4 py-3 font-body-sm text-body-sm text-text-secondary">
+            {shown.length} of {rows.length} items · {formatBytes(total)}
+          </li>
+        </ul>
+        <div className="hidden overflow-x-auto rounded-xl bg-surface shadow-sm md:block">
           <table className="w-full min-w-[900px] text-left">
             <thead className="bg-surface-container-low/60">
               <tr className="font-label-md text-label-md uppercase tracking-wider text-text-secondary">
@@ -251,6 +289,7 @@ export function TrashView({ rows, meId }: { rows: TrashRow[]; meId: string }) {
             Showing {shown.length} of {rows.length} items · Total trash space: {formatBytes(total)}
           </div>
         </div>
+        </>
       )}
 
       <Dialog

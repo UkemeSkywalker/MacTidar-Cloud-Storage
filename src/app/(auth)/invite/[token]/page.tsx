@@ -40,7 +40,7 @@ export default async function InvitePage({ params }: { params: Promise<{ token: 
   }
 
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-center bg-canvas px-4 py-10 sm:px-6">
+    <main className="flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-canvas px-4 py-10 sm:px-6">
       <div className="relative w-full max-w-[480px]">
         <div className="pointer-events-none absolute -left-12 -top-12 h-48 w-48 rounded-full bg-primary/5 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-10 -right-10 h-48 w-48 rounded-full bg-tertiary/5 blur-3xl" />
