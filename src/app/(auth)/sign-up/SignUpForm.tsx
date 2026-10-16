@@ -5,16 +5,19 @@ import { useState } from "react";
 import { Icon } from "@/components/Icon";
 import { inputClass, PasswordInput } from "@/components/PasswordInput";
 import { PasswordRules } from "@/components/PasswordRules";
+import { Turnstile } from "@/components/Turnstile";
 import { api, type ApiError } from "@/lib/api";
 import { passwordRules } from "@/lib/passwords";
 
-export function SignUpForm() {
+export function SignUpForm({ siteKey }: { siteKey: string }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState<{ message: string; exists?: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+  const [resetKey, setResetKey] = useState(0);
   const valid = passwordRules.every((r) => r.test(password));
 
   async function submit(e: React.FormEvent) {
@@ -22,10 +25,11 @@ export function SignUpForm() {
     setBusy(true);
     setError(null);
     try {
-      await api("/api/auth/sign-up", { body: { name, email, password, agree } });
+      await api("/api/auth/sign-up", { body: { name, email, password, agree, turnstile: token } });
       window.location.href = `/verify-email?email=${encodeURIComponent(email.trim().toLowerCase())}`;
     } catch (err) {
       setError({ message: (err as Error).message, exists: (err as ApiError).code === "exists" });
+      setResetKey((k) => k + 1); // tokens are single-use
       setBusy(false);
     }
   }
@@ -64,6 +68,7 @@ export function SignUpForm() {
           </Link>
         </span>
       </label>
+      <Turnstile siteKey={siteKey} onToken={setToken} resetKey={resetKey} />
       {error && (
         <div className="flex items-start gap-1.5 text-danger">
           <Icon name="error" className="mt-px shrink-0 text-[16px]" />
@@ -79,7 +84,7 @@ export function SignUpForm() {
       )}
       <button
         type="submit"
-        disabled={busy || !valid || !agree || !name.trim()}
+        disabled={busy || !valid || !agree || !name.trim() || !token}
         className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-primary-container px-5 font-title-md text-title-md text-on-primary shadow-md transition-all hover:bg-primary active:scale-[0.99] disabled:opacity-60"
       >
         <span>{busy ? "Creating account…" : "Create account"}</span>

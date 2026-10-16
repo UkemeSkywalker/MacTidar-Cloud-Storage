@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { btn, Dialog } from "@/components/Dialog";
 import { Icon } from "@/components/Icon";
+import { Turnstile } from "@/components/Turnstile";
 import { api } from "@/lib/api";
 
 const REASONS = [
@@ -13,7 +14,7 @@ const REASONS = [
   ["OTHER", "Something else", "Tell us more below"],
 ] as const;
 
-export function ReportAbuse({ token }: { token: string }) {
+export function ReportAbuse({ token, siteKey }: { token: string; siteKey: string }) {
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState<(typeof REASONS)[number][0] | null>(null);
   const [details, setDetails] = useState("");
@@ -22,15 +23,18 @@ export function ReportAbuse({ token }: { token: string }) {
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [human, setHuman] = useState<string | null>(null);
+  const [resetKey, setResetKey] = useState(0);
 
   async function submit() {
     setBusy(true);
     setError(null);
     try {
-      await api(`/api/public/${token}/report`, { body: { reason, details: details || undefined, email: email || undefined, website: trap || undefined } });
+      await api(`/api/public/${token}/report`, { body: { reason, details: details || undefined, email: email || undefined, website: trap || undefined, turnstile: human } });
       setDone(true);
     } catch (e) {
       setError((e as Error).message);
+      setResetKey((k) => k + 1);
     } finally {
       setBusy(false);
     }
@@ -57,7 +61,7 @@ export function ReportAbuse({ token }: { token: string }) {
           ) : (
             <>
               <button className={btn.secondary} onClick={() => setOpen(false)}>Cancel</button>
-              <button className={btn.danger} disabled={!reason || busy || (reason === "OTHER" && !details.trim())} onClick={submit}>
+              <button className={btn.danger} disabled={!reason || busy || !human || (reason === "OTHER" && !details.trim())} onClick={submit}>
                 {busy ? "Sending…" : "Submit report"}
               </button>
             </>
@@ -94,6 +98,7 @@ export function ReportAbuse({ token }: { token: string }) {
             </label>
             {/* Hidden from people; bots tend to fill it in. */}
             <input type="text" tabIndex={-1} autoComplete="off" aria-hidden value={trap} onChange={(e) => setTrap(e.target.value)} name="website" className="absolute -left-[9999px] h-0 w-0 opacity-0" />
+            <Turnstile siteKey={siteKey} onToken={setHuman} resetKey={resetKey} />
             {error && (
               <p className="flex items-center gap-1.5 font-label-md text-label-md text-danger">
                 <Icon name="error" className="text-[16px]" /> {error}

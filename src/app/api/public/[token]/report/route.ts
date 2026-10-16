@@ -7,6 +7,7 @@ import { getLink, setLinkSuspended } from "@/server/db/links";
 import { sendEmail } from "@/server/email";
 import { HttpError, notFound, route } from "@/server/errors";
 import { secrets } from "@/server/secrets";
+import { requireHuman } from "@/server/turnstile";
 
 const AUTO_DISABLE_AFTER = 3;
 
@@ -15,6 +16,7 @@ const body = z.object({
   details: z.string().trim().max(500).optional(),
   email: z.string().trim().toLowerCase().email("Enter a valid email or leave it empty.").optional().or(z.literal("")),
   website: z.string().optional(), // honeypot: real people never fill this hidden field
+  turnstile: z.string().max(4096).optional(),
 });
 
 const LABEL: Record<string, string> = {
@@ -30,6 +32,7 @@ export const POST = route<{ params: Promise<{ token: string }> }>(async (req, { 
   const { token } = await params;
   const input = body.parse(await req.json());
   if (input.website) return Response.json({ ok: true }); // silently drop bots
+  await requireHuman(input.turnstile, req);
   const link = await getLink(token);
   const item = link ? await getItem(link.itemId) : null;
   if (!link || !item) throw notFound("This link no longer exists.");
