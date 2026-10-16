@@ -85,3 +85,24 @@ export async function checkUsageAlert(workspaceId: string) {
     );
   }
 }
+
+// The viewer's largest active files in their current workspace, for the storage-full dialog.
+export async function largestFiles(workspaceId: string, ownerId: string, limit = 5) {
+  const files: { id: string; name: string; size: number; parentId: string | null; mimeType?: string }[] = [];
+  let start: Record<string, unknown> | undefined;
+  do {
+    const res = await ddb().send(
+      new ScanCommand({
+        TableName: TABLE(),
+        FilterExpression: "workspaceId = :ws AND ownerId = :o AND SK = :meta AND #t = :file AND #s = :active",
+        ExpressionAttributeNames: { "#t": "type", "#s": "status", "#n": "name" },
+        ExpressionAttributeValues: { ":ws": workspaceId, ":o": ownerId, ":meta": "META", ":file": "file", ":active": "ACTIVE" },
+        ProjectionExpression: "id, #n, size, parentId, mimeType",
+        ExclusiveStartKey: start,
+      }),
+    );
+    for (const it of res.Items ?? []) files.push({ id: it.id, name: it.name, size: it.size ?? 0, parentId: it.parentId ?? null, mimeType: it.mimeType });
+    start = res.LastEvaluatedKey;
+  } while (start);
+  return files.sort((a, b) => b.size - a.size).slice(0, limit);
+}

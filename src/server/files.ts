@@ -283,4 +283,15 @@ export async function emptyTrash(user: Viewer) {
   return count;
 }
 
+// What "Empty trash" would give back: the viewer's own trashed files, including inside trashed folders.
+export async function emptyableTrashBytes(user: Viewer) {
+  let bytes = 0;
+  for (const t of await listTrash(user)) {
+    if (t.ownerId !== user.id) continue;
+    if (t.type === "file") bytes += t.size ?? 0;
+    else for (const d of await listSubtree(t.rootId, t.path)) if (d.type === "file" && d.trashRootId === t.id) bytes += d.size ?? 0;
+  }
+  return bytes;
+}
+
 export const folderIdsOf = (item: Item) => pathIds(item.path);
