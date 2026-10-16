@@ -139,7 +139,65 @@ export function MembersView({
         </button>
       </div>
 
-      <div className="overflow-x-auto rounded-xl bg-surface shadow-sm">
+      <ul className="mb-4 divide-y divide-border rounded-xl bg-surface shadow-sm [&>li:first-child]:rounded-t-xl [&>li:last-child]:rounded-b-xl md:hidden">
+        {shownMembers.map((m) => (
+          <li key={m.id} className={`flex items-center gap-3 py-3 pl-3 pr-1 ${m.status === "DISABLED" ? "opacity-60" : ""}`}>
+            <Avatar name={m.name} id={m.id} size="h-10 w-10 text-[14px]" />
+            <div className="min-w-0 flex-1">
+              <p className="flex items-center gap-1.5 font-title-md text-title-md text-text-primary">
+                <span className="truncate">{m.name}</span>
+                {m.id === meId && <span className="rounded bg-primary-fixed px-1.5 font-label-sm text-label-sm text-primary">You</span>}
+              </p>
+              <p className="truncate font-body-sm text-body-sm text-text-secondary">{m.email}</p>
+              <p className="mt-1 flex flex-wrap items-center gap-1.5">
+                <span className={`rounded-full px-2 py-0.5 font-label-sm text-label-sm ${m.role === "ADMIN" ? "bg-primary-fixed text-primary" : "bg-surface-container-high text-on-surface-variant"}`}>
+                  {m.role === "ADMIN" ? "Admin" : "Member"}
+                </span>
+                <span className={`rounded-full px-2 py-0.5 font-label-sm text-label-sm ${m.status === "ACTIVE" ? "bg-tertiary-fixed/50 text-on-tertiary-fixed-variant" : "bg-error-container text-on-error-container"}`}>
+                  {m.status === "ACTIVE" ? "Active" : "Deactivated"}
+                </span>
+                <span className="font-label-sm text-label-sm text-text-secondary">{formatBytes(m.usedBytes)} used</span>
+              </p>
+            </div>
+            {m.id !== meId && (
+              <RowMenu
+                items={[
+                  {
+                    label: m.role === "ADMIN" ? "Make member" : "Make admin",
+                    icon: "manage_accounts",
+                    onClick: () => patch(m, { role: m.role === "ADMIN" ? "MEMBER" : "ADMIN" }, `${m.name} is now ${m.role === "ADMIN" ? "a member" : "an admin"}`),
+                  },
+                  m.status === "ACTIVE"
+                    ? { label: "Deactivate member", icon: "person_off", danger: true, onClick: () => setConfirm(m) }
+                    : { label: "Reactivate member", icon: "person_check", onClick: () => patch(m, { status: "ACTIVE" }, `${m.name} reactivated`) },
+                ]}
+              />
+            )}
+          </li>
+        ))}
+        {shownInvites.map((i) => (
+          <li key={i.id} className="flex items-center gap-3 py-3 pl-3 pr-1">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-container-high font-semibold text-on-surface-variant">
+              {initials(i.email.split("@")[0])}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-title-md text-title-md text-text-secondary">{i.email}</p>
+              <p className="mt-1 flex items-center gap-1.5">
+                <span className="rounded-full bg-warning/10 px-2 py-0.5 font-label-sm text-label-sm text-warning">Invited</span>
+                <span className="font-label-sm text-label-sm text-text-secondary">{formatDate(i.createdAt)}</span>
+              </p>
+            </div>
+            <RowMenu
+              items={[
+                { label: "Resend invite", icon: "forward_to_inbox", onClick: () => resend(i) },
+                { label: "Cancel invite", icon: "cancel", danger: true, onClick: () => revoke(i) },
+              ]}
+            />
+          </li>
+        ))}
+        {shownMembers.length + shownInvites.length === 0 && <li className="px-4 py-8 text-center text-text-secondary">No members match your filters.</li>}
+      </ul>
+      <div className="hidden overflow-x-auto rounded-xl bg-surface shadow-sm md:block">
         <table className="w-full min-w-[860px] text-left">
           <thead>
             <tr className="font-label-md text-label-md uppercase tracking-wider text-text-secondary">
@@ -351,6 +409,7 @@ function Stat({ label, value, unit, unitClass = "text-text-secondary", icon, ton
 
 function RowMenu({ items }: { items: { label: string; icon: string; danger?: boolean; onClick: () => void }[] }) {
   const [open, setOpen] = useState(false);
+  const [up, setUp] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const close = (e: MouseEvent) => ref.current && !ref.current.contains(e.target as Node) && setOpen(false);
@@ -359,11 +418,14 @@ function RowMenu({ items }: { items: { label: string; icon: string; danger?: boo
   }, []);
   return (
     <div className="relative inline-block" ref={ref}>
-      <button aria-label="Actions" onClick={() => setOpen((o) => !o)} className="flex h-9 w-9 items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-low">
+      <button aria-label="Actions" onClick={(e) => {
+          setUp(window.innerHeight - e.currentTarget.getBoundingClientRect().bottom < 320);
+          setOpen((o) => !o);
+        }} className="flex h-9 w-9 items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-low">
         <Icon name="more_vert" className="text-[20px]" />
       </button>
       {open && (
-        <div className="absolute right-0 top-10 z-20 w-56 rounded-xl bg-surface py-1 text-left shadow-[0_10px_30px_rgba(0,0,0,0.12)]">
+        <div className={`absolute right-0 ${up ? "bottom-10" : "top-10"} z-20 w-56 rounded-xl bg-surface py-1 text-left shadow-[0_10px_30px_rgba(0,0,0,0.12)]`}>
           <p className="px-4 pb-1 pt-2 font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Manage</p>
           {items.map((it) => (
             <button

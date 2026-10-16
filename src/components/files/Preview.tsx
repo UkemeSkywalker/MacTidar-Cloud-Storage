@@ -60,28 +60,30 @@ export function Preview({
   }, [index, rows.length, onClose, onIndex]);
 
   const ext = row.name.includes(".") ? row.name.split(".").pop()!.toUpperCase() : "";
-  const roundBtn = "flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20";
+  const roundBtn = "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:h-10 sm:w-10";
 
   return (
     <div className="fixed inset-0 z-[95] flex flex-col bg-overlay-dark text-white">
-      <header className="flex h-20 shrink-0 items-center justify-between gap-4 px-6">
-        <div className="flex min-w-0 items-center gap-4">
+      <header className="flex h-16 shrink-0 items-center justify-between gap-2 px-3 sm:h-20 sm:gap-4 sm:px-6">
+        <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4">
           <button aria-label="Back" onClick={onClose} className={roundBtn}>
             <Icon name="arrow_back" className="text-[22px]" />
           </button>
-          <FileIcon type="file" name={row.name} mime={row.mimeType} />
+          <span className="hidden sm:block">
+            <FileIcon type="file" name={row.name} mime={row.mimeType} />
+          </span>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="truncate font-headline-sm text-headline-sm">{row.name}</span>
-              {ext && <span className="rounded bg-white/15 px-1.5 font-label-sm text-label-sm">{ext}</span>}
+              <span className="truncate font-headline-sm text-[15px] sm:text-headline-sm">{row.name}</span>
+              {ext && <span className="hidden rounded bg-white/15 px-1.5 font-label-sm text-label-sm sm:inline">{ext}</span>}
             </div>
-            <p className="truncate font-body-sm text-body-sm text-white/60">{location}</p>
+            <p className="hidden truncate font-body-sm text-body-sm text-white/60 sm:block">{location}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           {canShare && onShare && (
-            <button onClick={() => onShare(row)} className="flex h-10 items-center gap-2 rounded-full bg-primary-container px-5 font-title-md text-title-md hover:bg-primary">
-              <Icon name="share" className="text-[18px]" /> Share
+            <button onClick={() => onShare(row)} aria-label="Share" className="flex h-9 items-center gap-2 rounded-full bg-primary-container px-2.5 font-title-md text-title-md hover:bg-primary sm:h-10 sm:px-5">
+              <Icon name="share" className="text-[18px]" /> <span className="hidden sm:inline">Share</span>
             </button>
           )}
           {canDownload && (
@@ -94,7 +96,7 @@ export function Preview({
               <Icon name="star" fill={row.starred} className={`text-[20px] ${row.starred ? "text-[#facc15]" : ""}`} />
             </button>
           )}
-          <button aria-label="Details" onClick={() => setDetails((d) => !d)} className={`${roundBtn} ${details ? "bg-white/25" : ""}`}>
+          <button aria-label="Details" onClick={() => setDetails((d) => !d)} className={`${roundBtn} hidden md:flex ${details ? "bg-white/25" : ""}`}>
             <Icon name="info" className="text-[20px]" />
           </button>
           <button aria-label="Close" onClick={onClose} className={roundBtn}>

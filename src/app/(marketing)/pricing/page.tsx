@@ -123,12 +123,12 @@ export default function PricingPage() {
         <h2 className="mb-2 text-center text-[28px] font-bold text-text-primary">Compare plans</h2>
         <p className="mb-8 text-center font-body-md text-[15px] text-text-secondary">What&apos;s included today, and what Team plans will add.</p>
         <div className="mx-auto mb-20 max-w-4xl overflow-x-auto rounded-2xl bg-surface shadow-sm">
-          <table className="w-full min-w-[560px] text-left">
+          <table className="w-full text-left">
             <thead>
               <tr className="border-b border-border">
-                <th className="px-6 py-5 font-label-md text-label-md uppercase tracking-wider text-text-secondary">Features</th>
-                <th className="px-6 py-5 text-center font-title-md text-[15px] text-primary">Free</th>
-                <th className="px-6 py-5 text-center font-title-md text-[15px] text-text-secondary">Team · soon</th>
+                <th className="px-4 py-5 font-label-md text-label-md uppercase tracking-wider text-text-secondary sm:px-6">Features</th>
+                <th className="px-3 py-5 text-center font-title-md text-[15px] text-primary sm:px-6">Free</th>
+                <th className="px-3 py-5 text-center font-title-md text-[15px] text-text-secondary sm:px-6">Team · soon</th>
               </tr>
             </thead>
             {ROWS.map((g) => (
@@ -140,9 +140,9 @@ export default function PricingPage() {
                 </tr>
                 {g.rows.map(([label, free, team]) => (
                   <tr key={label} className="border-t border-border">
-                    <td className="px-6 py-3.5 font-body-md text-[15px] text-on-surface-variant">{label}</td>
-                    <td className="px-6 py-3.5 text-center">{cell(free)}</td>
-                    <td className="px-6 py-3.5 text-center">{cell(team)}</td>
+                    <td className="px-4 py-3.5 font-body-md text-[14px] text-on-surface-variant sm:px-6 sm:text-[15px]">{label}</td>
+                    <td className="px-3 py-3.5 text-center sm:px-6">{cell(free)}</td>
+                    <td className="px-3 py-3.5 text-center sm:px-6">{cell(team)}</td>
                   </tr>
                 ))}
               </tbody>

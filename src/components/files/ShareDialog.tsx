@@ -186,8 +186,8 @@ function TeamPeople({ data, meId, onChanged }: { data: Data; meId: string; onCha
       {canManage ? (
         <>
           <p className="mb-2 font-body-sm text-body-sm text-text-secondary">Add people to this {data.item.type}</p>
-          <div className="relative mb-5 flex gap-2">
-            <div className="relative flex-1">
+          <div className="relative mb-5 flex flex-wrap gap-2">
+            <div className="relative w-full sm:w-auto sm:flex-1">
               <Icon name="mail" className="absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-outline" />
               <input
                 value={pick ? pick.name : query}
@@ -213,11 +213,11 @@ function TeamPeople({ data, meId, onChanged }: { data: Data; meId: string; onCha
                 </div>
               )}
             </div>
-            <select value={role} onChange={(e) => setRole(e.target.value as "VIEWER" | "EDITOR")} className="h-11 rounded-lg bg-surface-container-low px-3 font-title-md text-title-md">
+            <select value={role} onChange={(e) => setRole(e.target.value as "VIEWER" | "EDITOR")} className="h-11 flex-1 rounded-lg bg-surface-container-low px-3 font-title-md text-title-md sm:flex-none">
               <option value="EDITOR">Editor</option>
               <option value="VIEWER">Viewer</option>
             </select>
-            <button disabled={!pick || busy} onClick={() => pick && grant(pick.id, role, pick.name)} className={btn.primary}>
+            <button disabled={!pick || busy} onClick={() => pick && grant(pick.id, role, pick.name)} className={`${btn.primary} flex-1 sm:flex-none`}>
               Invite
             </button>
           </div>

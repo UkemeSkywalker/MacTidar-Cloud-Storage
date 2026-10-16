@@ -220,7 +220,7 @@ export function FileBrowser({
     );
 
   const quickActions = (r: BrowserRow, alwaysVisible = false) => (
-    <div className={`flex items-center justify-end gap-1 ${alwaysVisible ? "" : "opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"}`}>
+    <div className={`flex items-center justify-end gap-1 ${alwaysVisible ? "" : "opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"}`}>
       {can(r.role, "EDITOR") && (
         <IconBtn label="Share" icon="share" onClick={() => onShare(r)} />
       )}
@@ -241,6 +241,21 @@ export function FileBrowser({
     </div>
   );
 
+  // Every action for one row — used by the compact phone layout.
+  const actionsFor = (r: BrowserRow) => [
+    { label: r.type === "folder" ? "Open folder" : "Preview", icon: r.type === "folder" ? "folder_open" : "visibility", onClick: () => open(r) },
+    ...(can(r.role, "EDITOR") ? [{ label: "Share", icon: "share", onClick: () => onShare(r) }] : []),
+    { label: r.type === "folder" ? "Download as .zip" : "Download", icon: "download", onClick: () => downloadMany([r]) },
+    { label: r.starred ? "Remove star" : "Star", icon: "star", onClick: () => toggleStar(r) },
+    ...(can(r.role, "EDITOR")
+      ? [
+          { label: "Rename", icon: "edit", onClick: () => setNameDialog({ mode: "rename", row: r }) },
+          ...(folder ? [{ label: "Move", icon: "drive_file_move", onClick: () => setMoveRows([r]) }] : []),
+          { label: "Move to trash", icon: "delete", danger: true, onClick: () => setTrashRows([r]) },
+        ]
+      : []),
+  ];
+
   const totalSize = files.reduce((a, r) => a + r.size, 0);
 
   return (
@@ -249,13 +264,13 @@ export function FileBrowser({
 
       {(folder || showLocation || showToolbar) && (
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {canUpload && (
               <>
-                <button onClick={() => fileInput.current?.click()} className="flex h-11 items-center gap-2 rounded-full bg-primary-container px-6 font-title-md text-title-md text-on-primary shadow-sm hover:bg-primary">
+                <button onClick={() => fileInput.current?.click()} className="flex h-11 items-center gap-2 rounded-full bg-primary-container px-5 sm:px-6 font-title-md text-title-md text-on-primary shadow-sm hover:bg-primary">
                   <Icon name="upload" className="text-[20px]" /> Upload
                 </button>
-                <button onClick={() => setNameDialog({ mode: "folder" })} className="flex h-11 items-center gap-2 rounded-full bg-surface px-5 font-title-md text-title-md text-text-primary shadow-sm hover:bg-surface-container-low">
+                <button onClick={() => setNameDialog({ mode: "folder" })} className="flex h-11 items-center gap-2 rounded-full bg-surface px-4 sm:px-5 font-title-md text-title-md text-text-primary shadow-sm hover:bg-surface-container-low">
                   <Icon name="create_new_folder" className="text-[20px] text-primary" /> New folder
                 </button>
               </>
@@ -263,9 +278,10 @@ export function FileBrowser({
             {folder && rows.length > 0 && (
               <button
                 onClick={() => downloadFolderZip(folder.id.startsWith("root-") ? "My Files" : folder.name, appZip, folder.id)}
-                className="flex h-11 items-center gap-2 rounded-full bg-surface px-5 font-title-md text-title-md text-text-primary shadow-sm hover:bg-surface-container-low"
+                aria-label="Download folder as .zip"
+                className="flex h-11 items-center gap-2 rounded-full bg-surface px-3.5 sm:px-5 font-title-md text-title-md text-text-primary shadow-sm hover:bg-surface-container-low"
               >
-                <Icon name="folder_zip" className="text-[20px] text-on-surface-variant" /> Download .zip
+                <Icon name="folder_zip" className="text-[20px] text-on-surface-variant" /> <span className="hidden sm:inline">Download .zip</span>
               </button>
             )}
             {folder && !canUpload && (
@@ -276,7 +292,7 @@ export function FileBrowser({
           </div>
           <div className="flex items-center gap-2">
             <label className="flex h-11 items-center gap-2 rounded-xl bg-surface px-3 font-body-md text-body-md text-text-secondary shadow-sm">
-              <Icon name="sort" className="text-[20px]" /> Sort:
+              <Icon name="sort" className="text-[20px]" /> <span className="hidden sm:inline">Sort:</span>
               <select
                 value={sort.key}
                 onChange={(e) => setSort({ key: e.target.value as SortKey, dir: e.target.value === "name" ? 1 : -1 })}
@@ -363,7 +379,36 @@ export function FileBrowser({
           )}
         </div>
       ) : view === "list" ? (
-        <div className="overflow-x-auto rounded-xl bg-surface shadow-sm">
+        <>
+        <ul className="divide-y divide-border rounded-xl bg-surface shadow-sm [&>li:first-child]:rounded-t-xl [&>li:last-child]:rounded-b-xl md:hidden">
+          {sorted.map((r) => {
+            const isSel = selected.has(r.id);
+            return (
+              <li key={r.id} className={`flex items-center gap-3 py-2.5 pl-3 pr-1 ${isSel ? "bg-primary-soft" : ""}`}>
+                <input type="checkbox" aria-label={`Select ${r.name}`} checked={isSel} onChange={() => toggle(r.id)} className="h-4 w-4 shrink-0 accent-primary-container" />
+                <button onClick={() => open(r)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
+                  <FileIcon type={r.type} name={r.name} mime={r.mimeType} />
+                  <span className="min-w-0">
+                    <span className="flex items-center gap-1 font-title-md text-title-md text-text-primary">
+                      <span className="truncate">{highlight ? <Highlight text={r.name} q={highlight} /> : r.name}</span>
+                      {r.starred && <Icon name="star" fill className="shrink-0 text-[15px] text-[#f59e0b]" />}
+                      {(r.hasLink || r.sharedCount > 0) && <Icon name={r.hasLink ? "link" : "group"} className="shrink-0 text-[15px] text-primary" />}
+                    </span>
+                    <span className="block truncate font-body-sm text-body-sm text-text-secondary">
+                      {r.type === "folder" ? "Folder" : formatBytes(r.size)} · {formatDate(r.updatedAt)}
+                      {showLocation && r.location ? ` · ${r.location}` : ""}
+                    </span>
+                  </span>
+                </button>
+                <RowMenu items={actionsFor(r)} />
+              </li>
+            );
+          })}
+          <li className="px-4 py-3 font-body-sm text-body-sm text-text-secondary">
+            {sorted.length} items · {formatBytes(totalSize)}
+          </li>
+        </ul>
+        <div className="hidden overflow-x-auto rounded-xl bg-surface shadow-sm md:block">
           <table className="w-full min-w-[900px] text-left">
             <thead className="bg-surface-container-low/60">
               <tr className="font-title-md text-title-md text-text-secondary">
@@ -433,6 +478,7 @@ export function FileBrowser({
             </span>
           </div>
         </div>
+        </>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {sorted.map((r) => {
@@ -456,7 +502,7 @@ export function FileBrowser({
                   aria-label={`Select ${r.name}`}
                   checked={isSel}
                   onChange={() => toggle(r.id)}
-                  className={`absolute left-3 top-3 h-4 w-4 accent-primary-container ${isSel ? "" : "opacity-0 group-hover:opacity-100"}`}
+                  className={`absolute left-3 top-3 h-4 w-4 accent-primary-container ${isSel ? "" : "opacity-0 group-hover:opacity-100 [@media(hover:none)]:opacity-100"}`}
                 />
                 {r.starred && <Icon name="star" fill className="absolute right-3 top-3 text-[20px] text-[#f59e0b]" />}
                 <div className="flex items-center gap-2 p-3">
@@ -595,6 +641,7 @@ function BarBtn({ icon, label, onClick }: { icon: string; label: string; onClick
 
 export function RowMenu({ items }: { items: { label: string; icon: string; danger?: boolean; onClick: () => void }[] }) {
   const [open, setOpen] = useState(false);
+  const [up, setUp] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!open) return;
@@ -604,11 +651,14 @@ export function RowMenu({ items }: { items: { label: string; icon: string; dange
   }, [open]);
   return (
     <div className="relative" ref={ref}>
-      <button aria-label="More actions" onClick={() => setOpen((o) => !o)} className="flex h-9 w-9 items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-text-primary">
+      <button aria-label="More actions" onClick={(e) => {
+          setUp(window.innerHeight - e.currentTarget.getBoundingClientRect().bottom < 320);
+          setOpen((o) => !o);
+        }} className="flex h-9 w-9 items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-text-primary">
         <Icon name="more_horiz" className="text-[20px]" />
       </button>
       {open && (
-        <div className="absolute right-0 top-10 z-30 w-52 rounded-xl bg-surface py-1 text-left shadow-[0_10px_30px_rgba(0,0,0,0.12)]">
+        <div className={`absolute right-0 ${up ? "bottom-10" : "top-10"} z-30 w-52 rounded-xl bg-surface py-1 text-left shadow-[0_10px_30px_rgba(0,0,0,0.12)]`}>
           {items.map((it) => (
             <button
               key={it.label}
