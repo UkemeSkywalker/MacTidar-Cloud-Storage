@@ -19,7 +19,7 @@ export async function startUpload(user: Viewer, input: { parentId: string; name:
     throw new HttpError(413, `Exceeds the maximum file size (${formatBytes(team.maxFileBytes, 0)}).`, "too_large");
   }
   if (!(await reserveBytes(parent.workspaceId, input.size))) {
-    throw new HttpError(413, `Not enough team storage left (${formatBytes(team.freeBytes)} free).`, "quota");
+    throw new HttpError(413, `Not enough storage left (${formatBytes(Math.max(0, team.freeBytes))} free).`, "quota");
   }
 
   const id = newId();

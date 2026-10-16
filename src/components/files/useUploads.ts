@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { api } from "@/lib/api";
+import { api, ApiError } from "@/lib/api";
+import { reportStorageFull } from "../StorageFullDialog";
 
 export type UploadState = "queued" | "uploading" | "done" | "error" | "cancelled";
 
@@ -93,6 +94,7 @@ export function useUploads(onFileDone: () => void) {
         onFileDone();
       } catch (err) {
         const cancelled = (err as Error).name === "AbortError";
+        if (err instanceof ApiError && err.code === "quota") reportStorageFull();
         if (uploadId) api(`/api/uploads/${uploadId}`, { method: "DELETE" }).catch(() => {});
         update(task.key, { state: cancelled ? "cancelled" : "error", error: cancelled ? undefined : (err as Error).message });
       } finally {

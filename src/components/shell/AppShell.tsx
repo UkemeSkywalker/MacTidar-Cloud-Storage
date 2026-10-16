@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
+import { StorageFullDialog } from "../StorageFullDialog";
 import { Toaster } from "../toast";
 import { Sidebar, type WorkspaceOption } from "./Sidebar";
 import { TopBar } from "./TopBar";
@@ -28,6 +29,7 @@ export function AppShell({
         <TopBar user={user} onMenu={() => setMenuOpen(true)} />
       </Suspense>
       <main className="px-space-md pb-16 pt-[88px] lg:ml-[260px] lg:px-space-xl">{children}</main>
+      <StorageFullDialog />
       <Toaster />
     </div>
   );
