@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/Icon";
+import { Turnstile } from "@/components/Turnstile";
 import { api } from "@/lib/api";
 
 const RESEND_SECONDS = 45;
 
-export function VerifyForm({ email, autoResend }: { email: string; autoResend: boolean }) {
+export function VerifyForm({ email, autoResend, siteKey }: { email: string; autoResend: boolean; siteKey: string }) {
   const [digits, setDigits] = useState<string[]>(Array(6).fill(""));
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -15,14 +16,23 @@ export function VerifyForm({ email, autoResend }: { email: string; autoResend: b
   const [countdown, setCountdown] = useState(RESEND_SECONDS);
   const boxes = useRef<(HTMLInputElement | null)[]>([]);
   const sent = useRef(false);
+  const [human, setHuman] = useState<string | null>(null);
+  const [resetKey, setResetKey] = useState(0);
 
   useEffect(() => {
     boxes.current[0]?.focus();
-    if (autoResend && email && !sent.current) {
+  }, []);
+
+  // Coming from sign-in with an unverified account: send a code once the bot check passes.
+  useEffect(() => {
+    if (autoResend && email && human && !sent.current) {
       sent.current = true;
-      api("/api/auth/resend", { body: { email } }).then(() => setInfo("We sent you a new code.")).catch(() => {});
+      api("/api/auth/resend", { body: { email, turnstile: human } })
+        .then(() => setInfo("We sent you a new code."))
+        .catch(() => {})
+        .finally(() => setResetKey((k) => k + 1));
     }
-  }, [autoResend, email]);
+  }, [autoResend, email, human]);
 
   useEffect(() => {
     if (countdown <= 0) return;
@@ -58,11 +68,13 @@ export function VerifyForm({ email, autoResend }: { email: string; autoResend: b
   async function resend() {
     setError(null);
     try {
-      await api("/api/auth/resend", { body: { email } });
+      await api("/api/auth/resend", { body: { email, turnstile: human } });
       setInfo("We sent you a new code.");
       setCountdown(RESEND_SECONDS);
     } catch (err) {
       setError((err as Error).message);
+    } finally {
+      setResetKey((k) => k + 1);
     }
   }
 
@@ -103,8 +115,11 @@ export function VerifyForm({ email, autoResend }: { email: string; autoResend: b
       >
         {busy ? "Verifying…" : "Verify email"} <Icon name="arrow_forward" className="text-[18px]" />
       </button>
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-surface-container-low px-3 py-2.5">
-        <button type="button" disabled={countdown > 0} onClick={resend} className="flex items-center gap-2 font-body-md text-body-md text-text-secondary hover:text-text-primary disabled:hover:text-text-secondary">
+      <div className="mt-6">
+        <Turnstile siteKey={siteKey} onToken={setHuman} resetKey={resetKey} />
+      </div>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-surface-container-low px-3 py-2.5">
+        <button type="button" disabled={countdown > 0 || !human} onClick={resend} className="flex items-center gap-2 font-body-md text-body-md text-text-secondary hover:text-text-primary disabled:hover:text-text-secondary">
           Didn&apos;t get it? Resend code
           {countdown > 0 && <span className="rounded bg-surface-container-high px-1.5 font-mono text-[12px]">0:{String(countdown).padStart(2, "0")}</span>}
         </button>

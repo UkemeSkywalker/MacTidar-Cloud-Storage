@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/Icon";
 import { PasswordInput } from "@/components/PasswordInput";
 import { PasswordRules } from "@/components/PasswordRules";
+import { Turnstile } from "@/components/Turnstile";
 import { api } from "@/lib/api";
 import { passwordRules } from "@/lib/passwords";
 
 const RESEND_SECONDS = 45;
 
-export function ResetFlow() {
+export function ResetFlow({ siteKey }: { siteKey: string }) {
   const [email, setEmail] = useState("");
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [digits, setDigits] = useState<string[]>(Array(6).fill(""));
@@ -18,6 +19,8 @@ export function ResetFlow() {
   const [busy, setBusy] = useState<"send" | "reset" | null>(null);
   const [error, setError] = useState<{ step: 1 | 2; message: string } | null>(null);
   const [countdown, setCountdown] = useState(0);
+  const [human, setHuman] = useState<string | null>(null);
+  const [resetKey, setResetKey] = useState(0);
   const boxes = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -31,7 +34,7 @@ export function ResetFlow() {
     setBusy("send");
     setError(null);
     try {
-      await api("/api/auth/forgot", { body: { email } });
+      await api("/api/auth/forgot", { body: { email, turnstile: human } });
       setSentTo(email.trim().toLowerCase());
       setCountdown(RESEND_SECONDS);
       setTimeout(() => boxes.current[0]?.focus(), 50);
@@ -39,6 +42,7 @@ export function ResetFlow() {
       setError({ step: 1, message: (err as Error).message });
     } finally {
       setBusy(null);
+      setResetKey((k) => k + 1); // tokens are single-use; get one ready for a resend
     }
   }
 
@@ -125,10 +129,11 @@ export function ResetFlow() {
                 />
               </div>
             </div>
+            <Turnstile siteKey={siteKey} onToken={setHuman} resetKey={resetKey} />
             {error?.step === 1 && <ErrorLine message={error.message} />}
             <button
               type="submit"
-              disabled={busy !== null}
+              disabled={busy !== null || !human}
               className="group mt-2 flex h-10 w-full items-center justify-center gap-2 rounded-full bg-primary-container font-title-md text-title-md text-on-primary shadow-sm transition-all duration-150 hover:bg-primary disabled:opacity-60"
             >
               <span>{busy === "send" ? "Sending…" : step2 ? "Send a new code" : "Send reset code"}</span>
@@ -193,7 +198,7 @@ export function ResetFlow() {
                 <span className="font-body-sm text-body-sm text-text-secondary">Didn&apos;t receive a code?</span>
                 <button
                   type="button"
-                  disabled={countdown > 0 || busy !== null}
+                  disabled={countdown > 0 || busy !== null || !human}
                   onClick={() => sendCode()}
                   className="flex items-center gap-1 font-body-sm text-body-sm text-text-secondary transition-colors hover:text-text-primary disabled:hover:text-text-secondary"
                 >
