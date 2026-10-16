@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { Logo } from "@/components/Logo";
+import { turnstileSiteKey } from "@/server/turnstile";
 import { ResetFlow } from "./ResetFlow";
 
+export const dynamic = "force-dynamic";
 export const metadata = { title: "Reset password · MacTidar Cloud" };
 
 export default function ForgotPasswordPage() {
@@ -24,7 +26,7 @@ export default function ForgotPasswordPage() {
           <span>Secured connection</span>
         </div>
       </header>
-      <ResetFlow />
+      <ResetFlow siteKey={turnstileSiteKey()} />
     </main>
   );
 }

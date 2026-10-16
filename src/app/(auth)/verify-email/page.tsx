@@ -1,5 +1,6 @@
 import { Icon } from "@/components/Icon";
 import { Logo } from "@/components/Logo";
+import { turnstileSiteKey } from "@/server/turnstile";
 import { VerifyForm } from "./VerifyForm";
 
 export const metadata = { title: "Verify your email · MacTidar Cloud" };
@@ -25,7 +26,7 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
           <p className="mb-7 text-center font-body-md text-[15px] text-text-secondary">
             We sent a 6-digit code to <span className="font-semibold text-text-primary">{email || "your email"}</span>
           </p>
-          <VerifyForm email={email} autoResend={!!resend} />
+          <VerifyForm email={email} autoResend={!!resend} siteKey={turnstileSiteKey()} />
         </div>
         <div className="flex items-center justify-center gap-2 bg-surface-container-low py-3 font-label-md text-label-md text-on-surface-variant">
           <Icon name="verified_user" className="text-[16px] text-tertiary" /> Your connection is encrypted (HTTPS)
