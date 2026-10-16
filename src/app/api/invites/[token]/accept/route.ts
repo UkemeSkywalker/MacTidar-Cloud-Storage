@@ -4,6 +4,7 @@ import { createCognitoUser } from "@/server/cognito";
 import { deleteInvite, getInviteByToken } from "@/server/db/invites";
 import { createUser, findUserByEmail } from "@/server/db/users";
 import { addMember } from "@/server/db/workspaces";
+import { ensurePersonalWorkspace } from "@/server/accounts";
 import { conflict, notFound, route } from "@/server/errors";
 import { setActiveWorkspace, startSession } from "@/server/session";
 
@@ -22,6 +23,7 @@ export const POST = route<{ params: Promise<{ token: string }> }>(async (req, { 
   const id = await createCognitoUser(invite.email, password);
   const user = await createUser({ id, email: invite.email, name });
   await addMember(invite.workspaceId, user.id, invite.role);
+  await ensurePersonalWorkspace(user);
   await deleteInvite(invite.id);
   await setActiveWorkspace(invite.workspaceId);
   await startSession(user, true);

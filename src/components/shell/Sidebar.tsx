@@ -19,8 +19,11 @@ const ADMIN_NAV = [
   { href: "/admin/storage", label: "Storage", icon: "hard_drive" },
 ];
 
+export type WorkspaceOption = { id: string; name: string; type: "PERSONAL" | "COMPANY"; role: string; usedBytes: number; quotaBytes: number };
+
 export function Sidebar({
   workspace,
+  workspaces,
   isAdmin,
   usedBytes,
   quotaBytes,
@@ -28,6 +31,7 @@ export function Sidebar({
   onClose,
 }: {
   workspace: { id: string; name: string; type: "PERSONAL" | "COMPANY" };
+  workspaces: WorkspaceOption[];
   isAdmin: boolean;
   usedBytes: number;
   quotaBytes: number;
@@ -71,20 +75,12 @@ export function Sidebar({
               <span className="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface">MacTidar</span>
             </Link>
           </div>
-          <div className="mx-space-md mb-space-sm flex items-center gap-2.5 rounded-xl bg-surface-container-low px-3 py-2">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-fixed font-title-md text-title-md text-primary">
-              {workspace.name.slice(0, 1).toUpperCase()}
-            </div>
-            <div className="min-w-0">
-              <p className="truncate font-title-md text-title-md text-text-primary">{workspace.name}</p>
-              <p className="font-label-sm text-label-sm text-text-secondary">{workspace.type === "COMPANY" ? "Company workspace" : "Personal workspace"}</p>
-            </div>
-          </div>
+          <WorkspaceSwitcher current={workspace} workspaces={workspaces} isAdmin={isAdmin} />
           <div className="px-space-md pb-space-md pt-space-xs">
             <NewMenu />
           </div>
           <nav className="flex flex-col gap-0.5 px-space-md">{NAV.map(link)}</nav>
-          {isAdmin && (
+          {isAdmin && workspace.type === "COMPANY" && (
             <>
               <div className="px-space-lg pb-space-xs pt-space-lg">
                 <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline">Admin</span>
@@ -154,6 +150,110 @@ function NewMenu() {
           <button onClick={() => run("upload")} className="flex w-full items-center gap-3 px-4 py-2.5 text-left font-body-md text-body-md hover:bg-surface-container-low">
             <Icon name="upload_file" className="text-[20px] text-primary" /> Upload files
           </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WorkspaceSwitcher({ current, workspaces, isAdmin }: { current: { id: string; name: string; type: string }; workspaces: WorkspaceOption[]; isAdmin: boolean }) {
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState<string | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const me = workspaces.find((w) => w.id === current.id);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: MouseEvent) => ref.current && !ref.current.contains(e.target as Node) && setOpen(false);
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [open]);
+
+  async function switchTo(id: string) {
+    if (id === current.id) return setOpen(false);
+    setBusy(id);
+    const res = await fetch("/api/workspaces/switch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ workspaceId: id }) });
+    if (res.ok) window.location.href = "/files";
+    else setBusy(null);
+  }
+
+  const badge = (w: { name: string; type: string }) => (
+    <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-title-md text-title-md ${w.type === "PERSONAL" ? "bg-[#f3e8ff] text-file-image" : "bg-primary-container text-white"}`}>
+      {w.type === "PERSONAL" ? w.name.slice(0, 1).toUpperCase() + "P" : w.name.slice(0, 1).toUpperCase()}
+    </div>
+  );
+
+  return (
+    <div className="relative mx-space-md mb-space-sm" ref={ref}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-2.5 rounded-xl bg-surface-container-low px-2.5 py-2 text-left transition-colors hover:bg-surface-container"
+      >
+        {badge(current)}
+        <span className="min-w-0 flex-1">
+          <span className="block truncate font-title-md text-title-md text-text-primary">{current.name}</span>
+          <span className="block font-label-sm text-label-sm text-text-secondary">
+            {current.type === "COMPANY" ? "Company" : "Personal"}
+            {me ? ` · ${me.role === "ADMIN" ? "Admin" : "Member"}` : ""}
+          </span>
+        </span>
+        <Icon name="unfold_more" className="text-[20px] text-on-surface-variant" />
+      </button>
+      {open && (
+        <div className="fixed left-4 top-[124px] z-[60] w-[340px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl bg-surface shadow-[0_10px_30px_rgba(0,0,0,0.16)]">
+          <div className="flex items-center justify-between px-4 pb-2 pt-3">
+            <span className="font-label-md text-label-md uppercase tracking-wider text-text-secondary">Your workspaces</span>
+            <span className="rounded-full bg-primary-soft px-2 font-label-md text-label-md text-primary">{workspaces.length} active</span>
+          </div>
+          <div className="max-h-[320px] overflow-y-auto px-2">
+            {workspaces.map((w) => {
+              const pct = w.quotaBytes ? Math.min(100, (w.usedBytes / w.quotaBytes) * 100) : 0;
+              const active = w.id === current.id;
+              return (
+                <button
+                  key={w.id}
+                  onClick={() => switchTo(w.id)}
+                  disabled={!!busy}
+                  className={`mb-1 w-full rounded-xl p-2.5 text-left transition-colors ${active ? "bg-primary-soft" : "hover:bg-surface-container-low"}`}
+                >
+                  <span className="flex items-center gap-3">
+                    {badge(w)}
+                    <span className="min-w-0 flex-1">
+                      <span className="flex items-center gap-2">
+                        <span className="truncate font-title-md text-[15px] text-text-primary">{w.name}</span>
+                        {w.type === "COMPANY" && (
+                          <span className="rounded bg-surface-container-high px-1.5 font-label-sm text-label-sm uppercase text-on-surface-variant">{w.role === "ADMIN" ? "Admin" : "Member"}</span>
+                        )}
+                      </span>
+                      <span className="block font-body-sm text-body-sm text-text-secondary">
+                        {w.type === "COMPANY" ? "Company" : "Personal · Free"} · {formatBytes(w.usedBytes)} / {formatBytes(w.quotaBytes, 0)}
+                      </span>
+                    </span>
+                    {busy === w.id ? (
+                      <Icon name="progress_activity" className="animate-spin text-[20px] text-primary" />
+                    ) : (
+                      active && <Icon name="check_circle" className="text-[22px] text-primary" />
+                    )}
+                  </span>
+                  <span className="mt-2 block h-1 overflow-hidden rounded-full bg-surface-container-high">
+                    <span className={`block h-full rounded-full ${w.type === "PERSONAL" ? "bg-file-image" : "bg-primary-container"}`} style={{ width: `${pct}%` }} />
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <div className="mt-1 border-t border-border p-2">
+            <Link href="/onboarding?step=company" className="flex items-center gap-3 rounded-lg px-3 py-2.5 font-title-md text-[15px] text-primary hover:bg-surface-container-low">
+              <Icon name="add_business" className="text-[20px]" /> Create company workspace
+            </Link>
+            <Link
+              href={current.type === "COMPANY" && isAdmin ? "/admin/storage" : "/settings#settings-sharing"}
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 font-body-md text-[15px] text-text-primary hover:bg-surface-container-low"
+            >
+              <Icon name="settings" className="text-[20px] text-on-surface-variant" /> Workspace settings
+            </Link>
+          </div>
         </div>
       )}
     </div>

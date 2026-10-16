@@ -15,6 +15,7 @@ const body = z.object({
 export const POST = route(async (req) => {
   const admin = await requireAdmin();
   const { emails, role, message } = body.parse(await req.json());
+  if (admin.workspaceType === "PERSONAL") throw conflict("Personal workspaces can't have members. Create a company workspace to invite your team.");
   const unique = [...new Set(emails)];
 
   const pending = new Set((await listInvites(admin.workspaceId)).map((i) => i.email));
@@ -25,6 +26,6 @@ export const POST = route(async (req) => {
   }
 
   const results = [];
-  for (const email of unique) results.push(await inviteMember(admin, { email, role, message }));
+  for (const email of unique) results.push(await inviteMember(admin, admin.workspaceId, { email, role, message }));
   return Response.json({ results });
 });

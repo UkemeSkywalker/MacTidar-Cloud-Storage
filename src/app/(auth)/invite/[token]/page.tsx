@@ -2,6 +2,10 @@ import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { Logo } from "@/components/Logo";
 import { getInviteByToken } from "@/server/db/invites";
+import { findUserByEmail } from "@/server/db/users";
+import { getWorkspace, listWorkspaceMembers } from "@/server/db/workspaces";
+import { currentUser } from "@/server/session";
+import { JoinCard } from "./JoinCard";
 import { AcceptForm } from "./AcceptForm";
 
 export const metadata = { title: "Accept invitation · MacTidar Cloud" };
@@ -10,6 +14,30 @@ export default async function InvitePage({ params }: { params: Promise<{ token: 
   const { token } = await params;
   const invite = await getInviteByToken(token);
   const firstName = invite?.invitedByName.split(" ")[0];
+  const [workspace, existing, viewer] = invite
+    ? await Promise.all([getWorkspace(invite.workspaceId), findUserByEmail(invite.email), currentUser()])
+    : [null, null, null];
+  const memberCount = workspace ? (await listWorkspaceMembers(workspace.id)).filter((m) => m.status === "ACTIVE").length : 0;
+
+  // Existing accounts join with one click instead of creating a new password.
+  if (invite && workspace && existing) {
+    return (
+      <main className="flex min-h-screen w-full flex-col items-center justify-center bg-canvas px-4 py-10">
+        <div className="mb-8">
+          <Logo />
+        </div>
+        <JoinCard
+          token={token}
+          inviterName={invite.invitedByName}
+          workspaceName={workspace.name}
+          memberCount={memberCount}
+          role={invite.role}
+          inviteEmail={invite.email}
+          signedInAs={viewer?.email ?? null}
+        />
+      </main>
+    );
+  }
 
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center bg-canvas px-4 py-10 sm:px-6">
@@ -27,7 +55,7 @@ export default async function InvitePage({ params }: { params: Promise<{ token: 
                 <span>Team Invitation</span>
               </div>
               <h1 className="mb-2 text-center font-headline-lg text-headline-lg tracking-tight text-text-primary">
-                {firstName} invited you to join the MacTidar team
+                {firstName} invited you to join {workspace?.name ?? "MacTidar"}
               </h1>
               <p className="mb-6 text-center font-body-md text-body-md text-text-secondary">
                 Set up your account to start collaborating with your team on MacTidar Cloud.

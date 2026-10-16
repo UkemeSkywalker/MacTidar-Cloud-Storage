@@ -4,7 +4,7 @@ import { getItems, pathIds, type Item } from "./db/items";
 import { createLink, deleteLink, getLinkForItem, updateLink, type PublicLink } from "./db/links";
 import { deleteShare, getShare, listSharesOn, putShare } from "./db/shares";
 import { getUser, type User } from "./db/users";
-import { getMembership, listWorkspaceMembers } from "./db/workspaces";
+import { getMembership, getWorkspace, listWorkspaceMembers } from "./db/workspaces";
 import type { Viewer } from "./session";
 import { sendEmail } from "./email";
 import { badRequest, forbidden, notFound } from "./errors";
@@ -45,9 +45,10 @@ export async function accessList(user: Viewer, itemId: string) {
       });
     }
   }
-  const link = await getLinkForItem(item.id);
+  const [link, ws] = await Promise.all([getLinkForItem(item.id), getWorkspace(item.workspaceId)]);
   return {
     item,
+    workspace: { type: ws?.type ?? "COMPANY", sharingEnabled: ws?.type !== "PERSONAL" || !!ws?.sharingEnabled },
     myRole: role,
     entries: [...entries.values()],
     members: members.filter((m) => m.status === "ACTIVE" && m.userStatus === "ACTIVE").map((m) => ({ id: m.id, name: m.name, email: m.email })),
@@ -105,6 +106,10 @@ export async function saveLink(user: Viewer, itemId: string, settings: LinkSetti
   const { item, role } = await requireAccess(user, itemId, "VIEWER");
   if (!atLeast(role, "OWNER")) throw forbidden("Only the owner can create or change public links.");
   if (!item.parentId) throw badRequest("Create links for files or folders inside My Files.");
+  const ws = await getWorkspace(item.workspaceId);
+  if (ws?.type === "PERSONAL" && !ws.sharingEnabled) {
+    throw forbidden("Sharing is turned off for your personal workspace. Turn it on in Settings → Sharing first.");
+  }
   if (settings.password !== undefined && settings.password !== null && settings.password.length < 4) {
     throw badRequest("Link passwords need at least 4 characters.");
   }

@@ -8,7 +8,7 @@ export const POST = route<{ params: Promise<{ id: string }> }>(async (_req, { pa
   const admin = await requireAdmin();
   const invite = await getInvite((await params).id);
   if (!invite) throw notFound("This invite no longer exists.");
-  const result = await inviteMember(admin, { email: invite.email, role: invite.role });
+  const result = await inviteMember(admin, admin.workspaceId, { email: invite.email, role: invite.role });
   await deleteInvite(invite.id);
   return Response.json({ result });
 });
