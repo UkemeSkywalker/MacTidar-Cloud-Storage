@@ -34,6 +34,25 @@ export async function findUserByEmail(email: string): Promise<User | null> {
   return res.Items?.[0] ? (strip(res.Items[0]) as User) : null;
 }
 
+export async function listAllUsers(): Promise<User[]> {
+  const out: User[] = [];
+  let start: Record<string, unknown> | undefined;
+  do {
+    const res = await ddb().send(
+      new QueryCommand({
+        TableName: TABLE(),
+        IndexName: "GSI1",
+        KeyConditionExpression: "GSI1PK = :pk",
+        ExpressionAttributeValues: { ":pk": "MEMBERS" },
+        ExclusiveStartKey: start,
+      }),
+    );
+    out.push(...(res.Items ?? []).map((i) => strip(i) as User));
+    start = res.LastEvaluatedKey;
+  } while (start);
+  return out;
+}
+
 export async function createUser(input: { id: string; email: string; name: string }) {
   const at = now();
   const user: User = {
