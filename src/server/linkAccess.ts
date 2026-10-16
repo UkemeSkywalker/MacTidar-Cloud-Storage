@@ -49,6 +49,7 @@ export async function isUnlocked(link: PublicLink) {
 
 export type LinkState =
   | { state: "missing" }
+  | { state: "suspended" }
   | { state: "expired"; link: PublicLink; root: Item | null }
   | { state: "locked"; link: PublicLink; root: Item }
   | { state: "open"; link: PublicLink; root: Item };
@@ -58,6 +59,7 @@ export async function resolveLink(token: string): Promise<LinkState> {
   if (!link) return { state: "missing" };
   const root = await getItem(link.itemId);
   if (!root || root.status !== "ACTIVE") return { state: "missing" };
+  if (link.suspendedAt) return { state: "suspended" };
   if (isExpired(link)) return { state: "expired", link, root };
   if (!(await isUnlocked(link))) return { state: "locked", link, root };
   return { state: "open", link, root };

@@ -13,6 +13,9 @@ export type PublicLink = {
   expiresAt?: number; // epoch seconds; also the TTL attribute
   failedAttempts?: number;
   lockedUntil?: number;
+  // Set when the link is disabled for abuse (automatically or by a platform admin).
+  suspendedAt?: string;
+  suspendedReason?: string;
   createdAt: string;
 };
 
@@ -111,3 +114,15 @@ export async function recordFailedAttempt(link: PublicLink) {
 }
 
 export const isLocked = (link: PublicLink) => !!link.lockedUntil && link.lockedUntil > epochSeconds(new Date());
+
+export async function setLinkSuspended(token: string, reason: string | null) {
+  await ddb().send(
+    new UpdateCommand({
+      TableName: TABLE(),
+      Key: keys.link(token),
+      UpdateExpression: reason ? "SET suspendedAt = :at, suspendedReason = :r" : "REMOVE suspendedAt, suspendedReason",
+      ConditionExpression: "attribute_exists(PK)",
+      ExpressionAttributeValues: reason ? { ":at": now(), ":r": reason } : undefined,
+    }),
+  );
+}

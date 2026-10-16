@@ -5,6 +5,7 @@ import { listChildren } from "@/server/db/items";
 import { getUser } from "@/server/db/users";
 import { itemInLink, resolveLink } from "@/server/linkAccess";
 import { PublicBrowser } from "./PublicBrowser";
+import { ReportAbuse } from "./ReportAbuse";
 import { UnlockForm } from "./UnlockForm";
 
 export const dynamic = "force-dynamic";
@@ -24,7 +25,22 @@ export default async function PublicLinkPage({
   const sharerName = sharer?.name ?? "A MacTidar teammate";
 
   let body: React.ReactNode;
-  if (resolved.state === "missing" || resolved.state === "expired") {
+  if (resolved.state === "suspended") {
+    body = (
+      <StateCard>
+        <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-[#fef3c7] text-warning">
+          <Icon name="gpp_maybe" className="text-[44px]" />
+        </div>
+        <h1 className="mb-2 text-center text-[28px] font-semibold text-text-primary">This link has been disabled</h1>
+        <p className="mb-6 max-w-sm text-center font-body-md text-[15px] text-text-secondary">
+          The content behind this link was reported and is being reviewed. If you think this is a mistake, contact admin@mactidar.com.
+        </p>
+        <Link href="/" className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-surface-container-high font-title-md text-title-md text-text-primary hover:bg-surface-container-highest">
+          <Icon name="cloud" className="text-[20px]" /> Go to MacTidar
+        </Link>
+      </StateCard>
+    );
+  } else if (resolved.state === "missing" || resolved.state === "expired") {
     body = (
       <StateCard>
         <div className="relative mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-error-container/60 text-danger">
@@ -120,8 +136,16 @@ export default async function PublicLinkPage({
         </Link>
       </header>
       <main className="w-full flex-1 px-4 py-10 lg:px-10">{body}</main>
-      <footer className="flex items-center justify-center gap-2 py-8 font-body-md text-body-md text-text-secondary">
-        <Icon name="cloud" className="text-[18px] text-primary" /> Powered by <span className="font-semibold text-text-primary">MacTidar Cloud</span> — secure cloud file storage for teams
+      <footer className="flex flex-col items-center justify-center gap-3 px-4 py-8 text-center font-body-md text-body-md text-text-secondary sm:flex-row">
+        <span className="flex items-center gap-2">
+          <Icon name="cloud" className="text-[18px] text-primary" /> Powered by <span className="font-semibold text-text-primary">MacTidar Cloud</span>
+        </span>
+        {(resolved.state === "open" || resolved.state === "locked") && (
+          <>
+            <span className="hidden h-1 w-1 rounded-full bg-outline-variant sm:block" />
+            <ReportAbuse token={token} />
+          </>
+        )}
       </footer>
     </div>
   );
