@@ -367,11 +367,11 @@ Quota counters live on `WS#<id>/META`; per-member usage on the membership. Uploa
 ### 16.4 Deactivation
 Deactivating a member now disables their **membership** in that workspace (they lose access to it) rather than the global Cognito login, because a person may belong to other workspaces.
 
-### 16.5 Migration (`npm run migrate:workspaces`, idempotent, additive)
+### 16.5 Migration (completed; was `npm run migrate:workspaces`, idempotent, additive)
 1. Create `WS#ws-mactidar/META` from `TEAM/SETTINGS` (name "MacTidar", `COMPANY`, owner = first admin).
 2. For each user: create the membership (role, usedBytes, rootFolderId from the profile) and its `USERWS#` index entry.
 3. Add `workspaceId` to every item, share, invite and link; rewrite the `SHAREDWITH#`, `INVITES#`, `RECENT#` and `TRASH#` index keys.
-4. Leave `TEAM/SETTINGS` and the old profile fields in place for rollback; remove them in a later cleanup.
+4. Leave `TEAM/SETTINGS` and the old profile fields in place for rollback; remove them in a later cleanup. *(Done 2026-10-16: both removed and the migration script retired. It remains in git history.)*
 5. Recompute usage from the files themselves (`npm run recompute:usage`) to correct any drift during the switch-over.
 
 Order: run the migration → apply the Lambda update → deploy the app. The migration only adds data, so the old app keeps working until the new one is live.
