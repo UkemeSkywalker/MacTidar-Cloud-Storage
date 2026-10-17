@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { api } from "@/lib/api";
 import { formatBytes, formatDate } from "@/lib/format";
 import { appZip, downloadFolderZip } from "@/lib/zipDownload";
@@ -702,41 +703,80 @@ function BarBtn({ icon, label, onClick }: { icon: string; label: string; onClick
   );
 }
 
+// The menu is portalled to <body> with fixed positioning, so scrolling or
+// overflow-clipped containers (the file table) can't cut it off.
 export function RowMenu({ items }: { items: { label: string; icon: string; danger?: boolean; onClick: () => void }[] }) {
-  const [open, setOpen] = useState(false);
-  const [up, setUp] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ top?: number; bottom?: number; right: number } | null>(null);
+  const button = useRef<HTMLButtonElement>(null);
+  const menu = useRef<HTMLDivElement>(null);
+  const open = pos !== null;
+
   useEffect(() => {
     if (!open) return;
-    const close = (e: MouseEvent) => ref.current && !ref.current.contains(e.target as Node) && setOpen(false);
+    const close = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (!menu.current?.contains(t) && !button.current?.contains(t)) setPos(null);
+    };
+    const dismiss = () => setPos(null);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setPos(null);
     document.addEventListener("mousedown", close);
-    return () => document.removeEventListener("mousedown", close);
+    window.addEventListener("scroll", dismiss, true);
+    window.addEventListener("resize", dismiss);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", close);
+      window.removeEventListener("scroll", dismiss, true);
+      window.removeEventListener("resize", dismiss);
+      window.removeEventListener("keydown", onKey);
+    };
   }, [open]);
+
+  const toggle = () => {
+    if (open) return setPos(null);
+    const r = button.current!.getBoundingClientRect();
+    const height = items.length * 44 + 8;
+    const right = Math.max(8, window.innerWidth - r.right);
+    // Open downwards unless there isn't room below and there is more room above.
+    const below = window.innerHeight - r.bottom;
+    setPos(below < height + 12 && r.top > below ? { bottom: window.innerHeight - r.top + 4, right } : { top: r.bottom + 4, right });
+  };
+
   return (
-    <div className="relative" ref={ref}>
-      <button aria-label="More actions" onClick={(e) => {
-          setUp(window.innerHeight - e.currentTarget.getBoundingClientRect().bottom < 320);
-          setOpen((o) => !o);
-        }} className="flex h-9 w-9 items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-text-primary">
+    <>
+      <button
+        ref={button}
+        aria-label="More actions"
+        aria-expanded={open}
+        onClick={toggle}
+        className="flex h-9 w-9 items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-text-primary"
+      >
         <Icon name="more_horiz" className="text-[20px]" />
       </button>
-      {open && (
-        <div className={`absolute right-0 ${up ? "bottom-10" : "top-10"} z-30 w-52 rounded-xl bg-surface py-1 text-left shadow-[0_10px_30px_rgba(0,0,0,0.12)]`}>
-          {items.map((it) => (
-            <button
-              key={it.label}
-              onClick={() => {
-                setOpen(false);
-                it.onClick();
-              }}
-              className={`flex w-full items-center gap-3 px-4 py-2.5 font-body-md text-body-md hover:bg-surface-container-low ${it.danger ? "text-danger" : "text-text-primary"}`}
-            >
-              <Icon name={it.icon} className="text-[20px]" /> {it.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
+      {open &&
+        createPortal(
+          <div
+            ref={menu}
+            role="menu"
+            style={{ position: "fixed", top: pos.top, bottom: pos.bottom, right: pos.right }}
+            className="z-[80] max-h-[calc(100vh-16px)] w-52 overflow-y-auto rounded-xl bg-surface py-1 text-left shadow-[0_10px_30px_rgba(0,0,0,0.12)]"
+          >
+            {items.map((it) => (
+              <button
+                key={it.label}
+                role="menuitem"
+                onClick={() => {
+                  setPos(null);
+                  it.onClick();
+                }}
+                className={`flex w-full items-center gap-3 px-4 py-2.5 font-body-md text-body-md hover:bg-surface-container-low ${it.danger ? "text-danger" : "text-text-primary"}`}
+              >
+                <Icon name={it.icon} className="text-[20px]" /> {it.label}
+              </button>
+            ))}
+          </div>,
+          document.body,
+        )}
+    </>
   );
 }
 
