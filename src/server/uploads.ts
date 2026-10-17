@@ -8,6 +8,7 @@ import { badRequest, forbidden, HttpError, notFound } from "./errors";
 import { newId } from "./ids";
 import { formatBytes } from "@/lib/format";
 import { requireAccess } from "./permissions";
+import { newItemOwner } from "./files";
 import { abortMultipart, completeMultipart, fileKey, objectSize, PART_SIZE, presignSinglePut, startMultipart } from "./storage";
 
 export async function startUpload(user: Viewer, input: { parentId: string; name: string; size: number; type: string }) {
@@ -41,7 +42,7 @@ export async function startUpload(user: Viewer, input: { parentId: string; name:
           parentId: parent.id,
           rootId: parent.rootId,
           path: `${parent.path}${id}/`,
-          ownerId: parent.ownerId,
+          ownerId: newItemOwner(user, parent),
           createdBy: user.id,
           size: input.size,
           mimeType: type,

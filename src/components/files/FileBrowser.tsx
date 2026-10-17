@@ -16,6 +16,7 @@ import { ShareDialog } from "./ShareDialog";
 import type { AccessRole, Row } from "./types";
 import { UploadPanel } from "./UploadPanel";
 import { useUploads } from "./useUploads";
+import { readDrop, readPicked, uploadTree, type PickedFile } from "./folderUpload";
 
 type SortKey = "name" | "updatedAt" | "size";
 const RANK: Record<AccessRole, number> = { VIEWER: 1, EDITOR: 2, OWNER: 3 };
@@ -61,11 +62,37 @@ export function FileBrowser({
   const [shareRow, setShareRow] = useState<BrowserRow | null>(null);
   const onShare = (row: BrowserRow) => setShareRow(row);
   const fileInput = useRef<HTMLInputElement>(null);
+  const folderInput = useRef<HTMLInputElement>(null);
+  const [uploadMenu, setUploadMenu] = useState(false);
+  const uploadMenuRef = useRef<HTMLDivElement>(null);
   const dragDepth = useRef(0);
 
   const canUpload = !!folder && can(folder.role, "EDITOR");
   const refresh = useCallback(() => router.refresh(), [router]);
   const uploads = useUploads(refresh);
+
+  // Uploads a dropped or picked folder: makes its folders, then queues the files.
+  const startTree = useCallback(
+    (reading: Promise<{ files: PickedFile[]; dirs: string[] }>) => {
+      if (!folder) return;
+      const target = folder.id;
+      reading
+        .then((picked) => {
+          if (!picked.files.length && !picked.dirs.length) return;
+          return uploadTree(picked, target, uploads.add).then(({ folders }) => folders && refresh());
+        })
+        .catch((err) => toast((err as Error).message || "Couldn't upload that folder.", { tone: "error" }));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [folder?.id, uploads.add, refresh],
+  );
+
+  useEffect(() => {
+    if (!uploadMenu) return;
+    const close = (e: MouseEvent) => uploadMenuRef.current && !uploadMenuRef.current.contains(e.target as Node) && setUploadMenu(false);
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [uploadMenu]);
 
   // Remember list/grid and sort choices per browser.
   useEffect(() => {
@@ -92,6 +119,7 @@ export function FileBrowser({
       const action = (e as CustomEvent<string>).detail;
       if (action === "folder") setNameDialog({ mode: "folder" });
       if (action === "upload") fileInput.current?.click();
+      if (action === "upload-folder") folderInput.current?.click();
     };
     window.addEventListener("mt-new", onNew);
     const action = params.get("action");
@@ -122,8 +150,7 @@ export function FileBrowser({
       e.preventDefault();
       dragDepth.current = 0;
       setDragging(false);
-      const files = Array.from(e.dataTransfer?.files ?? []);
-      if (files.length) uploads.add(files, folder!.id);
+      if (e.dataTransfer) startTree(readDrop(e.dataTransfer));
     };
     window.addEventListener("dragenter", enter);
     window.addEventListener("dragover", over);
@@ -135,7 +162,7 @@ export function FileBrowser({
       window.removeEventListener("dragleave", leave);
       window.removeEventListener("drop", drop);
     };
-  }, [canUpload, folder, uploads]);
+  }, [canUpload, startTree]);
 
   const sorted = useMemo(() => {
     const withStars = rows.map((r) => (r.id in starOverrides ? { ...r, starred: starOverrides[r.id] } : r));
@@ -273,9 +300,25 @@ export function FileBrowser({
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {canUpload && (
               <>
-                <button onClick={() => fileInput.current?.click()} className="flex h-11 items-center gap-2 rounded-full bg-primary-container px-5 sm:px-6 font-title-md text-title-md text-on-primary shadow-sm hover:bg-primary">
-                  <Icon name="upload" className="text-[20px]" /> Upload
-                </button>
+                <div className="relative" ref={uploadMenuRef}>
+                  <button
+                    onClick={() => setUploadMenu((o) => !o)}
+                    aria-expanded={uploadMenu}
+                    className="flex h-11 items-center gap-2 rounded-full bg-primary-container px-5 sm:px-6 font-title-md text-title-md text-on-primary shadow-sm hover:bg-primary"
+                  >
+                    <Icon name="upload" className="text-[20px]" /> Upload <Icon name="arrow_drop_down" className="-mr-2 text-[20px] opacity-80" />
+                  </button>
+                  {uploadMenu && (
+                    <div className="absolute left-0 top-12 z-40 w-52 overflow-hidden rounded-xl bg-surface py-1 shadow-[0_10px_30px_rgba(0,0,0,0.12)]">
+                      <button onClick={() => { setUploadMenu(false); fileInput.current?.click(); }} className="flex w-full items-center gap-3 px-4 py-2.5 text-left font-body-md text-body-md hover:bg-surface-container-low">
+                        <Icon name="upload_file" className="text-[20px] text-primary" /> Upload files
+                      </button>
+                      <button onClick={() => { setUploadMenu(false); folderInput.current?.click(); }} className="flex w-full items-center gap-3 px-4 py-2.5 text-left font-body-md text-body-md hover:bg-surface-container-low">
+                        <Icon name="drive_folder_upload" className="text-[20px] text-file-folder" /> Upload folder
+                      </button>
+                    </div>
+                  )}
+                </div>
                 <button onClick={() => setNameDialog({ mode: "folder" })} className="flex h-11 items-center gap-2 rounded-full bg-surface px-4 sm:px-5 font-title-md text-title-md text-text-primary shadow-sm hover:bg-surface-container-low">
                   <Icon name="create_new_folder" className="text-[20px] text-primary" /> New folder
                 </button>
@@ -334,7 +377,7 @@ export function FileBrowser({
             <Icon name="cloud_upload" className="text-[24px]" />
           </div>
           <div className="flex-1">
-            <p className="font-title-md text-title-md text-text-primary">Drop files anywhere to upload instantly</p>
+            <p className="font-title-md text-title-md text-text-primary">Drop files or folders anywhere to upload</p>
             <p className="font-body-sm text-body-sm text-text-secondary">Or click to choose files · they&apos;ll be saved to {folder!.name}</p>
           </div>
         </button>
@@ -347,6 +390,16 @@ export function FileBrowser({
         onChange={(e) => {
           const list = Array.from(e.target.files ?? []);
           if (list.length && folder) uploads.add(list, folder.id);
+          e.target.value = "";
+        }}
+      />
+      <input
+        ref={folderInput}
+        type="file"
+        hidden
+        {...{ webkitdirectory: "", directory: "" }}
+        onChange={(e) => {
+          if (e.target.files?.length) startTree(Promise.resolve(readPicked(e.target.files)));
           e.target.value = "";
         }}
       />

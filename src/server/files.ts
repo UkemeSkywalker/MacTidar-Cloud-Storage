@@ -18,12 +18,21 @@ import { getMembership, listWorkspaceMembers } from "./db/workspaces";
 import type { Viewer } from "./session";
 import { badRequest, forbidden, notFound } from "./errors";
 import { newId } from "./ids";
-import { requireAccess } from "./permissions";
+import { inTeamFiles, requireAccess } from "./permissions";
 import { deleteObjects } from "./storage";
 
 export async function createFolder(user: Viewer, parentId: string, rawName: string) {
   const { item: parent } = await requireAccess(user, parentId, "EDITOR");
   if (parent.type !== "folder") throw badRequest("You can only create folders inside a folder.");
+  const { id, name } = await createFolderIn(user, parent, rawName, false);
+  return { id, name };
+}
+
+// Who owns something new: in Team Files the person who made it; in a shared
+// folder elsewhere, the folder's owner (it lives in their space).
+export const newItemOwner = (user: Viewer, parent: Item) => (inTeamFiles(user, parent) ? user.id : parent.ownerId);
+
+async function createFolderIn(user: Viewer, parent: Item, rawName: string, autoRename: boolean) {
   const name = validateName(rawName);
   const id = newId();
   const at = now();
@@ -37,7 +46,7 @@ export async function createFolder(user: Viewer, parentId: string, rawName: stri
       parentId: parent.id,
       rootId: parent.rootId,
       path: `${parent.path}${id}/`,
-      ownerId: parent.ownerId,
+      ownerId: newItemOwner(user, parent),
       createdBy: user.id,
       size: 0,
       status: "ACTIVE",
@@ -47,8 +56,41 @@ export async function createFolder(user: Viewer, parentId: string, rawName: stri
     };
     return [{ Put: { TableName: TABLE(), Item: itemRecord(folder) } }];
   };
-  const finalName = await withUniqueName(parent.id, name, build, { autoRename: false });
-  return { id, name: finalName };
+  const finalName = await withUniqueName(parent.id, name, build, { autoRename });
+  const folder = build(finalName)[0].Put.Item as unknown as Item;
+  return { id, name: finalName, folder };
+}
+
+// Recreates an uploaded folder's structure under `parentId` in one call.
+// `paths` are folder paths like "Photos" and "Photos/2026". Top-level folders
+// that clash get " (1)" added; returns path → new folder id.
+export async function createFolderTree(user: Viewer, parentId: string, paths: string[]) {
+  const { item: parent } = await requireAccess(user, parentId, "EDITOR");
+  if (parent.type !== "folder") throw badRequest("You can only upload folders into a folder.");
+  const all = new Set<string>();
+  for (const p of paths) {
+    const parts = p.split("/").filter(Boolean);
+    for (let i = 1; i <= parts.length; i++) all.add(parts.slice(0, i).join("/"));
+  }
+  if (all.size > 2000) throw badRequest("That folder has too many sub-folders to upload at once (max 2,000).");
+  const byDepth = [...all].sort((a, b) => a.split("/").length - b.split("/").length);
+  const made = new Map<string, Item>();
+  const ids: Record<string, string> = {};
+  for (let depth = 1; ; depth++) {
+    const level = byDepth.filter((p) => p.split("/").length === depth);
+    if (!level.length) break;
+    // Siblings at the same depth are created together.
+    await Promise.all(
+      level.map(async (p) => {
+        const parts = p.split("/");
+        const under = depth === 1 ? parent : made.get(parts.slice(0, -1).join("/"))!;
+        const { id, folder } = await createFolderIn(user, under, parts[parts.length - 1], depth === 1);
+        made.set(p, folder);
+        ids[p] = id;
+      }),
+    );
+  }
+  return ids;
 }
 
 export async function renameItem(user: Viewer, id: string, rawName: string) {
