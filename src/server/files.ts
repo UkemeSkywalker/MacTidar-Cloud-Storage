@@ -14,7 +14,7 @@ import {
 } from "./db/items";
 import { ddb, keys, now, strip, TABLE } from "./db/table";
 import { addUsedBytes } from "./db/team";
-import { getMembership } from "./db/workspaces";
+import { getMembership, listWorkspaceMembers } from "./db/workspaces";
 import type { Viewer } from "./session";
 import { badRequest, forbidden, notFound } from "./errors";
 import { newId } from "./ids";
@@ -53,7 +53,7 @@ export async function createFolder(user: Viewer, parentId: string, rawName: stri
 
 export async function renameItem(user: Viewer, id: string, rawName: string) {
   const { item } = await requireAccess(user, id, "EDITOR");
-  if (!item.parentId) throw badRequest("Your My Files folder can't be renamed.");
+  if (!item.parentId) throw badRequest("The top-level folder can't be renamed.");
   const name = validateName(rawName);
   if (name === item.name) return item;
   await withUniqueName(
@@ -86,7 +86,7 @@ export async function moveItems(user: Viewer, ids: string[], targetId: string) {
   const moved: string[] = [];
   for (const id of ids) {
     const { item } = await requireAccess(user, id, "EDITOR");
-    if (!item.parentId) throw badRequest("Your My Files folder can't be moved.");
+    if (!item.parentId) throw badRequest("The top-level folder can't be moved.");
     if (item.parentId === target.id) continue;
     if (item.rootId !== target.rootId) {
       throw badRequest("Items can only be moved within the same owner's files for now.");
@@ -137,7 +137,7 @@ export async function moveItems(user: Viewer, ids: string[], targetId: string) {
 export async function trashItems(user: Viewer, ids: string[]) {
   for (const id of ids) {
     const { item } = await requireAccess(user, id, "EDITOR");
-    if (!item.parentId) throw badRequest("Your My Files folder can't be deleted.");
+    if (!item.parentId) throw badRequest("The top-level folder can't be deleted.");
     await moveToTrash(item, user.id);
   }
 }
@@ -159,42 +159,56 @@ async function moveToTrash(item: Item, byUserId: string) {
 
 // Platform staff removing reported content: trash it, then delete it for good.
 export async function removeItemAsPlatform(admin: Viewer, item: Item) {
-  if (!item.parentId) throw badRequest("A member's My Files folder can't be removed. Suspend the workspace instead.");
+  if (!item.parentId) throw badRequest("A top-level folder can't be removed. Suspend the workspace instead.");
   if (item.status === "ACTIVE") await moveToTrash(item, item.ownerId);
   const fresh = await getItem(item.id);
   if (fresh?.status === "TRASHED" && fresh.trashRootId === fresh.id) return deleteForever(admin, fresh.id, { system: true });
   return 0;
 }
 
-export async function listTrash(user: Viewer): Promise<Item[]> {
+async function trashedBy(workspaceId: string, userId: string): Promise<Item[]> {
   const res = await ddb().send(
     new QueryCommand({
       TableName: TABLE(),
       IndexName: "GSI2",
       KeyConditionExpression: "GSI2PK = :pk",
-      ExpressionAttributeValues: { ":pk": `TRASH#${user.workspaceId}#${user.id}` },
+      ExpressionAttributeValues: { ":pk": `TRASH#${workspaceId}#${userId}` },
       ScanIndexForward: false,
     }),
   );
   return (res.Items ?? []).map((i) => strip(i) as Item);
 }
 
+const isCompanyAdmin = (user: Viewer) => user.workspaceType === "COMPANY" && user.role === "ADMIN";
+
+// What you deleted. Company admins see everything the team deleted.
+export async function listTrash(user: Viewer): Promise<Item[]> {
+  if (!isCompanyAdmin(user)) return trashedBy(user.workspaceId, user.id);
+  const members = await listWorkspaceMembers(user.workspaceId);
+  const all = (await Promise.all(members.map((m) => trashedBy(user.workspaceId, m.id)))).flat();
+  return all.sort((a, b) => String(b.trashedAt).localeCompare(String(a.trashedAt)));
+}
+
+// Who can restore or permanently delete a trashed item.
+export const canManageTrashed = (user: Viewer, item: Item) => item.trashedBy === user.id || item.ownerId === user.id || isCompanyAdmin(user);
+
 async function requireTrashRoot(user: Viewer, id: string) {
   const item = await getItem(id);
   if (!item || item.status !== "TRASHED" || item.trashRootId !== item.id || item.workspaceId !== user.workspaceId) {
     throw notFound("This item isn't in the trash.");
   }
-  if (item.trashedBy !== user.id && item.ownerId !== user.id) throw forbidden();
+  if (!canManageTrashed(user, item)) throw forbidden();
   return item;
 }
 
 export async function restoreItem(user: Viewer, id: string) {
   const item = await requireTrashRoot(user, id);
-  // Go back to the original folder if it still exists, otherwise to the owner's My Files.
+  // Go back to the original folder if it still exists, otherwise to the top level
+  // (Team Files, or the owner's My Files).
   let parent = item.parentId ? await getItem(item.parentId) : null;
   if (!parent || parent.status !== "ACTIVE") {
     const owner = await getMembership(item.workspaceId, item.ownerId);
-    parent = owner ? await getItem(owner.rootFolderId) : null;
+    parent = await getItem(user.teamRootId ?? owner?.rootFolderId ?? user.rootFolderId);
     if (!parent) throw badRequest("The original location no longer exists.");
   }
   const newPath = `${parent.path}${item.id}/`;
@@ -237,7 +251,7 @@ export async function restoreItem(user: Viewer, id: string) {
 export async function deleteForever(user: Viewer, id: string, { system = false } = {}) {
   const item = system ? await getItem(id) : await requireTrashRoot(user, id);
   if (!item) return;
-  if (!system && item.ownerId !== user.id) throw forbidden("Only the owner can delete items forever.");
+  if (!system && !canManageTrashed(user, item)) throw forbidden("Only the owner can delete items forever.");
   const all = item.type === "folder" ? await listSubtree(item.rootId, item.path) : [item];
   const doomed = all.filter((d) => d.id === item.id || d.trashRootId === item.id);
 
@@ -278,7 +292,7 @@ export async function deleteForever(user: Viewer, id: string, { system = false }
 export async function emptyTrash(user: Viewer) {
   let count = 0;
   for (const t of await listTrash(user)) {
-    if (t.ownerId === user.id) count += (await deleteForever(user, t.id)) ?? 0;
+    if (canManageTrashed(user, t)) count += (await deleteForever(user, t.id)) ?? 0;
   }
   return count;
 }
@@ -287,7 +301,7 @@ export async function emptyTrash(user: Viewer) {
 export async function emptyableTrashBytes(user: Viewer) {
   let bytes = 0;
   for (const t of await listTrash(user)) {
-    if (t.ownerId !== user.id) continue;
+    if (!canManageTrashed(user, t)) continue;
     if (t.type === "file") bytes += t.size ?? 0;
     else for (const d of await listSubtree(t.rootId, t.path)) if (d.type === "file" && d.trashRootId === t.id) bytes += d.size ?? 0;
   }

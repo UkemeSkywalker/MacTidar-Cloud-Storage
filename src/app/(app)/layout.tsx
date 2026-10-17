@@ -10,7 +10,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <AppShell
       user={{ id: user.id, name: user.name, email: user.email, role: user.role, platformAdmin: isPlatformAdmin(user) }}
-      workspace={{ id: user.workspaceId, name: user.workspaceName, type: user.workspaceType }}
+      workspace={{ id: user.workspaceId, name: user.workspaceName, type: user.workspaceType, teamFiles: !!user.teamRootId }}
       workspaces={user.workspaces}
       usedBytes={team.usedBytes}
       quotaBytes={team.quotaBytes}

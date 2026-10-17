@@ -3,7 +3,7 @@ import { ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { getItems, pathIds, type Item } from "./db/items";
 import { ddb, strip, TABLE } from "./db/table";
 import type { Viewer } from "./session";
-import { effectiveRole, sharesOnPath, type AccessRole } from "./permissions";
+import { effectiveRole, inTeamFiles, sharesOnPath, type AccessRole } from "./permissions";
 
 // Keeps the active items the user can see, with their role and a readable location.
 export async function visibleItems(user: Viewer, items: Item[]) {
@@ -15,7 +15,7 @@ export async function visibleItems(user: Viewer, items: Item[]) {
       const role = await effectiveRole(user, i);
       if (!role) return;
       roles.set(i.id, role);
-      if (i.ownerId !== user.id) {
+      if (i.ownerId !== user.id && !inTeamFiles(user, i)) {
         const shares = await sharesOnPath(user.id, i);
         startIndex.set(i.id, Math.max(0, pathIds(i.path).findIndex((id) => shares.has(id))));
       }
@@ -25,7 +25,7 @@ export async function visibleItems(user: Viewer, items: Item[]) {
   const folders = await getItems(visible.flatMap((i) => pathIds(i.path).slice(0, -1)));
   const location = (i: Item) => {
     const ids = pathIds(i.path).slice(0, -1);
-    if (i.ownerId === user.id) return ids.map((id) => (id.startsWith("root-") ? "My Files" : (folders.get(id)?.name ?? "…"))).join(" / ");
+    if (i.ownerId === user.id || inTeamFiles(user, i)) return ids.map((id) => folders.get(id)?.name ?? "…").join(" / ");
     const from = startIndex.get(i.id) ?? 0;
     return ["Shared with me", ...ids.slice(from).map((id) => folders.get(id)?.name ?? "…")].join(" / ");
   };

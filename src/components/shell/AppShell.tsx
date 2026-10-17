@@ -15,7 +15,7 @@ export function AppShell({
   children,
 }: {
   user: { id: string; name: string; email: string; role: string; platformAdmin?: boolean };
-  workspace: { id: string; name: string; type: "PERSONAL" | "COMPANY" };
+  workspace: { id: string; name: string; type: "PERSONAL" | "COMPANY"; teamFiles?: boolean };
   workspaces: WorkspaceOption[];
   usedBytes: number;
   quotaBytes: number;

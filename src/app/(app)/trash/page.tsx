@@ -1,6 +1,6 @@
 import { getItems, pathIds } from "@/server/db/items";
 import { listWorkspaceMembers } from "@/server/db/workspaces";
-import { listTrash } from "@/server/files";
+import { canManageTrashed, listTrash } from "@/server/files";
 import { requirePageUser } from "@/server/session";
 import { TrashView } from "./TrashView";
 
@@ -14,7 +14,7 @@ export default async function TrashPage() {
   const location = (path: string) =>
     pathIds(path)
       .slice(0, -1)
-      .map((id) => (parents.get(id)?.parentId === null || id.startsWith("root-") ? "My Files" : (parents.get(id)?.name ?? "…")))
+      .map((id) => parents.get(id)?.name ?? "…")
       .join(" / ");
   return (
     <TrashView
@@ -29,7 +29,8 @@ export default async function TrashPage() {
         deletedById: i.trashedBy ?? user.id,
         deletedByName: names.get(i.trashedBy ?? "") ?? "Unknown",
         trashedAt: i.trashedAt ?? i.updatedAt,
-        isOwner: i.ownerId === user.id,
+        // "isOwner" here means "can restore or delete forever".
+        isOwner: canManageTrashed(user, i),
       }))}
     />
   );

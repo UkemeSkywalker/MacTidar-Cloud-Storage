@@ -41,14 +41,20 @@ export async function accessList(user: Viewer, itemId: string) {
         name: m.name,
         email: m.email,
         role: s.role,
-        inheritedFrom: id === item.id ? undefined : { id, name: id.startsWith("root-") ? "My Files" : (folderNames.get(id)?.name ?? "a parent folder") },
+        inheritedFrom: id === item.id ? undefined : { id, name: folderNames.get(id)?.name ?? "a parent folder" },
       });
     }
   }
   const [link, ws] = await Promise.all([getLinkForItem(item.id), getWorkspace(item.workspaceId)]);
   return {
     item,
-    workspace: { type: ws?.type ?? "COMPANY", sharingEnabled: ws?.type !== "PERSONAL" || !!ws?.sharingEnabled },
+    workspace: {
+      type: ws?.type ?? "COMPANY",
+      name: ws?.name ?? "",
+      sharingEnabled: ws?.type !== "PERSONAL" || !!ws?.sharingEnabled,
+      // In Team Files everyone in the workspace already has edit access.
+      teamFiles: !!ws?.teamRootId && item.rootId === ws.teamRootId,
+    },
     myRole: role,
     entries: [...entries.values()],
     members: members.filter((m) => m.status === "ACTIVE" && m.userStatus === "ACTIVE").map((m) => ({ id: m.id, name: m.name, email: m.email })),
@@ -65,7 +71,7 @@ export const publicLinkInfo = (link: PublicLink) => ({
 
 export async function shareWith(user: Viewer, itemId: string, targetId: string, role: "VIEWER" | "EDITOR") {
   const { item } = await requireAccess(user, itemId, "EDITOR");
-  if (!item.parentId) throw badRequest("Share folders inside My Files instead of My Files itself.");
+  if (!item.parentId) throw badRequest("Share the folders inside instead of the top-level folder itself.");
   const target = await getUser(targetId);
   const membership = target ? await getMembership(item.workspaceId, target.id) : null;
   if (!target || target.status !== "ACTIVE" || membership?.status !== "ACTIVE") throw notFound("That teammate isn't in this workspace.");
@@ -105,7 +111,7 @@ export type LinkSettings = { allowDownload: boolean; password?: string | null; e
 export async function saveLink(user: Viewer, itemId: string, settings: LinkSettings) {
   const { item, role } = await requireAccess(user, itemId, "VIEWER");
   if (!atLeast(role, "OWNER")) throw forbidden("Only the owner can create or change public links.");
-  if (!item.parentId) throw badRequest("Create links for files or folders inside My Files.");
+  if (!item.parentId) throw badRequest("Create links for the files or folders inside instead.");
   const ws = await getWorkspace(item.workspaceId);
   if (ws?.type === "PERSONAL" && !ws.sharingEnabled) {
     throw forbidden("Sharing is turned off for your personal workspace. Turn it on in Settings → Sharing first.");
