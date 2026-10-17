@@ -242,6 +242,10 @@ export function FileBrowser({
       <span className="inline-flex items-center gap-1 rounded-full bg-primary-fixed/70 px-2.5 py-0.5 font-label-md text-label-md text-primary">
         <Icon name="link" className="text-[14px]" /> Public link
       </span>
+    ) : r.team ? (
+      <span title="Everyone in this workspace can see and edit this" className="inline-flex items-center gap-1 rounded-full bg-tertiary-fixed/40 px-2.5 py-0.5 font-label-md text-label-md text-on-tertiary-fixed-variant">
+        <Icon name="groups" className="text-[14px]" /> Team
+      </span>
     ) : r.sharedCount ? (
       <span className="inline-flex items-center gap-1 rounded-full bg-primary-fixed/70 px-2.5 py-0.5 font-label-md text-label-md text-primary">
         <Icon name="group" className="text-[14px]" /> Shared
