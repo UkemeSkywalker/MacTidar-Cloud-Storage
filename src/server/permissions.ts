@@ -29,7 +29,9 @@ export const inTeamFiles = (user: Who, item: Item) => !!user.teamRootId && item.
 
 export async function effectiveRole(user: Who, item: Item): Promise<AccessRole | null> {
   if (item.ownerId === user.id) return "OWNER";
-  let best: AccessRole | null = inTeamFiles(user, item) ? "EDITOR" : null;
+  // Shares grant at most EDITOR, which every member already has in Team Files.
+  if (inTeamFiles(user, item)) return "EDITOR";
+  let best: AccessRole | null = null;
   for (const role of (await sharesOnPath(user.id, item)).values()) {
     if (!best || RANK[role] > RANK[best]) best = role;
   }

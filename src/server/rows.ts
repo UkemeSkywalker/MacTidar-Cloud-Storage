@@ -1,10 +1,15 @@
 import "server-only";
+import { cache } from "react";
 import type { BrowserRow } from "@/components/files/FileBrowser";
 import type { Item } from "./db/items";
 import { listStarIds } from "./db/stars";
 import { listWorkspaceMembers } from "./db/workspaces";
 import type { Viewer } from "./session";
 import type { AccessRole } from "./permissions";
+
+// Per-request caches: pages start these early, in parallel with the access check.
+export const workspaceMembers = cache(listWorkspaceMembers);
+export const starIds = cache(listStarIds);
 
 // Shapes items for the client file browser, resolving owner names and stars.
 export async function toRows(
@@ -13,7 +18,7 @@ export async function toRows(
   roleOf: (item: Item) => AccessRole,
   locationOf?: (item: Item) => string | undefined,
 ): Promise<BrowserRow[]> {
-  const [members, stars] = await Promise.all([listWorkspaceMembers(user.workspaceId), listStarIds(user.id)]);
+  const [members, stars] = await Promise.all([workspaceMembers(user.workspaceId), starIds(user.id)]);
   const names = new Map(members.map((m) => [m.id, m.name]));
   const starred = new Set(stars);
   return items.map((i) => ({
