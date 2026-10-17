@@ -128,7 +128,7 @@ function NewMenu() {
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  const run = (action: "folder" | "upload") => {
+  const run = (action: "folder" | "upload" | "upload-folder") => {
     setOpen(false);
     const onFilesPage = pathname === "/files" || pathname.startsWith("/folders/");
     if (onFilesPage) window.dispatchEvent(new CustomEvent("mt-new", { detail: action }));
@@ -155,6 +155,9 @@ function NewMenu() {
           </button>
           <button onClick={() => run("upload")} className="flex w-full items-center gap-3 px-4 py-2.5 text-left font-body-md text-body-md hover:bg-surface-container-low">
             <Icon name="upload_file" className="text-[20px] text-primary" /> Upload files
+          </button>
+          <button onClick={() => run("upload-folder")} className="flex w-full items-center gap-3 px-4 py-2.5 text-left font-body-md text-body-md hover:bg-surface-container-low">
+            <Icon name="drive_folder_upload" className="text-[20px] text-file-folder" /> Upload folder
           </button>
         </div>
       )}
