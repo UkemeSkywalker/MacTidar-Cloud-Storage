@@ -1,16 +1,19 @@
-# Next.js on Amplify Hosting in eu-west-1, talking to data services in
-# af-south-1 through an IAM compute role. See docs/architecture.md §2.
+# Next.js on Amplify Hosting in eu-west-1. Data (DynamoDB, S3, zip worker) is
+# in data_region; Cognito, SES and SSM secrets in auth_region. See
+# docs/architecture.md §2.
 
 variable "name" { type = string }
 variable "app_region" { type = string }
 variable "data_region" { type = string }
+variable "auth_region" { type = string }
+# Every table/bucket the app may touch: both old and new during a region move.
+variable "table_arns" { type = list(string) }
+variable "bucket_arns" { type = list(string) }
 variable "domain_name" { type = string }
 variable "zone_id" { type = string }
 variable "repository" { type = string }
 variable "production_branch" { type = string }
-variable "table_arn" { type = string }
 variable "table_name" { type = string }
-variable "bucket_arn" { type = string }
 variable "bucket_name" { type = string }
 variable "user_pool_arn" { type = string }
 variable "user_pool_id" { type = string }
@@ -36,7 +39,7 @@ locals {
 
 data "aws_caller_identity" "current" {}
 
-# ---------- Secrets (SSM, in the data region)
+# ---------- Secrets (SSM, in the auth region)
 
 resource "random_password" "session" {
   length  = 64
@@ -80,7 +83,7 @@ data "aws_iam_policy_document" "compute" {
       "dynamodb:Query", "dynamodb:Scan", "dynamodb:BatchGetItem", "dynamodb:BatchWriteItem",
       "dynamodb:TransactGetItems", "dynamodb:TransactWriteItems", "dynamodb:ConditionCheckItem",
     ]
-    resources = [var.table_arn, "${var.table_arn}/index/*"]
+    resources = flatten([for t in var.table_arns : [t, "${t}/index/*"]])
   }
 
   statement {
@@ -89,13 +92,13 @@ data "aws_iam_policy_document" "compute" {
       "s3:GetObject", "s3:PutObject", "s3:DeleteObject",
       "s3:AbortMultipartUpload", "s3:ListMultipartUploadParts",
     ]
-    resources = ["${var.bucket_arn}/*"]
+    resources = [for b in var.bucket_arns : "${b}/*"]
   }
 
   statement {
     sid       = "FilesBucket"
     actions   = ["s3:ListBucket", "s3:ListBucketMultipartUploads"]
-    resources = [var.bucket_arn]
+    resources = var.bucket_arns
   }
 
   statement {
@@ -125,7 +128,7 @@ data "aws_iam_policy_document" "compute" {
   statement {
     sid       = "Secrets"
     actions   = ["ssm:GetParameter", "ssm:GetParameters"]
-    resources = ["arn:aws:ssm:${var.data_region}:${data.aws_caller_identity.current.account_id}:parameter${local.ssm_prefix}/*"]
+    resources = ["arn:aws:ssm:${var.auth_region}:${data.aws_caller_identity.current.account_id}:parameter${local.ssm_prefix}/*"]
   }
 }
 
@@ -163,6 +166,7 @@ resource "aws_amplify_branch" "main" {
 
   environment_variables = {
     DATA_REGION          = var.data_region
+    AUTH_REGION          = var.auth_region
     TABLE_NAME           = var.table_name
     FILES_BUCKET         = var.bucket_name
     COGNITO_USER_POOL_ID = var.user_pool_id

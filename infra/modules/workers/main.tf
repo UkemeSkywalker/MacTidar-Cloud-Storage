@@ -6,6 +6,10 @@ variable "table_arn" { type = string }
 variable "bucket_name" { type = string }
 variable "bucket_arn" { type = string }
 variable "ses_events_topic_arn" { type = string }
+# Where the Lambdas, schedules and alarms run (next to the data).
+variable "region" { type = string }
+# The SES events topic lives with SES; its subscription must be created there.
+variable "topic_region" { type = string }
 
 data "archive_file" "code" {
   type        = "zip"
@@ -84,12 +88,14 @@ locals {
 }
 
 resource "aws_cloudwatch_log_group" "job" {
+  region            = var.region
   for_each          = local.jobs
   name              = "/aws/lambda/${var.name}-${each.key}"
   retention_in_days = 30
 }
 
 resource "aws_lambda_function" "job" {
+  region           = var.region
   for_each         = local.jobs
   function_name    = "${var.name}-${each.key}"
   description      = each.value.description
@@ -137,6 +143,7 @@ resource "aws_iam_role_policy" "scheduler" {
 }
 
 resource "aws_scheduler_schedule" "job" {
+  region                       = var.region
   for_each                     = local.jobs
   name                         = "${var.name}-${each.key}"
   schedule_expression          = each.value.schedule
@@ -153,6 +160,7 @@ resource "aws_scheduler_schedule" "job" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "errors" {
+  region              = var.region
   for_each            = local.jobs
   alarm_name          = "${var.name}-${each.key}-errors"
   namespace           = "AWS/Lambda"
@@ -168,11 +176,13 @@ resource "aws_cloudwatch_metric_alarm" "errors" {
 
 # SES bounces: cancel pending invites to addresses that hard-bounce.
 resource "aws_cloudwatch_log_group" "ses_events" {
+  region            = var.region
   name              = "/aws/lambda/${var.name}-ses-events"
   retention_in_days = 30
 }
 
 resource "aws_lambda_function" "ses_events" {
+  region           = var.region
   function_name    = "${var.name}-ses-events"
   description      = "Cancels invites to email addresses that bounce"
   role             = aws_iam_role.lambda.arn
@@ -195,6 +205,7 @@ resource "aws_lambda_function" "ses_events" {
 }
 
 resource "aws_lambda_permission" "ses_events" {
+  region        = var.region
   statement_id  = "AllowSNS"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.ses_events.function_name
@@ -203,6 +214,7 @@ resource "aws_lambda_permission" "ses_events" {
 }
 
 resource "aws_sns_topic_subscription" "ses_events" {
+  region    = var.topic_region
   topic_arn = var.ses_events_topic_arn
   protocol  = "lambda"
   endpoint  = aws_lambda_function.ses_events.arn
@@ -210,11 +222,13 @@ resource "aws_sns_topic_subscription" "ses_events" {
 
 # Folder downloads: invoked asynchronously by the app, streams S3 → zip → S3.
 resource "aws_cloudwatch_log_group" "zip" {
+  region            = var.region
   name              = "/aws/lambda/${var.name}-zip-folder"
   retention_in_days = 30
 }
 
 resource "aws_lambda_function" "zip" {
+  region           = var.region
   function_name    = "${var.name}-zip-folder"
   description      = "Builds a .zip of a folder for download"
   role             = aws_iam_role.lambda.arn
@@ -238,6 +252,7 @@ resource "aws_lambda_function" "zip" {
 
 # Async invocations: don't retry a failed zip (the app shows the error instead).
 resource "aws_lambda_function_event_invoke_config" "zip" {
+  region                 = var.region
   function_name          = aws_lambda_function.zip.function_name
   maximum_retry_attempts = 0
 }

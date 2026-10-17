@@ -4,15 +4,12 @@ variable "name" {
   type = string
 }
 
-variable "quota_bytes" {
-  type = number
-}
-
-variable "max_file_bytes" {
-  type = number
+variable "region" {
+  type = string
 }
 
 resource "aws_dynamodb_table" "this" {
+  region                      = var.region
   name                        = var.name
   billing_mode                = "PAY_PER_REQUEST"
   hash_key                    = "PK"
@@ -64,28 +61,6 @@ resource "aws_dynamodb_table" "this" {
 
   server_side_encryption {
     enabled = true
-  }
-}
-
-# Initial team settings. The app updates these counters at runtime, so
-# Terraform only creates the item and never overwrites it.
-resource "aws_dynamodb_table_item" "team_settings" {
-  table_name = aws_dynamodb_table.this.name
-  hash_key   = aws_dynamodb_table.this.hash_key
-  range_key  = aws_dynamodb_table.this.range_key
-
-  item = jsonencode({
-    PK           = { S = "TEAM" }
-    SK           = { S = "SETTINGS" }
-    quotaBytes   = { N = tostring(var.quota_bytes) }
-    usedBytes    = { N = "0" }
-    freeBytes    = { N = tostring(var.quota_bytes) }
-    maxFileBytes = { N = tostring(var.max_file_bytes) }
-    alertPercent = { N = "80" }
-  })
-
-  lifecycle {
-    ignore_changes = [item]
   }
 }
 

@@ -1,7 +1,25 @@
 variable "data_region" {
-  description = "Region for S3, DynamoDB, Cognito, SES and Lambdas."
+  description = "Region for S3, DynamoDB and the Lambda workers (next to the app)."
+  type        = string
+  default     = "eu-west-1"
+}
+
+variable "auth_region" {
+  description = "Region for Cognito, SES, SSM secrets and the provider default. Stays put: moving Cognito would force password resets."
   type        = string
   default     = "af-south-1"
+}
+
+variable "legacy_data_region" {
+  description = "Where the data lived before the move. The old table and bucket stay here until they're decommissioned."
+  type        = string
+  default     = "af-south-1"
+}
+
+variable "use_ireland_data" {
+  description = "Cutover switch: false = app and workers use the old af-south-1 table/bucket; true = the new data_region ones."
+  type        = bool
+  default     = false
 }
 
 variable "app_region" {
@@ -32,18 +50,6 @@ variable "production_branch" {
   description = "Git branch Amplify deploys."
   type        = string
   default     = "master"
-}
-
-variable "quota_gb" {
-  description = "Initial team storage quota in GiB. Later changes are made by an admin in the app."
-  type        = number
-  default     = 15
-}
-
-variable "max_file_gb" {
-  description = "Initial maximum size of a single upload in GiB."
-  type        = number
-  default     = 5
 }
 
 variable "alert_email" {
