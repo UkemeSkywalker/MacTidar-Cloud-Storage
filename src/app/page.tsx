@@ -4,7 +4,7 @@ import { currentUser } from "@/server/session";
 
 export const metadata = {
   title: "MacTidar Cloud — Your work, safely in one place",
-  description: "Free cloud storage for you and your team. Store, preview and share files — 3 GB free, data stored in Africa.",
+  description: "Free cloud storage for you and your team. Store, preview and share files — 3 GB free.",
 };
 
 export default async function Home() {

@@ -6,7 +6,7 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Privacy Policy"
-      updated="16 October 2026"
+      updated="17 October 2026"
       pledge="We collect only what we need to run MacTidar Cloud. We don't sell your data, show you ads, or use your files to train AI."
       other={{ href: "/terms", label: "Read the Terms of Service" }}
       sections={[
@@ -55,11 +55,11 @@ export default function PrivacyPage() {
         },
         {
           id: "where",
-          title: "Where your data is stored",
+          title: "How your data is stored",
           body: (
             <p>
-              Your files and account data are stored on Amazon Web Services in <strong>Cape Town, South Africa</strong>, encrypted at rest (AES-256) and sent over encrypted connections (HTTPS).
-              The web app runs on Amazon Web Services in Ireland, which processes requests as you use the service.
+              Your files and account data are stored on Amazon Web Services, encrypted at rest (AES-256) and sent over encrypted connections (HTTPS).
+              The web app also runs on Amazon Web Services, which processes requests as you use the service.
             </p>
           ),
         },
