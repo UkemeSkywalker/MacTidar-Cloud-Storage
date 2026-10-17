@@ -94,7 +94,7 @@ export function StorageView({ team, stats, members }: { team: Team; stats: Stats
               </p>
               <p className="mb-3 font-body-md text-body-md text-text-secondary">{formatBytes(free)} available for upload</p>
               <p className="flex items-center gap-2 font-body-sm text-body-sm text-text-secondary">
-                <span className="h-2.5 w-2.5 rounded-sm bg-primary-container" /> S3 · Africa (Cape Town)
+                <span className="h-2.5 w-2.5 rounded-sm bg-primary-container" /> Stored on Amazon S3
               </p>
               {stats.trashBytes > 0 && <p className="mt-1 font-body-sm text-body-sm text-text-secondary">Includes {formatBytes(stats.trashBytes)} in trash</p>}
             </div>

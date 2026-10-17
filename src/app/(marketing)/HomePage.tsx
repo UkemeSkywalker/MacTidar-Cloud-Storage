@@ -364,7 +364,7 @@ export function HomePage() {
             Start with 3 GB free. Upgrade never required.
           </h2>
 <p className="font-body-md text-body-md text-on-primary/80 max-w-lg">
-            Set up in under a minute — no credit card needed. Your files are encrypted and stored in Africa.
+            Set up in under a minute — no credit card needed. Your files are encrypted and private by default.
           </p>
 <div className="pt-2">
 <Link className="inline-flex items-center gap-2 bg-surface text-primary font-title-md text-title-md px-8 py-3.5 rounded-full shadow-md hover:bg-surface-container-low transition-colors" data-path="get-started" href="/sign-up">
@@ -384,8 +384,8 @@ export function HomePage() {
 <div className="p-4 rounded-xl bg-surface/10 backdrop-blur-md text-on-primary flex items-center gap-3 shadow-sm">
 <span className="material-symbols-outlined text-primary-fixed text-[24px]">dns</span>
 <div>
-<p className="font-title-md text-title-md text-on-primary leading-tight">Data stored in Africa</p>
-<p className="font-label-sm text-label-sm text-on-primary/70">AWS Cape Town facility</p>
+<p className="font-title-md text-title-md text-on-primary leading-tight">Stored on Amazon Web Services</p>
+<p className="font-label-sm text-label-sm text-on-primary/70">Reliable cloud infrastructure</p>
 </div>
 </div>
 <div className="p-4 rounded-xl bg-surface/10 backdrop-blur-md text-on-primary flex items-center gap-3 shadow-sm">
@@ -729,14 +729,6 @@ export function HomePage() {
 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
 </a>
 </div>
-{/* Subtle Map Pin Graphic */}
-<div className="mt-4 p-4 rounded-2xl bg-surface/5 backdrop-blur-sm flex items-center gap-3 w-fit">
-<span className="material-symbols-outlined text-tertiary-fixed text-[24px]">location_on</span>
-<div className="flex flex-col">
-<span className="font-title-md text-title-md text-on-primary">Cape Town, South Africa</span>
-<span className="font-label-sm text-label-sm text-on-primary/70">Where your files live</span>
-</div>
-</div>
 </div>
 {/* Right Column: 2x2 Feature Grid */}
 <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -758,9 +750,9 @@ export function HomePage() {
 <span className="material-symbols-outlined text-[20px]">dns</span>
 </div>
 <div>
-<h3 className="font-headline-sm text-headline-sm text-on-primary mb-1">Stored in Africa</h3>
+<h3 className="font-headline-sm text-headline-sm text-on-primary mb-1">Built on AWS</h3>
 <p className="font-body-sm text-body-sm text-on-primary/75">
-                Hosted in Amazon Web Services&apos; Cape Town region, close to your team.
+                Hosted on Amazon Web Services&apos; secure, reliable cloud infrastructure.
               </p>
 </div>
 </div>
@@ -940,7 +932,7 @@ export function HomePage() {
 {/* Item 1 (Expanded) */}
 <details className="group bg-surface-container-low rounded-2xl p-6 shadow-sm transition-all" open><summary className="w-full flex items-center justify-between text-left font-title-md text-title-md text-text-primary cursor-pointer list-none [&::-webkit-details-marker]:hidden"><span>Is it really free?</span><span className="material-symbols-outlined text-text-secondary text-[20px] transition-transform transition-transform group-open:rotate-180">keyboard_arrow_down</span></summary><div className="mt-3 font-body-md text-body-md text-text-secondary leading-relaxed">Yes. MacTidar Cloud includes 3 GB of secure cloud storage completely free for life. No credit card required.</div></details>
 {/* Item 2 */}
-<details className="group bg-surface-container-low rounded-2xl p-6 shadow-sm transition-all"><summary className="w-full flex items-center justify-between text-left font-title-md text-title-md text-text-primary cursor-pointer list-none [&::-webkit-details-marker]:hidden"><span>Where are my files stored?</span><span className="material-symbols-outlined text-text-secondary text-[20px] transition-transform transition-transform group-open:rotate-180">keyboard_arrow_down</span></summary><div className="mt-3 font-body-md text-body-md text-text-secondary leading-relaxed">Your data is hosted securely in Africa at the AWS Cape Town facility, protected by AES-256 encryption at rest.</div></details>
+<details className="group bg-surface-container-low rounded-2xl p-6 shadow-sm transition-all"><summary className="w-full flex items-center justify-between text-left font-title-md text-title-md text-text-primary cursor-pointer list-none [&::-webkit-details-marker]:hidden"><span>Where are my files stored?</span><span className="material-symbols-outlined text-text-secondary text-[20px] transition-transform transition-transform group-open:rotate-180">keyboard_arrow_down</span></summary><div className="mt-3 font-body-md text-body-md text-text-secondary leading-relaxed">Your files are hosted securely on Amazon Web Services, protected by AES-256 encryption at rest.</div></details>
 {/* Item 3 */}
 <details className="group bg-surface-container-low rounded-2xl p-6 shadow-sm transition-all"><summary className="w-full flex items-center justify-between text-left font-title-md text-title-md text-text-primary cursor-pointer list-none [&::-webkit-details-marker]:hidden"><span>Can people without an account see what I share?</span><span className="material-symbols-outlined text-text-secondary text-[20px] transition-transform transition-transform group-open:rotate-180">keyboard_arrow_down</span></summary><div className="mt-3 font-body-md text-body-md text-text-secondary leading-relaxed">Yes, through a secure link you control, with optional password protection and expiration dates.</div></details>
 {/* Item 4 */}
