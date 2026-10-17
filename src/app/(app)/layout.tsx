@@ -1,12 +1,12 @@
 import { AppShell } from "@/components/shell/AppShell";
-import { getTeamSettings } from "@/server/db/team";
 import { isPlatformAdmin, requirePageUser } from "@/server/session";
 
 export const dynamic = "force-dynamic";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await requirePageUser();
-  const team = await getTeamSettings(user.workspaceId);
+  // Usage comes with the viewer's workspaces; no extra read needed.
+  const team = user.workspaces.find((w) => w.id === user.workspaceId) ?? { usedBytes: 0, quotaBytes: 0 };
   return (
     <AppShell
       user={{ id: user.id, name: user.name, email: user.email, role: user.role, platformAdmin: isPlatformAdmin(user) }}

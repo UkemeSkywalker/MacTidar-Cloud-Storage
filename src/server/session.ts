@@ -74,10 +74,11 @@ export const currentUser = cache(async (): Promise<Viewer | null> => {
   if (!token) return null;
   const payload = await decode(token);
   if (!payload) return null;
-  const user = await getUser(payload.uid);
+  // Both keyed by the user id, so fetch them together (each round trip to the data region counts).
+  const [user, memberships] = await Promise.all([getUser(payload.uid), listUserWorkspaces(payload.uid)]);
   if (!user || user.status !== "ACTIVE" || user.sessionVersion !== payload.ver) return null;
 
-  const all = (await listUserWorkspaces(user.id)).filter((w) => w.membership.status === "ACTIVE" && w.workspace.status === "ACTIVE");
+  const all = memberships.filter((w) => w.membership.status === "ACTIVE" && w.workspace.status === "ACTIVE");
   if (!all.length) return null;
   const wanted = jar.get(WORKSPACE_COOKIE)?.value;
   const active = all.find((w) => w.workspace.id === wanted) ?? all[0];

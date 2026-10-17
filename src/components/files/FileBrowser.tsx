@@ -160,9 +160,15 @@ export function FileBrowser({
       return n;
     });
 
+  const opening = useRef<string | null>(null);
   const open = (row: BrowserRow) => {
-    if (row.type === "folder") router.push(`/folders/${row.id}`);
-    else setPreview(files.findIndex((f) => f.id === row.id));
+    if (row.type === "folder") {
+      // A double-click (or click + row double-click) must not start several navigations.
+      if (opening.current === row.id) return;
+      opening.current = row.id;
+      setTimeout(() => (opening.current = null), 3000);
+      router.push(`/folders/${row.id}`);
+    } else setPreview(files.findIndex((f) => f.id === row.id));
   };
 
   const downloadMany = (list: BrowserRow[]) => {
@@ -386,7 +392,7 @@ export function FileBrowser({
             return (
               <li key={r.id} className={`flex items-center gap-3 py-2.5 pl-3 pr-1 ${isSel ? "bg-primary-soft" : ""}`}>
                 <input type="checkbox" aria-label={`Select ${r.name}`} checked={isSel} onChange={() => toggle(r.id)} className="h-4 w-4 shrink-0 accent-primary-container" />
-                <button onClick={() => open(r)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
+                <Opener row={r} onOpen={open} className="flex min-w-0 flex-1 items-center gap-3 text-left">
                   <FileIcon type={r.type} name={r.name} mime={r.mimeType} />
                   <span className="min-w-0">
                     <span className="flex items-center gap-1 font-title-md text-title-md text-text-primary">
@@ -399,7 +405,7 @@ export function FileBrowser({
                       {showLocation && r.location ? ` · ${r.location}` : ""}
                     </span>
                   </span>
-                </button>
+                </Opener>
                 <RowMenu items={actionsFor(r)} />
               </li>
             );
@@ -436,14 +442,14 @@ export function FileBrowser({
                 return (
                   <tr
                     key={r.id}
-                    onDoubleClick={() => open(r)}
+                    onDoubleClick={() => r.type === "file" && open(r)}
                     className={`group border-t border-border transition-colors ${isSel ? "bg-primary-soft" : "hover:bg-surface-container-low/60"}`}
                   >
                     <td className="py-3 pl-5">
                       <input type="checkbox" aria-label={`Select ${r.name}`} checked={isSel} onChange={() => toggle(r.id)} className="h-4 w-4 accent-primary-container" />
                     </td>
                     <td className="px-3 py-3">
-                      <button onClick={() => open(r)} className="flex max-w-[420px] items-center gap-3 text-left">
+                      <Opener row={r} onOpen={open} className="flex max-w-[420px] items-center gap-3 text-left">
                         <FileIcon type={r.type} name={r.name} mime={r.mimeType} />
                         <span className="min-w-0">
                           <span className={`flex items-center gap-1.5 font-title-md text-title-md ${isSel ? "text-primary" : "text-text-primary"}`}>
@@ -452,7 +458,7 @@ export function FileBrowser({
                           </span>
                           <span className="block truncate font-body-sm text-body-sm text-text-secondary">{kindLabel(r.type, r.name, r.mimeType)}</span>
                         </span>
-                      </button>
+                      </Opener>
                     </td>
                     {showLocation && <td className="px-3 py-3 font-body-md text-body-md text-text-secondary">{r.location ?? "—"}</td>}
                     <td className="px-3 py-3">
@@ -489,14 +495,14 @@ export function FileBrowser({
                 key={r.id}
                 className={`group relative flex flex-col overflow-hidden rounded-xl bg-surface shadow-sm transition-shadow hover:shadow-md ${isSel ? "ring-2 ring-primary-container" : ""}`}
               >
-                <button onClick={() => open(r)} className="flex aspect-[4/3] items-center justify-center bg-surface-container-low">
+                <Opener row={r} onOpen={open} className="flex aspect-[4/3] items-center justify-center bg-surface-container-low">
                   {isImage ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={downloadUrl(r, true)} alt="" loading="lazy" className="h-full w-full object-cover" />
                   ) : (
                     <FileIcon type={r.type} name={r.name} mime={r.mimeType} size="xl" />
                   )}
-                </button>
+                </Opener>
                 <input
                   type="checkbox"
                   aria-label={`Select ${r.name}`}
@@ -719,5 +725,22 @@ function Highlight({ text, q }: { text: string; q: string }) {
       <mark className="rounded bg-primary-fixed px-0.5 text-primary">{text.slice(i, i + q.length)}</mark>
       {text.slice(i + q.length)}
     </>
+  );
+}
+
+// Folders are real links so Next preloads their contents while they're on screen,
+// which makes opening them instant; files open the preview.
+function Opener({ row, onOpen, className, children }: { row: BrowserRow; onOpen: (r: BrowserRow) => void; className: string; children: React.ReactNode }) {
+  if (row.type === "folder") {
+    return (
+      <Link href={`/folders/${row.id}`} prefetch className={className}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <button onClick={() => onOpen(row)} className={className}>
+      {children}
+    </button>
   );
 }
