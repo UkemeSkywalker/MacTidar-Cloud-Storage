@@ -5,7 +5,7 @@ import type { Item } from "./db/items";
 import { listStarIds } from "./db/stars";
 import { listWorkspaceMembers } from "./db/workspaces";
 import type { Viewer } from "./session";
-import type { AccessRole } from "./permissions";
+import { inTeamFiles, type AccessRole } from "./permissions";
 
 // Per-request caches: pages start these early, in parallel with the access check.
 export const workspaceMembers = cache(listWorkspaceMembers);
@@ -33,6 +33,7 @@ export async function toRows(
     ownerName: i.ownerId === user.id ? `${user.name.split(" ")[0]} (You)` : (names.get(i.ownerId) ?? "Former member"),
     sharedCount: i.sharedCount ?? 0,
     hasLink: !!i.linkToken,
+    team: inTeamFiles(user, i),
     starred: starred.has(i.id),
     role: roleOf(i),
     location: locationOf?.(i),

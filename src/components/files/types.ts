@@ -10,6 +10,8 @@ export type Row = {
   ownerName: string;
   sharedCount: number;
   hasLink: boolean;
+  /** In a company workspace's Team Files: every member has access. */
+  team?: boolean;
   starred?: boolean;
   location?: string;
 };
