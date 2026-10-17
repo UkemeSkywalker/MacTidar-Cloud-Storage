@@ -102,7 +102,7 @@ export function RecentView({ entries, meId }: { entries: Entry[]; meId: string }
           <p className="font-headline-sm text-headline-sm text-text-primary">No recent activity yet</p>
           <p className="mt-1 font-body-md text-body-md text-text-secondary">Files you open or upload will show up here.</p>
           <Link href="/files" className="mt-4 font-title-md text-title-md text-primary hover:underline">
-            Go to My Files →
+            Go to your files →
           </Link>
         </div>
       ) : (

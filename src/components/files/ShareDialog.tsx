@@ -15,7 +15,7 @@ type Entry = { userId: string; name: string; email: string; role: AccessRole; in
 type LinkInfo = { url: string; allowDownload: boolean; hasPassword: boolean; expiresAt: string | null };
 type Data = {
   item: { id: string; name: string; type: "folder" | "file"; size: number };
-  workspace: { type: "PERSONAL" | "COMPANY"; sharingEnabled: boolean };
+  workspace: { type: "PERSONAL" | "COMPANY"; name: string; sharingEnabled: boolean; teamFiles: boolean };
   myRole: AccessRole;
   entries: Entry[];
   members: { id: string; name: string; email: string }[];
@@ -126,7 +126,23 @@ export function ShareDialog({ itemId, meId, onClose, onChanged }: { itemId: stri
 }
 
 function People(props: { data: Data; meId: string; onChanged: () => Promise<void> }) {
-  return props.data.workspace.type === "PERSONAL" ? <PersonalPeople /> : <TeamPeople {...props} />;
+  if (props.data.workspace.type === "PERSONAL") return <PersonalPeople />;
+  if (props.data.workspace.teamFiles) return <TeamFilesPeople data={props.data} />;
+  return <TeamPeople {...props} />;
+}
+
+function TeamFilesPeople({ data }: { data: Data }) {
+  return (
+    <div className="flex flex-col items-center gap-3 py-6 text-center">
+      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft text-primary">
+        <Icon name="folder_shared" className="text-[28px]" />
+      </span>
+      <p className="font-title-md text-[15px]">Everyone in {data.workspace.name} can see and edit this</p>
+      <p className="max-w-sm font-body-md text-body-md text-text-secondary">
+        It&apos;s in Team Files, so all {data.members.length} member{data.members.length === 1 ? "" : "s"} have access. To share it with someone outside the workspace, use a public link.
+      </p>
+    </div>
+  );
 }
 
 function PersonalPeople() {

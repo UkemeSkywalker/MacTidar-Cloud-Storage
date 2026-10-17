@@ -61,6 +61,8 @@ export type Viewer = User & {
   workspaceType: WorkspaceType;
   role: Role;
   rootFolderId: string;
+  // Set in company workspaces: everything under it is editable by every member.
+  teamRootId?: string;
   usedBytes: number;
   workspaces: { id: string; name: string; type: WorkspaceType; role: Role; usedBytes: number; quotaBytes: number }[];
 };
@@ -86,6 +88,7 @@ export const currentUser = cache(async (): Promise<Viewer | null> => {
     workspaceType: active.workspace.type,
     role: active.membership.role,
     rootFolderId: active.membership.rootFolderId,
+    teamRootId: active.workspace.teamRootId,
     usedBytes: active.membership.usedBytes ?? 0,
     workspaces: all.map((w) => ({
       id: w.workspace.id,

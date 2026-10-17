@@ -375,3 +375,13 @@ Deactivating a member now disables their **membership** in that workspace (they 
 5. Recompute usage from the files themselves (`npm run recompute:usage`) to correct any drift during the switch-over.
 
 Order: run the migration → apply the Lambda update → deploy the app. The migration only adds data, so the old app keeps working until the new one is live.
+
+## 17. Team Files (company workspaces)
+
+Company workspaces have no private areas. Each one has a single shared root folder, **Team Files** (`teamRootId` on `WS#<id>/META`, item id `team-<id>`), and every membership's `rootFolderId` points at it.
+
+- **Access:** any active member has at least `EDITOR` on everything whose `rootId` is the workspace's `teamRootId`. This comes from membership, not per-item shares, so joining or leaving takes effect straight away. The uploader stays `OWNER` of their own items (e.g. for public links).
+- **Trash:** any member can delete. The person who deleted an item, its owner, or a company admin can restore it or delete it forever. Admins see the whole team's trash.
+- **Leaving:** files stay in Team Files; ownership of the leaver's items moves to the chosen member.
+- **Personal workspaces** are unchanged: one private **My Files** per person.
+- **Migration:** `scripts/migrate-team-files.ts` (dry run by default, `--apply`, `--only <wsId>`) creates Team Files for existing company workspaces, moves every member's My Files contents into it (renaming on clashes) and re-points memberships. Deploy the code first: it behaves as before for workspaces without `teamRootId`.

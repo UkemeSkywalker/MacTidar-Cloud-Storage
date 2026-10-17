@@ -277,7 +277,7 @@ export function FileBrowser({
             )}
             {folder && rows.length > 0 && (
               <button
-                onClick={() => downloadFolderZip(folder.id.startsWith("root-") ? "My Files" : folder.name, appZip, folder.id)}
+                onClick={() => downloadFolderZip(folder.name, appZip, folder.id)}
                 aria-label="Download folder as .zip"
                 className="flex h-11 items-center gap-2 rounded-full bg-surface px-3.5 sm:px-5 font-title-md text-title-md text-text-primary shadow-sm hover:bg-surface-container-low"
               >
@@ -690,7 +690,7 @@ export function Breadcrumbs({ crumbs, rootLabel, rootHref }: { crumbs: { id: str
       )}
       {crumbs.map((c, i) => {
         const last = i === crumbs.length - 1;
-        const href = i === 0 && !rootLabel && c.id.startsWith("root-") ? "/files" : `/folders/${c.id}`;
+        const href = i === 0 && !rootLabel ? "/files" : `/folders/${c.id}`;
         return (
           <span key={c.id} className="flex items-center gap-1">
             {i > 0 && <Icon name="chevron_right" className="text-[20px] text-outline" />}

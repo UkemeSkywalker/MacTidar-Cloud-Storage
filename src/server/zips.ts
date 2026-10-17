@@ -39,7 +39,7 @@ export async function startZip(folder: Item, requester: string) {
   const job: ZipJob = {
     jobId,
     folderId: folder.id,
-    folderName: folder.parentId ? folder.name : "My Files",
+    folderName: folder.name,
     requester,
     key: `tmp/zips/${jobId}.zip`,
     status: "PENDING",

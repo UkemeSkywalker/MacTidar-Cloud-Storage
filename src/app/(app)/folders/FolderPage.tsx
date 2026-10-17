@@ -11,10 +11,11 @@ export async function FolderPage({ folderId }: { folderId: string }) {
   const { item: folder, role } = await orNotFound(() => requireAccess(user, folderId, "VIEWER"));
   const [{ crumbs, viaShare }, children] = await Promise.all([breadcrumb(user, folder), listChildren(folder.id)]);
   if (folder.parentId) recordRecent(user.id, folder.workspaceId, folder.id, "opened").catch(() => {});
-  const rows = await toRows(user, children, () => role);
+  // Your own uploads stay yours (e.g. for public links) even inside Team Files.
+  const rows = await toRows(user, children, (i) => (i.ownerId === user.id ? "OWNER" : role));
   return (
     <FolderView
-      folder={{ id: folder.id, name: folder.parentId ? folder.name : "My Files", role, path: folder.path }}
+      folder={{ id: folder.id, name: folder.name, role, path: folder.path, isRoot: !folder.parentId }}
       crumbs={crumbs}
       viaShare={viaShare}
       rows={rows}

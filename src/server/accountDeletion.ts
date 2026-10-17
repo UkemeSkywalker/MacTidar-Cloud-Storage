@@ -87,7 +87,17 @@ export async function deleteWorkspaceEverything(workspaceId: string) {
 // Leaves a company workspace, handing the user's files to another member.
 async function leaveWorkspace(workspace: Workspace, membership: Membership, user: User, targetId: string) {
   const targetMembership = (await listUserWorkspaces(targetId)).find((w) => w.workspace.id === workspace.id)?.membership;
-  const [oldRoot, newParent] = await Promise.all([getItem(membership.rootFolderId), targetMembership ? getItem(targetMembership.rootFolderId) : null]);
+  const teamRoot = workspace.teamRootId ? await getItem(workspace.teamRootId) : null;
+  if (teamRoot) {
+    // Team Files: everything stays where it is; the other member takes over what this user owned.
+    for (const it of await listSubtree(teamRoot.rootId, teamRoot.path)) {
+      if (it.ownerId !== user.id) continue;
+      await ddb().send(
+        new UpdateCommand({ TableName: TABLE(), Key: keys.item(it.id), UpdateExpression: "SET ownerId = :owner", ExpressionAttributeValues: { ":owner": targetId } }),
+      );
+    }
+  }
+  const [oldRoot, newParent] = teamRoot ? [null, null] : await Promise.all([getItem(membership.rootFolderId), targetMembership ? getItem(targetMembership.rootFolderId) : null]);
   if (oldRoot && newParent) {
     const subtree = await listSubtree(oldRoot.rootId, oldRoot.path);
     const newPathOf = (it: Item) => newParent.path + it.path.slice(1);

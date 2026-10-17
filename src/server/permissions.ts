@@ -22,9 +22,14 @@ export async function sharesOnPath(userId: string, item: Item): Promise<Map<stri
   return out;
 }
 
-export async function effectiveRole(user: User, item: Item): Promise<AccessRole | null> {
+type Who = User & { workspaceId?: string; teamRootId?: string };
+
+// Everything under a company workspace's Team Files is editable by every member.
+export const inTeamFiles = (user: Who, item: Item) => !!user.teamRootId && item.rootId === user.teamRootId && item.workspaceId === user.workspaceId;
+
+export async function effectiveRole(user: Who, item: Item): Promise<AccessRole | null> {
   if (item.ownerId === user.id) return "OWNER";
-  let best: AccessRole | null = null;
+  let best: AccessRole | null = inTeamFiles(user, item) ? "EDITOR" : null;
   for (const role of (await sharesOnPath(user.id, item)).values()) {
     if (!best || RANK[role] > RANK[best]) best = role;
   }
@@ -49,11 +54,11 @@ export async function requireAccess(user: Viewer, id: string, min: AccessRole, {
 export type Crumb = { id: string; name: string };
 
 // Breadcrumb from the top-most folder the user can see down to the item.
-export async function breadcrumb(user: User, item: Item): Promise<{ crumbs: Crumb[]; viaShare: boolean }> {
+export async function breadcrumb(user: Who, item: Item): Promise<{ crumbs: Crumb[]; viaShare: boolean }> {
   const ids = pathIds(item.path);
   let startIndex = 0;
   let viaShare = false;
-  if (item.ownerId !== user.id) {
+  if (item.ownerId !== user.id && !inTeamFiles(user, item)) {
     const shares = await sharesOnPath(user.id, item);
     startIndex = Math.max(0, ids.findIndex((id) => shares.has(id)));
     viaShare = true;

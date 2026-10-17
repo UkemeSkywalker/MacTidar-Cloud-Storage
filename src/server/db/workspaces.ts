@@ -23,6 +23,8 @@ export type Workspace = {
   externalSharing: boolean;
   // Personal workspaces: public links are off until the owner turns sharing on.
   sharingEnabled?: boolean;
+  // Company workspaces: the shared "Team Files" root every member can see and edit.
+  teamRootId?: string;
   createdAt: string;
 };
 
@@ -135,7 +137,9 @@ export async function listWorkspaceMembers(workspaceId: string): Promise<Member[
     });
 }
 
-function rootFolderRecord(workspaceId: string, rootFolderId: string, userId: string, at: string) {
+export const TEAM_FILES = "Team Files";
+
+export function rootFolderRecord(workspaceId: string, rootFolderId: string, userId: string, at: string, name = "My Files") {
   return {
     ...keys.item(rootFolderId),
     GSI3PK: `ROOT#${rootFolderId}`,
@@ -143,8 +147,8 @@ function rootFolderRecord(workspaceId: string, rootFolderId: string, userId: str
     id: rootFolderId,
     workspaceId,
     type: "folder",
-    name: "My Files",
-    nameLower: "my files",
+    name,
+    nameLower: name.toLowerCase(),
     parentId: null,
     rootId: rootFolderId,
     path: `/${rootFolderId}/`,
@@ -162,15 +166,18 @@ function membershipRecord(m: Membership) {
   return { ...keys.member(m.workspaceId, m.userId), GSI1PK: `USERWS#${m.userId}`, GSI1SK: m.workspaceId, ...m };
 }
 
-// Adds a user to a workspace with their own root "My Files" folder.
+// Adds a user to a workspace. Company members share the workspace's Team Files;
+// personal workspaces get their own root "My Files" folder.
 export async function addMember(workspaceId: string, userId: string, role: Role) {
   const at = now();
-  const m: Membership = { workspaceId, userId, role, status: "ACTIVE", rootFolderId: `root-${newId()}`, usedBytes: 0, joinedAt: at };
+  const ws = await getWorkspace(workspaceId);
+  const teamRoot = ws?.teamRootId;
+  const m: Membership = { workspaceId, userId, role, status: "ACTIVE", rootFolderId: teamRoot ?? `root-${newId()}`, usedBytes: 0, joinedAt: at };
   await ddb().send(
     new TransactWriteCommand({
       TransactItems: [
         { Put: { TableName: TABLE(), Item: membershipRecord(m), ConditionExpression: "attribute_not_exists(PK)" } },
-        { Put: { TableName: TABLE(), Item: rootFolderRecord(workspaceId, m.rootFolderId, userId, at), ConditionExpression: "attribute_not_exists(PK)" } },
+        ...(teamRoot ? [] : [{ Put: { TableName: TABLE(), Item: rootFolderRecord(workspaceId, m.rootFolderId, userId, at), ConditionExpression: "attribute_not_exists(PK)" } }]),
       ],
     }),
   );
@@ -193,11 +200,17 @@ export async function createWorkspace(input: { name: string; type: WorkspaceType
     maxFileBytes: DEFAULT_MAX_FILE,
     alertPercent: 80,
     externalSharing: false,
+    ...(input.type === "COMPANY" ? { teamRootId: `team-${newId()}` } : {}),
     createdAt: at,
   };
   await ddb().send(
     new TransactWriteCommand({
-      TransactItems: [{ Put: { TableName: TABLE(), Item: { ...keys.workspace(ws.id), ...workspaceIndex(ws), ...ws }, ConditionExpression: "attribute_not_exists(PK)" } }],
+      TransactItems: [
+        { Put: { TableName: TABLE(), Item: { ...keys.workspace(ws.id), ...workspaceIndex(ws), ...ws }, ConditionExpression: "attribute_not_exists(PK)" } },
+        ...(ws.teamRootId
+          ? [{ Put: { TableName: TABLE(), Item: rootFolderRecord(ws.id, ws.teamRootId, input.ownerId, at, TEAM_FILES), ConditionExpression: "attribute_not_exists(PK)" } }]
+          : []),
+      ],
     }),
   );
   const membership = await addMember(ws.id, input.ownerId, "ADMIN");

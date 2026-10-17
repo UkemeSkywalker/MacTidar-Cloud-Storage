@@ -1,7 +1,7 @@
 import { FolderPage } from "../folders/FolderPage";
 import { requirePageUser } from "@/server/session";
 
-export const metadata = { title: "My Files · MacTidar Cloud" };
+export const metadata = { title: "Files · MacTidar Cloud" };
 
 export default async function FilesPage() {
   const user = await requirePageUser();

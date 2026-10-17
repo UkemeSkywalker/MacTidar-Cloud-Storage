@@ -30,7 +30,7 @@ export function Sidebar({
   open,
   onClose,
 }: {
-  workspace: { id: string; name: string; type: "PERSONAL" | "COMPANY" };
+  workspace: { id: string; name: string; type: "PERSONAL" | "COMPANY"; teamFiles?: boolean };
   workspaces: WorkspaceOption[];
   isAdmin: boolean;
   usedBytes: number;
@@ -54,7 +54,7 @@ export function Sidebar({
         aria-current={active ? "page" : undefined}
         className={`flex items-center gap-space-md rounded-lg px-space-md py-2.5 font-title-md text-title-md transition-colors ${active ? "bg-surface-container-low text-primary" : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"}`}
       >
-        <Icon name={item.icon} className={`text-[20px] ${active && item.icon === "folder" ? "text-file-folder" : ""}`} fill={active} />
+        <Icon name={item.icon} className={`text-[20px] ${active && item.icon.startsWith("folder") ? "text-file-folder" : ""}`} fill={active} />
         <span>{item.label}</span>
       </Link>
     );
@@ -79,7 +79,13 @@ export function Sidebar({
           <div className="px-space-md pb-space-md pt-space-xs">
             <NewMenu />
           </div>
-          <nav className="flex flex-col gap-0.5 px-space-md">{NAV.map(link)}</nav>
+          <nav className="flex flex-col gap-0.5 px-space-md">
+            {(workspace.teamFiles
+              ? // Everything in a company workspace is in Team Files, so there's nothing separate to be "shared with me".
+                NAV.filter((n) => n.href !== "/shared").map((n) => (n.href === "/files" ? { ...n, label: "Team Files", icon: "folder_shared" } : n))
+              : NAV
+            ).map(link)}
+          </nav>
           {isAdmin && workspace.type === "COMPANY" && (
             <>
               <div className="px-space-lg pb-space-xs pt-space-lg">
