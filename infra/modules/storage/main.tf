@@ -8,10 +8,21 @@ variable "allowed_origins" {
   type = list(string)
 }
 
+variable "region" {
+  type = string
+}
+
+# Bucket names are global, so a second bucket in another region needs its own suffix.
+variable "bucket_suffix" {
+  type    = string
+  default = ""
+}
+
 data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "files" {
-  bucket = "${var.name}-files-${data.aws_caller_identity.current.account_id}"
+  region = var.region
+  bucket = "${var.name}-files${var.bucket_suffix}-${data.aws_caller_identity.current.account_id}"
 
   lifecycle {
     prevent_destroy = true
@@ -19,6 +30,7 @@ resource "aws_s3_bucket" "files" {
 }
 
 resource "aws_s3_bucket_public_access_block" "files" {
+  region                  = var.region
   bucket                  = aws_s3_bucket.files.id
   block_public_acls       = true
   block_public_policy     = true
@@ -27,6 +39,7 @@ resource "aws_s3_bucket_public_access_block" "files" {
 }
 
 resource "aws_s3_bucket_ownership_controls" "files" {
+  region = var.region
   bucket = aws_s3_bucket.files.id
   rule {
     object_ownership = "BucketOwnerEnforced"
@@ -34,6 +47,7 @@ resource "aws_s3_bucket_ownership_controls" "files" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "files" {
+  region = var.region
   bucket = aws_s3_bucket.files.id
   rule {
     apply_server_side_encryption_by_default {
@@ -43,6 +57,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "files" {
 }
 
 resource "aws_s3_bucket_versioning" "files" {
+  region = var.region
   bucket = aws_s3_bucket.files.id
   versioning_configuration {
     status = "Enabled"
@@ -50,6 +65,7 @@ resource "aws_s3_bucket_versioning" "files" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "files" {
+  region = var.region
   bucket = aws_s3_bucket.files.id
 
   rule {
@@ -88,6 +104,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "files" {
 }
 
 resource "aws_s3_bucket_cors_configuration" "files" {
+  region = var.region
   bucket = aws_s3_bucket.files.id
   cors_rule {
     allowed_methods = ["GET", "PUT", "HEAD"]
@@ -120,6 +137,7 @@ data "aws_iam_policy_document" "tls_only" {
 }
 
 resource "aws_s3_bucket_policy" "files" {
+  region     = var.region
   bucket     = aws_s3_bucket.files.id
   policy     = data.aws_iam_policy_document.tls_only.json
   depends_on = [aws_s3_bucket_public_access_block.files]
@@ -127,6 +145,7 @@ resource "aws_s3_bucket_policy" "files" {
 
 # Lets Lambdas (thumbnails) react to uploads via EventBridge.
 resource "aws_s3_bucket_notification" "files" {
+  region      = var.region
   bucket      = aws_s3_bucket.files.id
   eventbridge = true
 }

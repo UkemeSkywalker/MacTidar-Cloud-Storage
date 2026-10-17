@@ -5,6 +5,8 @@ import { z } from "zod";
 // "AWS", so the data region uses DATA_REGION.
 const schema = z.object({
   DATA_REGION: z.string().default("af-south-1"),
+  // Cognito, SES and SSM stay in af-south-1 when the data moves.
+  AUTH_REGION: z.string().default("af-south-1"),
   TABLE_NAME: z.string().min(1),
   FILES_BUCKET: z.string().min(1),
   COGNITO_USER_POOL_ID: z.string().min(1),

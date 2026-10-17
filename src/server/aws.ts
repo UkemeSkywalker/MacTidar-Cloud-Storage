@@ -8,9 +8,11 @@ import { SSMClient } from "@aws-sdk/client-ssm";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { config } from "./config";
 
-// All data services live in af-south-1, even though the app itself runs on
-// Amplify in eu-west-1. Credentials come from the Amplify compute role.
+// Files, the table and the zip worker live in DATA_REGION; sign-in (Cognito),
+// email (SES) and secrets (SSM) live in AUTH_REGION. Credentials come from the
+// Amplify compute role.
 const region = () => config().DATA_REGION;
+const authRegion = () => config().AUTH_REGION;
 
 let clients:
   | {
@@ -29,9 +31,9 @@ export function aws() {
       marshallOptions: { removeUndefinedValues: true },
     }),
     s3: new S3Client({ region: region() }),
-    cognito: new CognitoIdentityProviderClient({ region: region() }),
-    ses: new SESv2Client({ region: region() }),
-    ssm: new SSMClient({ region: region() }),
+    cognito: new CognitoIdentityProviderClient({ region: authRegion() }),
+    ses: new SESv2Client({ region: authRegion() }),
+    ssm: new SSMClient({ region: authRegion() }),
     lambda: new LambdaClient({ region: region() }),
   };
   return clients;

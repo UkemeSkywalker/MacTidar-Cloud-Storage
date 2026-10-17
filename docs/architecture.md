@@ -385,3 +385,19 @@ Company workspaces have no private areas. Each one has a single shared root fold
 - **Leaving:** files stay in Team Files; ownership of the leaver's items moves to the chosen member.
 - **Personal workspaces** are unchanged: one private **My Files** per person.
 - **Migration:** `scripts/migrate-team-files.ts` (dry run by default, `--apply`, `--only <wsId>`) creates Team Files for existing company workspaces, moves every member's My Files contents into it (renaming on clashes) and re-points memberships. Deploy the code first: it behaves as before for workspaces without `teamRootId`.
+
+## 18. Moving the data to Ireland (eu-west-1)
+
+The app runs in eu-west-1, so data in af-south-1 cost ~150 ms per DynamoDB round trip. The data stores and workers move next to the app; sign-in and email stay put.
+
+| Stays in af-south-1 (`auth_region`) | Moves to eu-west-1 (`data_region`) |
+|---|---|
+| Cognito (moving forces password resets), SES (production access was requested there), SSM secrets (keeps sessions valid), SES events SNS topic, Terraform state | DynamoDB table `mactidar`, S3 bucket `mactidar-files-ie-<account>`, Lambda workers + schedules + alarms |
+
+The app reads `DATA_REGION` (DynamoDB, S3, Lambda) and `AUTH_REGION` (Cognito, SES, SSM).
+
+**Rollout**
+1. Code: app understands `AUTH_REGION` (default af-south-1, so nothing changes yet).
+2. Terraform with `use_ireland_data = false`: creates the new table and bucket; the app's IAM role can reach both old and new.
+3. Cutover, at a quiet time: copy the table (`scripts/copy-table-region.ts --apply`, adds only missing items) and `aws s3 sync` the bucket; apply with `use_ireland_data = true` (Amplify env → Ireland, Lambdas re-created in Ireland); redeploy the app; once live, re-run the copy and sync to pick up anything written during the build; `npm run recompute:usage`.
+4. About a week later: delete the old af-south-1 table and bucket (`module.database`, `module.storage`).

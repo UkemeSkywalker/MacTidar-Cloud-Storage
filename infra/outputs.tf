@@ -14,9 +14,10 @@ output "amplify_default_domain" {
 # Values for .env.local when running the app locally.
 output "env" {
   value = {
-    DATA_REGION          = var.data_region
-    TABLE_NAME           = module.database.table_name
-    FILES_BUCKET         = module.storage.bucket_name
+    DATA_REGION          = local.active.region
+    AUTH_REGION          = var.auth_region
+    TABLE_NAME           = local.active.table_name
+    FILES_BUCKET         = local.active.bucket_name
     COGNITO_USER_POOL_ID = module.auth.user_pool_id
     COGNITO_CLIENT_ID    = module.auth.client_id
     SES_FROM_EMAIL       = module.email.from_email
