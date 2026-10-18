@@ -17,9 +17,9 @@ variable "legacy_data_region" {
 }
 
 variable "use_ireland_data" {
-  description = "Cutover switch: false = app and workers use the old af-south-1 table/bucket; true = the new data_region ones."
+  description = "Cutover switch: false = app and workers use the old af-south-1 table/bucket; true = the new data_region ones. Switched on 2026-10-18."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "app_region" {

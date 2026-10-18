@@ -401,3 +401,5 @@ The app reads `DATA_REGION` (DynamoDB, S3, Lambda) and `AUTH_REGION` (Cognito, S
 2. Terraform with `use_ireland_data = false`: creates the new table and bucket; the app's IAM role can reach both old and new.
 3. Cutover, at a quiet time: copy the table (`scripts/copy-table-region.ts --apply`, adds only missing items) and `aws s3 sync` the bucket; apply with `use_ireland_data = true` (Amplify env → Ireland, Lambdas re-created in Ireland); redeploy the app; once live, re-run the copy and sync to pick up anything written during the build; `npm run recompute:usage`.
 4. About a week later: delete the old af-south-1 table and bucket (`module.database`, `module.storage`).
+
+**Status:** cut over on 2026-10-18 (106 items, 14 files copied; nothing written during the deploy window). `use_ireland_data` now defaults to `true`. The af-south-1 table and bucket are kept as a read-only backup until decommissioned.
