@@ -62,8 +62,11 @@ removed {
 }
 
 module "auth" {
-  source = "./modules/auth"
-  name   = local.name
+  source            = "./modules/auth"
+  name              = local.name
+  ses_identity_arn  = module.email.identity_arn
+  from_email        = module.email.from_email
+  configuration_set = module.email.configuration_set_name
 }
 
 module "email" {
