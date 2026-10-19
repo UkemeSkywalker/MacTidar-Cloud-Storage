@@ -403,3 +403,17 @@ The app reads `DATA_REGION` (DynamoDB, S3, Lambda) and `AUTH_REGION` (Cognito, S
 4. About a week later: delete the old af-south-1 table and bucket (`module.database`, `module.storage`).
 
 **Status:** cut over on 2026-10-18 (106 items, 14 files copied; nothing written during the deploy window). `use_ireland_data` now defaults to `true`. The af-south-1 table and bucket are kept as a read-only backup until decommissioned.
+
+## 19. Sharing outside a workspace (guests)
+
+Anyone with **edit** access can share a file or folder with an email address outside the workspace. The recipient gets **view and download** access (no editing) and doesn't need an account.
+
+**Two keys (company workspaces):** the admin allows it for the workspace (`externalSharing`, optional `allowedDomains`), then each member turns it on for themselves (`outsideSharing` on their membership). **Personal workspaces:** the owner's existing *Turn on sharing* switch (`sharingEnabled`) covers it. The checks run on every guest request, against the person who shared, so turning any switch off, narrowing the domain list, removing the person, suspending the workspace or deleting the item cuts access off immediately.
+
+| Record | Key | Notes |
+|---|---|---|
+| Guest share | `GSHARE#<token>` / `META` | `itemId`, `workspaceId`, `email`, `role` (VIEWER), `sharedBy`; GSI1 `GUEST#<email>` |
+| Pointer | `ITEM#<itemId>` / `GUEST#<email>` | `token`; lives in the item's partition, so deleting the item forever removes the share |
+| Code | `GCODE#<email>` / `META` | HMAC of a 6-digit code, `attempts` (max 5), TTL 10 minutes |
+
+**Flow:** the invite email links to `/g/<token>`. The visitor asks for a code (Turnstile-protected, one per 45 s), which is only ever sent to the invited address. A correct code sets an HttpOnly `mt_guest` cookie (HMAC-signed email, 7 days). A visitor already signed in to MacTidar with the invited address skips the code. Guests browse with the public-link browser, scoped to the shared item; downloads and zips go through `/api/guest/<token>/…`.

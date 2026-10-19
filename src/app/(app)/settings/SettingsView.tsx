@@ -14,14 +14,15 @@ import { passwordRules } from "@/lib/passwords";
 import { TurnOnSharingDialog } from "@/components/TurnOnSharing";
 import { DeleteAccountDialog } from "@/components/DeleteAccount";
 import { formatBytes } from "@/lib/format";
+import { OutsideSharing, type CompanySharing } from "./OutsideSharing";
 
 type U = { id: string; name: string; email: string; role: string; notifyShares: boolean; createdAt: string };
 
 type Personal = { name: string; sharingEnabled: boolean; usedBytes: number; quotaBytes: number } | null;
 
-export function SettingsView({ user, personal }: { user: U; personal: Personal }) {
+export function SettingsView({ user, personal, company }: { user: U; personal: Personal; company: CompanySharing | null }) {
   const router = useRouter();
-  const [tab, setTab] = useState<"profile" | "security" | "sharing" | "notifications">("profile");
+  const [tab, setTab] = useState<"profile" | "security" | "sharing" | "outside" | "notifications">("profile");
   const [confirmSharing, setConfirmSharing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [name, setName] = useState(user.name);
@@ -59,6 +60,7 @@ export function SettingsView({ user, personal }: { user: U; personal: Personal }
             ["profile", "person", "Profile"],
             ["security", "shield", "Security"],
             ...(personal ? ([["sharing", "share", "Sharing"]] as const) : []),
+            ...(company ? ([["outside", "public", "Outside sharing"]] as const) : []),
             ["notifications", "notifications", "Notifications"],
           ] as const
         ).map(([key, icon, label]) => (
@@ -197,7 +199,7 @@ export function SettingsView({ user, personal }: { user: U; personal: Personal }
           <div className="mb-5 flex flex-wrap items-center justify-between gap-2">
             <div>
               <p className="font-headline-sm text-[17px]">Sharing · {personal.name}</p>
-              <p className="font-body-md text-body-md text-text-secondary">Controls public links for your personal workspace.</p>
+              <p className="font-body-md text-body-md text-text-secondary">Controls public links and sharing by email for your personal workspace.</p>
             </div>
             <span className="rounded-full bg-surface-container-low px-3 py-1 font-label-md text-label-md text-on-surface-variant">
               {formatBytes(personal.usedBytes)} of {formatBytes(personal.quotaBytes, 0)} used
@@ -210,7 +212,7 @@ export function SettingsView({ user, personal }: { user: U; personal: Personal }
               </span>
               <div className="flex-1">
                 <p className="font-title-md text-[15px]">Sharing is on</p>
-                <p className="font-body-md text-body-md text-text-secondary">You can create public links. Turning sharing off won&apos;t remove existing links — disable them from each file.</p>
+                <p className="font-body-md text-body-md text-text-secondary">You can share by email and create public links. Turning sharing off stops people you shared with by email from opening anything; existing public links keep working until you disable them.</p>
               </div>
               <button
                 className={btn.secondary}
@@ -235,7 +237,7 @@ export function SettingsView({ user, personal }: { user: U; personal: Personal }
                   <p className="flex items-center gap-2 font-title-md text-[16px]">
                     Sharing is off <span className="rounded-full bg-surface px-2 font-label-md text-label-md text-text-secondary">Default</span>
                   </p>
-                  <p className="font-body-md text-[15px] text-text-secondary">Files in your personal workspace are private. Turn on sharing to create public links.</p>
+                  <p className="font-body-md text-[15px] text-text-secondary">Files in your personal workspace are private. Turn on sharing to share with people by email or create public links.</p>
                 </div>
               </div>
               <button className={btn.primary} onClick={() => setConfirmSharing(true)}>
@@ -253,6 +255,8 @@ export function SettingsView({ user, personal }: { user: U; personal: Personal }
           />
         </section>
       )}
+
+      {company && <OutsideSharing company={company} className={`${card} ${section("outside")} scroll-mt-24`} />}
 
       <section id="settings-notifications" className={`${card} ${section("notifications")} scroll-mt-24`}>
         <p className="font-headline-sm text-[17px]">Notification Preferences</p>
