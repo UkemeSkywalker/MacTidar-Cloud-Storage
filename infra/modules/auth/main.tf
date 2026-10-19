@@ -5,11 +5,38 @@ variable "name" {
   type = string
 }
 
+# Cognito's own emails (sign-up codes, password resets) go through our SES
+# domain instead of Cognito's default sender (50/day, from verificationemail.com).
+variable "ses_identity_arn" {
+  type = string
+}
+
+variable "from_email" {
+  type = string
+}
+
+variable "configuration_set" {
+  type = string
+}
+
+# Lets Cognito send through SES on the account's behalf.
+resource "aws_iam_service_linked_role" "cognito_email" {
+  aws_service_name = "email.cognito-idp.amazonaws.com"
+}
+
 resource "aws_cognito_user_pool" "this" {
   name                     = var.name
   username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
   deletion_protection      = "ACTIVE"
+  depends_on               = [aws_iam_service_linked_role.cognito_email]
+
+  email_configuration {
+    email_sending_account = "DEVELOPER"
+    source_arn            = var.ses_identity_arn
+    from_email_address    = "MacTidar Cloud <${var.from_email}>"
+    configuration_set     = var.configuration_set
+  }
 
   admin_create_user_config {
     allow_admin_create_user_only = false

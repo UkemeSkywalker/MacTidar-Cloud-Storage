@@ -127,7 +127,7 @@ export function VerifyForm({ email, autoResend, siteKey }: { email: string; auto
           Use different email <Icon name="edit" className="text-[16px]" />
         </Link>
       </div>
-      <p className="mt-4 text-center font-body-sm text-body-sm text-text-secondary">Can&apos;t find it? Check your spam folder — it comes from no-reply@verificationemail.com.</p>
+      <p className="mt-4 text-center font-body-sm text-body-sm text-text-secondary">Can&apos;t find it? Check your spam folder — it comes from no-reply@cloud.mactidar.com.</p>
     </form>
   );
 }
