@@ -20,7 +20,10 @@ export type Workspace = {
   maxFileBytes: number;
   alertPercent: number;
   alertSentAt?: string;
+  // Company workspaces: the admin allows members to share with people outside.
   externalSharing: boolean;
+  // Optional allowlist for outside sharing (e.g. ["designcorp.com"]); empty = any domain.
+  allowedDomains?: string[];
   // Personal workspaces: public links are off until the owner turns sharing on.
   sharingEnabled?: boolean;
   // Company workspaces: the shared "Team Files" root every member can see and edit.
@@ -36,6 +39,8 @@ export type Membership = {
   rootFolderId: string;
   usedBytes: number;
   joinedAt: string;
+  // The member's own opt-in to sharing outside the workspace (when the admin allows it).
+  outsideSharing?: boolean;
 };
 
 // A workspace member joined with their global profile.
@@ -217,7 +222,7 @@ export async function createWorkspace(input: { name: string; type: WorkspaceType
   return { workspace: ws, membership };
 }
 
-export async function updateMembership(workspaceId: string, userId: string, fields: Partial<Pick<Membership, "role" | "status">>) {
+export async function updateMembership(workspaceId: string, userId: string, fields: Partial<Pick<Membership, "role" | "status" | "outsideSharing">>) {
   const entries = Object.entries(fields).filter(([, v]) => v !== undefined);
   if (!entries.length) return;
   await ddb().send(
@@ -232,7 +237,10 @@ export async function updateMembership(workspaceId: string, userId: string, fiel
   );
 }
 
-export async function updateWorkspace(id: string, fields: Partial<Pick<Workspace, "name" | "sharingEnabled" | "ownerId" | "status">>) {
+export async function updateWorkspace(
+  id: string,
+  fields: Partial<Pick<Workspace, "name" | "sharingEnabled" | "ownerId" | "status" | "externalSharing" | "allowedDomains">>,
+) {
   const entries = Object.entries(fields).filter(([, v]) => v !== undefined);
   if (!entries.length) return;
   await ddb().send(

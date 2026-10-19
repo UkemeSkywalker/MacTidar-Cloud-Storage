@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 // Pages anyone can open. Everything else needs a session cookie; the cookie is
 // fully verified server-side, this only avoids rendering app pages when signed out.
 // /onboarding needs a session, so it is not listed here.
-const PUBLIC_PREFIXES = ["/sign-in", "/sign-up", "/verify-email", "/forgot-password", "/invite/", "/s/", "/api/", "/terms", "/privacy", "/pricing"];
+const PUBLIC_PREFIXES = ["/sign-in", "/sign-up", "/verify-email", "/forgot-password", "/invite/", "/s/", "/g/", "/api/", "/terms", "/privacy", "/pricing"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

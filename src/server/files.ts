@@ -19,6 +19,7 @@ import type { Viewer } from "./session";
 import { badRequest, forbidden, notFound } from "./errors";
 import { newId } from "./ids";
 import { inTeamFiles, requireAccess } from "./permissions";
+import { guestShareKey } from "./db/guests";
 import { deleteObjects } from "./storage";
 
 export async function createFolder(user: Viewer, parentId: string, rawName: string) {
@@ -314,6 +315,7 @@ export async function deleteForever(user: Viewer, id: string, { system = false }
     for (const r of res.Items ?? []) {
       deletes.push({ PK: r.PK, SK: r.SK });
       if (r.SK === "LINK" && r.token) deletes.push(keys.link(r.token as string));
+      if (String(r.SK).startsWith("GUEST#") && r.token) deletes.push(guestShareKey(r.token as string));
     }
   }
   for (let i = 0; i < deletes.length; i += 25) {

@@ -8,10 +8,11 @@ import type { Row } from "@/components/files/types";
 import { Icon } from "@/components/Icon";
 import { Toaster } from "@/components/toast";
 import { formatBytes, formatDate } from "@/lib/format";
-import { downloadFolderZip, linkZip } from "@/lib/zipDownload";
+import { downloadFolderZip, guestZip, linkZip } from "@/lib/zipDownload";
 
 export function PublicBrowser({
   token,
+  mode = "link",
   sharerName,
   root,
   folder,
@@ -20,6 +21,8 @@ export function PublicBrowser({
   expiresAt,
 }: {
   token: string;
+  /** "link" = public link (/s/…); "guest" = shared with a verified outside person (/g/…). */
+  mode?: "link" | "guest";
   sharerName: string;
   root: { id: string; name: string; type: "folder" | "file"; size: number; mimeType?: string };
   folder: { id: string; name: string; isRoot: boolean } | null;
@@ -30,7 +33,9 @@ export function PublicBrowser({
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<"name" | "updatedAt" | "size">("name");
   const [preview, setPreview] = useState<number | null>(null);
-  const url = (row: { id: string }, inline = false) => `/api/public/${token}/items/${row.id}/download${inline ? "?inline=1" : ""}`;
+  const api = mode === "guest" ? `/api/guest/${token}` : `/api/public/${token}`;
+  const page = mode === "guest" ? `/g/${token}` : `/s/${token}`;
+  const url = (row: { id: string }, inline = false) => `${api}/items/${row.id}/download${inline ? "?inline=1" : ""}`;
 
   const shown = useMemo(
     () =>
@@ -91,7 +96,7 @@ export function PublicBrowser({
         )}
         {allowDownload && root.type === "folder" && items.length > 0 && (
           <button
-            onClick={() => downloadFolderZip(folder && !folder.isRoot ? folder.name : root.name, linkZip(token), folder && !folder.isRoot ? folder.id : undefined)}
+            onClick={() => downloadFolderZip(folder && !folder.isRoot ? folder.name : root.name, (mode === "guest" ? guestZip(token) : linkZip(token)), folder && !folder.isRoot ? folder.id : undefined)}
             className="flex h-12 items-center gap-2 rounded-full bg-primary-container px-6 font-title-md text-[15px] text-on-primary shadow-md hover:bg-primary"
           >
             <Icon name="cloud_download" className="text-[22px]" /> Download all (.zip)
@@ -103,7 +108,7 @@ export function PublicBrowser({
         <div className="flex items-center gap-2 font-headline-sm text-[18px]">
           {folder && !folder.isRoot && (
             <>
-              <Link href={`/s/${token}`} className="text-text-secondary hover:text-text-primary">
+              <Link href={page} className="text-text-secondary hover:text-text-primary">
                 {root.name}
               </Link>
               <Icon name="chevron_right" className="text-[20px] text-outline" />
@@ -154,7 +159,7 @@ export function PublicBrowser({
               </>
             );
             return item.type === "folder" ? (
-              <Link key={item.id} href={`/s/${token}?folder=${item.id}`} className="rounded-2xl bg-surface p-4 shadow-sm transition-shadow hover:shadow-md">
+              <Link key={item.id} href={`${page}?folder=${item.id}`} className="rounded-2xl bg-surface p-4 shadow-sm transition-shadow hover:shadow-md">
                 {card}
                 <p className="mt-3 flex justify-end font-body-sm text-body-sm text-primary">Open folder →</p>
               </Link>

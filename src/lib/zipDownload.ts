@@ -34,3 +34,4 @@ export async function downloadFolderZip(name: string, base: { start: string; sta
 
 export const appZip = { start: "/api/zips", status: (id: string) => `/api/zips/${id}` };
 export const linkZip = (token: string) => ({ start: `/api/public/${token}/zips`, status: (id: string) => `/api/public/${token}/zips/${id}` });
+export const guestZip = (token: string) => ({ start: `/api/guest/${token}/zips`, status: (id: string) => `/api/guest/${token}/zips/${id}` });

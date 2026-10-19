@@ -20,6 +20,13 @@ type Data = {
   entries: Entry[];
   members: { id: string; name: string; email: string }[];
   link: LinkInfo | null;
+  outside: {
+    allowed: boolean;
+    reason: "admin_off" | "member_off" | "personal_off" | "suspended" | null;
+    allowedDomains: string[];
+    isAdmin: boolean;
+    people: { email: string; sharedByName: string; createdAt: string }[];
+  };
 };
 
 const EXPIRY = [
@@ -40,8 +47,8 @@ export function ShareDialog({ itemId, meId, onClose, onChanged }: { itemId: stri
     try {
       const d = await api<Data>(`/api/items/${itemId}/shares`);
       setData(d);
-      // Personal workspaces have no teammates, so open on the link tab.
-      if (!tabSet && d.workspace.type === "PERSONAL") {
+      // Personal workspaces with sharing off have nothing to show on People yet.
+      if (!tabSet && d.workspace.type === "PERSONAL" && !d.outside.people.length && !d.workspace.sharingEnabled) {
         setTab("link");
         setTabSet(true);
       }
@@ -83,7 +90,7 @@ export function ShareDialog({ itemId, meId, onClose, onChanged }: { itemId: stri
         <div className="mx-7 mt-5 flex gap-6 border-b border-border">
           {(
             [
-              ["people", "group", "Teammates"],
+              ["people", "group", "People"],
               ["link", "link", "Public link"],
             ] as const
           ).map(([key, icon, label]) => (
@@ -126,9 +133,187 @@ export function ShareDialog({ itemId, meId, onClose, onChanged }: { itemId: stri
 }
 
 function People(props: { data: Data; meId: string; onChanged: () => Promise<void> }) {
-  if (props.data.workspace.type === "PERSONAL") return <PersonalPeople />;
-  if (props.data.workspace.teamFiles) return <TeamFilesPeople data={props.data} />;
-  return <TeamPeople {...props} />;
+  const inside =
+    props.data.workspace.type === "PERSONAL" ? null : props.data.workspace.teamFiles ? <TeamFilesPeople data={props.data} /> : <TeamPeople {...props} />;
+  return (
+    <>
+      {inside}
+      <OutsidePeople data={props.data} onChanged={props.onChanged} />
+    </>
+  );
+}
+
+// People outside the workspace, invited by email (view-only, verified by a code).
+function OutsidePeople({ data, onChanged }: { data: Data; onChanged: () => Promise<void> }) {
+  const o = data.outside;
+  const ws = data.workspace;
+  const [email, setEmail] = useState("");
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const canEdit = data.myRole === "OWNER" || data.myRole === "EDITOR";
+  const where = ws.type === "PERSONAL" ? "your personal workspace" : ws.name;
+
+  async function add(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      const r = await api<{ email: string; emailed: boolean }>(`/api/items/${data.item.id}/outside`, { body: { email, note: note || undefined } });
+      toast(r.emailed ? `Shared with ${r.email}. We've emailed them a link.` : `Shared with ${r.email}, but the email couldn't be sent.`, { tone: r.emailed ? "success" : "error" });
+      setEmail("");
+      setNote("");
+      await onChanged();
+    } catch (err) {
+      toast((err as Error).message, { tone: "error" });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function remove(target: string) {
+    try {
+      await api(`/api/items/${data.item.id}/outside`, { method: "DELETE", body: { email: target } });
+      toast(`${target} no longer has access`);
+      await onChanged();
+    } catch (err) {
+      toast((err as Error).message, { tone: "error" });
+    }
+  }
+
+  async function optIn() {
+    setBusy(true);
+    try {
+      await api("/api/me/outside-sharing", { method: "PATCH", body: { enabled: true } });
+      toast("You can now share outside this workspace");
+      await onChanged();
+    } catch (err) {
+      toast((err as Error).message, { tone: "error" });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const people = o.people.length > 0 && (
+    <ul className="mb-3 space-y-1">
+      {o.people.map((p) => (
+        <li key={p.email} className="flex items-center gap-3 rounded-xl bg-[#fffbeb] px-3 py-2.5">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fef3c7] text-[#b45309]">
+            <Icon name="public" className="text-[20px]" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="flex items-center gap-2">
+              <span className="truncate font-title-md text-title-md text-text-primary">{p.email}</span>
+              <span className="shrink-0 rounded-full bg-[#fef3c7] px-2 font-label-sm text-label-sm text-[#b45309]">External</span>
+            </span>
+            <span className="block truncate font-body-sm text-body-sm text-text-secondary">Viewer · shared by {p.sharedByName}</span>
+          </span>
+          {canEdit && (
+            <button onClick={() => remove(p.email)} aria-label={`Remove ${p.email}`} className="rounded-lg p-1.5 text-outline hover:bg-surface hover:text-danger">
+              <Icon name="person_remove" className="text-[20px]" />
+            </button>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+
+  let body: React.ReactNode;
+  if (!o.allowed && o.reason === "personal_off") {
+    body = (
+      <div className="flex flex-col items-center gap-3 rounded-xl bg-surface-container-low p-5 text-center">
+        <Icon name="lock" className="text-[28px] text-primary-container" />
+        <p className="font-title-md text-[15px]">Sharing is turned off for your personal workspace</p>
+        <p className="max-w-sm font-body-md text-body-md text-text-secondary">Turn it on to share with people by email or create public links.</p>
+        <button className={btn.primary} onClick={() => setConfirm(true)}>
+          <Icon name="lock_open" className="text-[18px]" /> Turn on sharing
+        </button>
+        <TurnOnSharingDialog
+          open={confirm}
+          onClose={() => setConfirm(false)}
+          onDone={async () => {
+            setConfirm(false);
+            await onChanged();
+          }}
+        />
+      </div>
+    );
+  } else if (!o.allowed && o.reason === "admin_off") {
+    body = (
+      <div className="flex items-start gap-3 rounded-xl bg-surface-container-low p-4">
+        <Icon name="block" className="mt-0.5 text-[20px] text-on-surface-variant" />
+        <div>
+          <p className="font-title-md text-title-md text-text-primary">Sharing outside {ws.name} is turned off</p>
+          <p className="font-body-sm text-body-sm text-text-secondary">
+            {o.isAdmin ? (
+              <>
+                You can allow it in{" "}
+                <a href="/settings#settings-outside" className="font-semibold text-primary hover:underline">
+                  Settings → Outside sharing
+                </a>
+                .
+              </>
+            ) : (
+              "Only a workspace admin can allow it."
+            )}
+          </p>
+        </div>
+      </div>
+    );
+  } else if (!o.allowed && o.reason === "member_off") {
+    body = (
+      <div className="rounded-xl bg-[#fffbeb] p-4">
+        <p className="font-title-md text-title-md text-text-primary">Sharing outside {ws.name} is off for you</p>
+        <p className="mb-3 font-body-sm text-body-sm text-text-secondary">Your workspace allows it, but you need to turn it on for yourself first.</p>
+        <button className={btn.secondary} disabled={busy} onClick={optIn}>
+          <Icon name="toggle_on" className="text-[20px] text-primary" /> Allow me to share outside {ws.name}
+        </button>
+      </div>
+    );
+  } else if (!o.allowed) {
+    body = <p className="font-body-md text-body-md text-text-secondary">Sharing isn&apos;t available for this workspace.</p>;
+  } else if (!canEdit) {
+    body = <p className="font-body-md text-body-md text-text-secondary">Only people who can edit this can share it outside {where}.</p>;
+  } else {
+    body = (
+      <form onSubmit={add} className="space-y-2">
+        <div className="flex gap-2">
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={o.allowedDomains.length ? `name@${o.allowedDomains[0]}` : "name@example.com"}
+            className="h-11 min-w-0 flex-1 rounded-lg bg-surface-container-low px-3 font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary-container/20"
+          />
+          <button type="submit" disabled={busy || !email.trim()} className={btn.primary}>
+            {busy ? "Sending…" : "Share"}
+          </button>
+        </div>
+        <input
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          maxLength={500}
+          placeholder="Add a message (optional)"
+          className="h-10 w-full rounded-lg bg-surface-container-low px-3 font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary-container/20"
+        />
+        {o.allowedDomains.length > 0 && (
+          <p className="font-body-sm text-body-sm text-text-secondary">Only {o.allowedDomains.map((d) => `@${d}`).join(", ")} addresses are allowed.</p>
+        )}
+      </form>
+    );
+  }
+
+  return (
+    <div className={data.workspace.type === "PERSONAL" ? "" : "mt-5 border-t border-border pt-5"}>
+      <p className="mb-1 flex items-center gap-2 font-title-md text-[15px] text-text-primary">
+        <Icon name="public" className="text-[20px] text-[#b45309]" /> People outside {where}
+        {o.people.length > 0 && <span className="rounded-full bg-[#fef3c7] px-2 font-label-md text-label-md text-[#b45309]">{o.people.length}</span>}
+      </p>
+      <p className="mb-3 font-body-sm text-body-sm text-text-secondary">They can view and download. They confirm their email with a one-time code before opening it.</p>
+      {people}
+      {body}
+    </div>
+  );
 }
 
 function TeamFilesPeople({ data }: { data: Data }) {
@@ -139,24 +324,10 @@ function TeamFilesPeople({ data }: { data: Data }) {
       </span>
       <p className="font-title-md text-[15px]">Everyone in {data.workspace.name} can see and edit this</p>
       <p className="max-w-sm font-body-md text-body-md text-text-secondary">
-        It&apos;s in Team Files, so all {data.members.length} member{data.members.length === 1 ? "" : "s"} have access. To share it with someone outside the workspace, use a public link.
+        It&apos;s in Team Files, so all {data.members.length} member{data.members.length === 1 ? "" : "s"} have access. To share it with someone outside the workspace, invite them below or use a public link.
       </p>
     </div>
   );
-}
-
-function PersonalPeople() {
-  {
-    return (
-      <div className="flex flex-col items-center gap-3 py-6 text-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#f3e8ff] text-file-image">
-          <Icon name="person" className="text-[28px]" />
-        </span>
-        <p className="font-title-md text-[15px]">This is your personal workspace</p>
-        <p className="max-w-sm font-body-md text-body-md text-text-secondary">Only you can see these files. To work with others, create a company workspace from the sidebar — or send a public link.</p>
-      </div>
-    );
-  }
 }
 
 function TeamPeople({ data, meId, onChanged }: { data: Data; meId: string; onChanged: () => Promise<void> }) {

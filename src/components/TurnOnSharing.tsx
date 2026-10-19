@@ -47,6 +47,7 @@ export function TurnOnSharingDialog({ open, onClose, onDone }: { open: boolean; 
     >
       <ul className="mb-5 space-y-3">
         {[
+          ["mail", "You can share files and folders with specific people by email."],
           ["link", "You can create public links with passwords and expiry dates."],
           ["lock", "Only items you choose are shared — everything else stays private."],
           ["toggle_off", "You can turn sharing off again at any time."],
