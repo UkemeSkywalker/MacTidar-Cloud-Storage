@@ -9,7 +9,7 @@ export function BrandPanel() {
         <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-primary-fixed-dim/40 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-primary/10 blur-2xl" />
         <div className="relative z-10">
-          <Logo subtitle="Cloud Storage" />
+          <Logo height={48} />
         </div>
         <div className="relative z-10 flex max-w-lg flex-col items-start">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-surface/80 px-3 py-1 shadow-sm backdrop-blur-md">
