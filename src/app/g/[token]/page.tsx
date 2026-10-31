@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PublicBrowser } from "@/app/s/[token]/PublicBrowser";
 import { Icon } from "@/components/Icon";
-import { Logo } from "@/components/Logo";
+import { Logo, LogoMark } from "@/components/Logo";
 import { listChildren } from "@/server/db/items";
 import { resolveGuest } from "@/server/guests";
 import { itemInLink } from "@/server/linkAccess";
@@ -31,7 +31,7 @@ export default async function GuestSharePage({ params, searchParams }: { params:
             : "It may have been removed, or the item was deleted. Ask the person who shared it with you for a new invite."}
         </p>
         <Link href="/" className="flex h-11 items-center justify-center gap-2 rounded-full bg-surface-container-high px-6 font-title-md text-title-md text-text-primary hover:bg-surface-container-highest">
-          <Icon name="cloud" className="text-[20px]" /> Go to MacTidar Cloud
+          <LogoMark height={20} /> Go to MacTidar Cloud
         </Link>
       </Card>
     );
@@ -105,7 +105,7 @@ export default async function GuestSharePage({ params, searchParams }: { params:
       </header>
       <main className="w-full flex-1 px-4 py-10 lg:px-10">{body}</main>
       <footer className="flex items-center justify-center gap-2 px-4 py-8 text-center font-body-md text-body-md text-text-secondary">
-        <Icon name="cloud" className="text-[18px] text-primary" /> Powered by <span className="font-semibold text-text-primary">MacTidar Cloud</span>
+        <LogoMark /> Powered by <span className="font-semibold text-text-primary">MacTidar Cloud</span>
       </footer>
     </div>
   );

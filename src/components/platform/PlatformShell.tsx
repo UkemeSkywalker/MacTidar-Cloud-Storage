@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Avatar } from "../Avatar";
 import { Icon } from "../Icon";
+import { Logo } from "../Logo";
 import { Toaster } from "../toast";
 
 const NAV = [
@@ -25,11 +26,8 @@ export function PlatformShell({ user, openReports, children }: { user: { id: str
       <aside className={`fixed left-0 top-0 z-50 flex h-screen w-[260px] flex-col justify-between bg-surface shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-transform lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}>
         <div>
           <div className="flex h-16 items-center gap-2 px-space-lg">
-            <Link href="/platform" className="flex items-center gap-space-sm">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-container text-on-primary shadow-sm">
-                <Icon name="cloud" className="text-[20px]" />
-              </div>
-              <span className="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface">MacTidar</span>
+            <Link href="/platform" className="flex items-center">
+              <Logo height={32} />
             </Link>
             <span className="rounded-full bg-[#f3e8ff] px-2 py-0.5 font-label-sm text-label-sm text-file-image">Platform admin</span>
           </div>

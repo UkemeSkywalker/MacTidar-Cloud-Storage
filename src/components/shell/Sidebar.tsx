@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { formatBytes } from "@/lib/format";
 import { Icon } from "../Icon";
+import { Logo } from "../Logo";
 
 const NAV = [
   { href: "/files", label: "My Files", icon: "folder", match: ["/files", "/folders"] },
@@ -68,11 +69,8 @@ export function Sidebar({
       >
         <div className="flex flex-col overflow-y-auto">
           <div className="flex h-16 items-center px-space-lg">
-            <Link href="/files" className="flex items-center gap-space-sm">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-container text-on-primary shadow-sm">
-                <Icon name="cloud" className="text-[20px]" />
-              </div>
-              <span className="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface">MacTidar</span>
+            <Link href="/files" className="flex items-center">
+              <Logo />
             </Link>
           </div>
           <WorkspaceSwitcher current={workspace} workspaces={workspaces} isAdmin={isAdmin} />

@@ -11,7 +11,7 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
     <main className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-canvas px-4 py-12">
       <div className="pointer-events-none absolute left-1/2 top-1/3 -z-0 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-fixed/30 blur-3xl" />
       <div className="relative mb-8">
-        <Logo subtitle="Cloud Workspace" />
+        <Logo height={48} />
       </div>
       <div className="relative w-full max-w-[640px] overflow-hidden rounded-2xl bg-surface shadow-xl">
         <div className="h-1 bg-gradient-to-r from-primary-fixed-dim via-primary-container to-file-doc" />

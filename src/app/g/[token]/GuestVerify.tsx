@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/Icon";
+import { LogoMark } from "@/components/Logo";
 import { Turnstile } from "@/components/Turnstile";
 import { api } from "@/lib/api";
 import { formatBytes } from "@/lib/format";
@@ -156,8 +157,8 @@ export function GuestVerify({
       )}
 
       <section className="mt-8 flex flex-wrap items-center gap-4 rounded-2xl bg-surface p-6 shadow-sm">
-        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft text-primary">
-          <Icon name="cloud" className="text-[26px]" />
+        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft">
+          <LogoMark height={22} />
         </span>
         <div className="min-w-0 flex-1">
           <p className="font-title-md text-[16px] text-text-primary">Want your own space?</p>

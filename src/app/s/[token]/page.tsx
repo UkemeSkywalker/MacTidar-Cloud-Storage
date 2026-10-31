@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
-import { Logo } from "@/components/Logo";
+import { Logo, LogoMark } from "@/components/Logo";
 import { listChildren } from "@/server/db/items";
 import { getUser } from "@/server/db/users";
 import { itemInLink, resolveLink } from "@/server/linkAccess";
@@ -47,7 +47,7 @@ export default async function PublicLinkPage({
           href="/"
           className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-surface-container-high font-title-md text-title-md text-text-primary hover:bg-surface-container-highest"
         >
-          <Icon name="cloud" className="text-[20px]" /> Go to MacTidar
+          <LogoMark height={20} /> Go to MacTidar
         </Link>
       </StateCard>
     );
@@ -107,7 +107,7 @@ export default async function PublicLinkPage({
           href="/sign-in"
           className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-surface-container-high font-title-md text-title-md text-text-primary hover:bg-surface-container-highest"
         >
-          <Icon name="cloud" className="text-[20px]" /> Go to MacTidar
+          <LogoMark height={20} /> Go to MacTidar
         </Link>
       </StateCard>
     );
@@ -221,7 +221,7 @@ export default async function PublicLinkPage({
       <main className="w-full flex-1 px-4 py-10 lg:px-10">{body}</main>
       <footer className="flex flex-col items-center justify-center gap-3 px-4 py-8 text-center font-body-md text-body-md text-text-secondary sm:flex-row">
         <span className="flex items-center gap-2">
-          <Icon name="cloud" className="text-[18px] text-primary" /> Powered by{" "}
+          <LogoMark /> Powered by{" "}
           <span className="font-semibold text-text-primary">
             MacTidar Cloud
           </span>

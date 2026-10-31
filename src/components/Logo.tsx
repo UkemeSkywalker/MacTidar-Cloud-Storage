@@ -1,15 +1,11 @@
-import { Icon } from "./Icon";
+import Image from "next/image";
 
-export function Logo({ subtitle }: { subtitle?: string }) {
-  return (
-    <div className="flex items-center gap-2.5">
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-container text-on-primary shadow-sm">
-        <Icon name="cloud" className="text-[22px]" />
-      </div>
-      <div className="flex flex-col leading-tight">
-        <span className="font-headline-sm text-headline-sm font-bold tracking-tight text-text-primary">MacTidar</span>
-        {subtitle && <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary">{subtitle}</span>}
-      </div>
-    </div>
-  );
+// Full MacTidar Cloud logo (mark + wordmark). Files in public/brand are already sized.
+export function Logo({ height = 40 }: { height?: number }) {
+  return <Image src="/brand/logo.png" alt="MacTidar Cloud" width={Math.round((height * 537) / 160)} height={height} unoptimized priority />;
+}
+
+// Just the cloud mark, for small spots next to text.
+export function LogoMark({ height = 18 }: { height?: number }) {
+  return <Image src="/brand/mark.png" alt="" width={Math.round((height * 205) / 128)} height={height} unoptimized />;
 }
